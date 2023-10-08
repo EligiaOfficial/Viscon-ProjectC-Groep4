@@ -2,11 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c3492009-be66-4d4c-8ef2-d3853da4e809" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ClientApp/postcss.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientApp/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/ClientApp/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientApp/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/ClientApp/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Viscon-ProjectC-Groep4.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Viscon-ProjectC-Groep4.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ClientApp/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ClientApp/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ClientApp/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/ClientApp/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ClientApp/src/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/ClientApp/src/pages/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/WeatherForecastController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Error.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Error.cshtml.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/_ViewImports.cshtml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WeatherForecast.cs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,9 +24,14 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Data/Machines.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Program.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/WeatherForecast.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Data/Messages.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Model.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Data/Tickets.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Data/Users.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/ClientApp/package-lock.json" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Data/Departments.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -54,7 +62,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1696749062810</updated>
-      <workItem from="1696749065460" duration="8849000" />
+      <workItem from="1696749065460" duration="11900000" />
+      <workItem from="1696766610038" duration="12000" />
     </task>
     <servers />
   </component>
@@ -62,7 +71,7 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
