@@ -28,10 +28,12 @@ public class Tickets
     public int Tick_MessageId { get; set; }
     public Messages Messages { get; set; }  
 
-    [ForeignKey("Tick_Creator_UserId")] // Hier wordt de juiste navigatie-eigenschap aangegeven
+    [ForeignKey("Creator")] // Hier wordt de juiste navigatie-eigenschap aangegeven
+    public int Tick_Creator_UserId { get; set; }
     public Users Creator { get; set; }
 
-    [ForeignKey("Tick_Helper_UserId")] // Hier wordt de juiste navigatie-eigenschap aangegeven
+    [ForeignKey("Helper")] // Hier wordt de juiste navigatie-eigenschap aangegeven
+    public int Tick_Helper_UserId { get; set; }
     public Users Helper { get; set; }
 
     public string Tick_Media { get; set; }

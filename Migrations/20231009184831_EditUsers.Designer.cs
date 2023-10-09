@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,13 +11,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231009184831_EditUsers")]
+    partial class EditUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("public")
                 .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -36,7 +38,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasKey("Dep_Id");
 
-                    b.ToTable("Departments", "public");
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("Machines", b =>
@@ -57,7 +59,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasKey("Mach_Id");
 
-                    b.ToTable("Machines", "public");
+                    b.ToTable("Machines");
                 });
 
             modelBuilder.Entity("Messages", b =>
@@ -80,7 +82,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasKey("Msg_Id");
 
-                    b.ToTable("Messages", "public");
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Tickets", b =>
@@ -139,7 +141,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasIndex("Tick_MessageId");
 
-                    b.ToTable("Tickets", "public");
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("Users", b =>
@@ -195,7 +197,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasIndex("Usr_DepId");
 
-                    b.ToTable("Users", "public");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Tickets", b =>

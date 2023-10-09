@@ -8,7 +8,10 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     proxy: {
-        '/weatherforecast': 'http://localhost:5030'
+        '/api': {
+            target: 'http://localhost:5030',
+            rewrite: (path) => path.replace(/^\/api/, ''),
+         },
     }
   }
 })
