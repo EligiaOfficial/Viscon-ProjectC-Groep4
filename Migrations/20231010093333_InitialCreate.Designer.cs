@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231009185408_AddingSalt")]
-    partial class AddingSalt
+    [Migration("20231010093333_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

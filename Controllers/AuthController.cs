@@ -60,11 +60,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
                 using (var context = new ApplicationDbContext())
                 {
-                    var company = await context.Departments.Where(p => p.Dep_Id == 0).FirstOrDefaultAsync();
-                    if (company != null) return BadRequest("No company found");
+                    var company = await context.Departments.Where(p => p.Dep_Id == 1).FirstOrDefaultAsync();
+                    if (company == null) return BadRequest("No company found");
                     var user = new Users
                     {
-                        Usr_Id = 1,
+                        Usr_Id = 2,
                         Usr_FirstName = "Test",
                         Usr_LastName = "Test",
                         Usr_Email = data.email,
@@ -75,10 +75,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
                         Usr_Role = "Test",
                         Usr_PhoneNumber = 1234,
                         Usr_LanguagePreference = "NL",
-                        Usr_DepId = 0,
+                        Usr_DepId = company.Dep_Id,
                     };
                     try
-                        {
+                    {
+                        System.Console.WriteLine("Test");
                         context.Users.Add(user);
                         context.SaveChanges();
                         }
