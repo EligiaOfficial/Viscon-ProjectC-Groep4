@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Messages
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Msg_Id { get; set; }
 
     public string Msg_Message { get; set; } 

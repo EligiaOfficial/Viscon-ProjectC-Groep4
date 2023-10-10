@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Machines
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Mach_Id { get; set; }
 
     public string Mach_Name { get; set; }

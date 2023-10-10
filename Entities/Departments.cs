@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Departments
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Dep_Id { get; set; }
 
     public string Dep_Speciality {get; set;}

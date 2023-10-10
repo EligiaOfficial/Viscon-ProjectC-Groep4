@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Tickets
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Tick_Id { get; set; }
 
     [ForeignKey("Machines")]

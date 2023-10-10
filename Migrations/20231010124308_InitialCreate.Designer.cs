@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Viscon_ProjectC_Groep4;
 
 #nullable disable
 
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231010093333_InitialCreate")]
+    [Migration("20231010124308_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -25,7 +26,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Departments", b =>
+            modelBuilder.Entity("Entities.Departments", b =>
                 {
                     b.Property<int>("Dep_Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +43,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.ToTable("Departments", "public");
                 });
 
-            modelBuilder.Entity("Machines", b =>
+            modelBuilder.Entity("Entities.Machines", b =>
                 {
                     b.Property<int>("Mach_Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +64,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.ToTable("Machines", "public");
                 });
 
-            modelBuilder.Entity("Messages", b =>
+            modelBuilder.Entity("Entities.Messages", b =>
                 {
                     b.Property<int>("Msg_Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +87,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.ToTable("Messages", "public");
                 });
 
-            modelBuilder.Entity("Tickets", b =>
+            modelBuilder.Entity("Entities.Tickets", b =>
                 {
                     b.Property<int>("Tick_Id")
                         .ValueGeneratedOnAdd()
@@ -145,7 +146,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.ToTable("Tickets", "public");
                 });
 
-            modelBuilder.Entity("Users", b =>
+            modelBuilder.Entity("Entities.Users", b =>
                 {
                     b.Property<int>("Usr_Id")
                         .ValueGeneratedOnAdd()
@@ -201,33 +202,33 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.ToTable("Users", "public");
                 });
 
-            modelBuilder.Entity("Tickets", b =>
+            modelBuilder.Entity("Entities.Tickets", b =>
                 {
-                    b.HasOne("Users", "Creator")
+                    b.HasOne("Entities.Users", "Creator")
                         .WithMany()
                         .HasForeignKey("Tick_Creator_UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Departments", "Departments")
+                    b.HasOne("Entities.Departments", "Departments")
                         .WithMany()
                         .HasForeignKey("Tick_DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Users", "Helper")
+                    b.HasOne("Entities.Users", "Helper")
                         .WithMany()
                         .HasForeignKey("Tick_Helper_UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Machines", "Machines")
+                    b.HasOne("Entities.Machines", "Machines")
                         .WithMany()
                         .HasForeignKey("Tick_MachId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Messages", "Messages")
+                    b.HasOne("Entities.Messages", "Messages")
                         .WithMany()
                         .HasForeignKey("Tick_MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -244,9 +245,9 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.Navigation("Messages");
                 });
 
-            modelBuilder.Entity("Users", b =>
+            modelBuilder.Entity("Entities.Users", b =>
                 {
-                    b.HasOne("Departments", "Departments")
+                    b.HasOne("Entities.Departments", "Departments")
                         .WithMany()
                         .HasForeignKey("Usr_DepId")
                         .OnDelete(DeleteBehavior.Cascade)
