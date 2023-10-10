@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Users
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Usr_Id { get; set; }
     public string Usr_FirstName { get; set; }
     public string Usr_LastName { get; set; }
@@ -20,7 +21,7 @@ public class Users
 
     [ForeignKey("Departments")]
     public int Usr_DepId { get; set; } = 0;
-    public Departments Departments { get; set; }
+    public Departments? Departments { get; set; }
 }
 
 public enum RoleTypes : int
