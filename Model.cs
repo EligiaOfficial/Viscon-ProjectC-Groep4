@@ -12,7 +12,7 @@ namespace Viscon_ProjectC_Groep4
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=192.168.56.1;Port=5432;Database=Project_C;Username=postgres;Password=");
+            optionsBuilder.UseNpgsql("Host=192.168.178.241;Port=5432;Database=Project_C;Username=postgres;Password=");
         }
 
         public DbSet<Users> Users { get; set; } = null!;

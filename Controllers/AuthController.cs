@@ -13,22 +13,24 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("Login")]
         public async Task<IActionResult> Login(LoginDto data) {
             try {
-                System.Console.WriteLine(data.email + "is trying to log in.");
+                System.Console.WriteLine(data.email + " is trying to log in.");
 
                 using (var context = new ApplicationDbContext()) {
                     var user = await context.Users.Where(p => p.Usr_Email == data.email).FirstOrDefaultAsync();
                     if (user == null) {
+                        System.Console.WriteLine("User not found");
                         return BadRequest("User not found");
                     }
 
                     if (!VerifyPassword(data.password, user.Usr_Password, user.Usr_PasswSalt)) {
+                        System.Console.WriteLine("Wrong Password");
                         return BadRequest("Wrong password");
                     }
-
-                    return Ok();
+                    System.Console.WriteLine("User and Passw correct", data.password);
+                    return Ok(user);
                 }
             }
             catch (Exception ex) {

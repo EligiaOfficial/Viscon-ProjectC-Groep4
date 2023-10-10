@@ -11,11 +11,11 @@ function AddAccount() {
          console.log('Passw:', password);
 
          if (email !== "" && password !== "") {
-             SignupEP({
+             Signup({
                  email: email,
                  password: password,
              }).then(() => {
-                 console.log("User created:", email, password);
+                 console.log("User created: ", email, password);
              }).catch(error => {
                  console.error("Error:", error);
              });
@@ -81,7 +81,7 @@ function AddAccount() {
 
 export default AddAccount
 
-function SignupEP(data: { email: string; password: string; }) {
+function Signup(data: { email: string; password: string; }) {
     console.log('Before Axios request');
     return axios.post('/api/Auth/add', data)
         .then(response => {
