@@ -62,7 +62,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 {
                     var company = await context.Departments.Where(p => p.Dep_Id == 1).FirstOrDefaultAsync();
                     if (company == null) return BadRequest("No company found");
-                    var user = new Users
+                    var user = new Entities.Users
                     {
                         Usr_Id = 2,
                         Usr_FirstName = "Test",

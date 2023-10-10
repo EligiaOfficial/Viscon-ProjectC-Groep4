@@ -1,3 +1,5 @@
+namespace Entities;
+
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
