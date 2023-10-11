@@ -4,4 +4,5 @@ bin
 .vscode
 *.log
 .vs
+.idea
 .gitignore
