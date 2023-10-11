@@ -12,7 +12,7 @@ namespace Viscon_ProjectC_Groep4
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=192.168.56.1;Port=5432;Database=Project_C;Username=postgres;Password=");
+            optionsBuilder.UseNpgsql("Host=192.168.178.241;Port=5432;Database=Project_C;Username=postgres;Password=");
         }
 
         public DbSet<Users> Users { get; set; } = null!;
@@ -26,22 +26,22 @@ namespace Viscon_ProjectC_Groep4
             modelBuilder.HasDefaultSchema("public");
         }
 
-        public void seedDb()
+        public void SeedDb()
         {
-            if (this.Departments.Count() == 0)
+            if (!this.Departments.Any())
             {
                 this.Add(new Departments { Dep_Id = 1, Dep_Speciality = "Dummy" });
             }
 
-            if (this.Machines.Count() == 0)
+            if (!this.Machines.Any())
             {
                 this.Add(new Machines { Mach_Id = 1, Mach_Name = "Dummy", Mach_Type = "Dummy " });
             }
 
             this.SaveChanges();
 
-            if (this.Users.Count() == 0) {
-                var password = "Dummy";
+            if (!this.Users.Any()) {
+                const string password = "Dummy";
 
                 CreatePassHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -62,11 +62,10 @@ namespace Viscon_ProjectC_Groep4
             this.SaveChanges();
         }
         
-        private void CreatePassHash(string password, out byte[] passwordHash, out byte[] passwordSalt) {
-            using (var hmac = new HMACSHA512()) {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
+        private static void CreatePassHash(string password, out byte[] passwordHash, out byte[] passwordSalt) {
+            using var hmac = new HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
     }
 }
