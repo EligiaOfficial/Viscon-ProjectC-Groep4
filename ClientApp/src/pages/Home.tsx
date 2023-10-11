@@ -1,3 +1,4 @@
+import Logout from "../components/Logout"
 
 function Home() {
 
@@ -8,6 +9,7 @@ function Home() {
             <a href="/login">Login</a>
             <hr/>
             <a href="/add">Create Account (Temp)</a>
+            <Logout></Logout>
         </>
     )
 }
