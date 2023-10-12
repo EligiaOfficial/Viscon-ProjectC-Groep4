@@ -18,13 +18,14 @@ function Login() {
                 email: email,
                 password: password,
             }).then(response => {
-                console.log("User Logged In: ", email);
-                if (response) {
-                    // todo check if logged in
-                    nav('/add')
-                } else {
+                if (!response) {
                     // todo give wrong combi back
                     alert("Email and Password combination not found");
+                    
+                } else {
+                    
+                    localStorage.setItem("token", response.data)
+                    nav('/add')
                 }
             }).catch(error => {
                 console.error("Error:", error);
