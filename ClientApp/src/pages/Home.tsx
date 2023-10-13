@@ -1,3 +1,5 @@
+import React from "react"
+
 function Home() {
 
     return (
@@ -7,6 +9,8 @@ function Home() {
             <a href="/login">Login</a>
             <hr/>
             <a href="/add">Create Account (Temp)</a>
+            <hr/>
+            <a href="Create">Create Ticket (Temp)</a>
         </>
     )
 }
