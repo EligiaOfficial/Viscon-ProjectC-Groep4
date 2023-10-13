@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,6 +12,7 @@
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <RootNamespace>Viscon_ProjectC_Groep4</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>49614c3a-1917-4947-97d4-6e5f92bea506</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

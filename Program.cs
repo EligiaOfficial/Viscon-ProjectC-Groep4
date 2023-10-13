@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseNpgsql(
-        "Host=localhost;Port=5432;Database=project_c;Username=postgres;Password="
+        builder.Configuration["database:connection_string"]
     )
 );
 builder.Services.AddControllersWithViews();
