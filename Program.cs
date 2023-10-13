@@ -5,11 +5,20 @@ using Viscon_ProjectC_Groep4;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-ApplicationDbContext db = new ApplicationDbContext();
-db.SeedDb();
-
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options => options.UseNpgsql(
+        "Host=localhost;Port=5432;Database=project_c;Username=postgres;Password="
+    )
+);
 builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
+
+var scopeFactory = app.Services.GetService<IServiceScopeFactory>();
+using (IServiceScope scope = scopeFactory.CreateScope()) {
+    var db = scope.ServiceProvider.GetService<ApplicationDbContext>();
+    db.SeedDb();
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
