@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using Entities;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
+using Viscon_ProjectC_Groep4.Dto;
 
 namespace Viscon_ProjectC_Groep4.Controllers {
     [ApiController]
@@ -21,20 +23,20 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [Route("Login")]
         public async Task<IActionResult> Login(LoginDto data) {
             try {
-                System.Console.WriteLine(data.email + " is trying to log in.");
+                System.Console.WriteLine(data.Email + " is trying to log in.");
 
                 using (var context = new ApplicationDbContext()) {
-                    var user = await context.Users.Where(p => p.Usr_Email == data.email).FirstOrDefaultAsync();
+                    var user = await context.Users.Where(p => p.Usr_Email == data.Email).FirstOrDefaultAsync();
                     if (user == null) {
                         System.Console.WriteLine("User not found");
                         return BadRequest("User not found");
                     }
 
-                    if (!VerifyPassword(data.password, user.Usr_Password, user.Usr_PasswSalt)) {
+                    if (!VerifyPassword(data.Password, user.Usr_Password, user.Usr_PasswSalt)) {
                         System.Console.WriteLine("Wrong Password");
                         return BadRequest("Wrong password");
                     }
-                    System.Console.WriteLine("User and Passw correct", data.password);
+                    System.Console.WriteLine("User and Passw correct", data.Password);
 
                     var token = CreateToken(user);
                     
@@ -50,40 +52,39 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [Route("Add")]
         public async Task<IActionResult> Add(AddDto data) {
             try {
-                System.Console.WriteLine(data.email + " is trying to be created");
+                System.Console.WriteLine(data.FirstName + " " + data.LastName + " is trying to be created");
 
-                CreatePassHash(data.password, out byte[] passwordHash, out byte[] passwordSalt);
+                CreatePassHash(data.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-                System.Console.WriteLine(data.password, passwordHash, passwordSalt);
+                System.Console.WriteLine(data.Password, passwordHash, passwordSalt);
 
-                using (var context = new ApplicationDbContext()) {
-                    var company = await context.Departments.Where(p => p.Dep_Id == 1).FirstOrDefaultAsync();
-                    if (company == null) return BadRequest("No company found");
-                    var user = new Entities.Users {
-                        Usr_FirstName = "Test",
-                        Usr_LastName = "Test",
-                        Usr_Email = data.email,
-                        Usr_Password = passwordHash,
-                        Usr_PasswSalt = passwordSalt,
-                        Usr_Level = 0,
-                        Usr_Username = "Test",
-                        Usr_Role = "Test",
-                        Usr_PhoneNumber = 1234,
-                        Usr_LanguagePreference = "NL",
-                        Usr_DepId = company.Dep_Id,
-                    };
-                    try {
-                        context.Users.Add(user);
-                        await context.SaveChangesAsync();
-                        System.Console.WriteLine("Created account for user: ", user.Usr_Email);
-
-                    }
-                    catch (DbUpdateException e) {
-                        System.Console.WriteLine(e);
-                    }
-
-                    return Ok(user);
+                await using var context = new ApplicationDbContext();
+                var department = await context.Departments.Where(p => p.Dep_Id == data.Department).FirstOrDefaultAsync();
+                var company = await context.Companies.Where(p => p.Com_Id == data.Company).FirstOrDefaultAsync();
+                    
+                if (company == null) return BadRequest("No company found");
+                var user = new Users {
+                    Usr_FirstName = data.FirstName,
+                    Usr_LastName = data.LastName,
+                    Usr_Email = data.Email,
+                    Usr_Password = passwordHash,
+                    Usr_PasswSalt = passwordSalt,
+                    Usr_Role = data.Role,
+                    Usr_PhoneNumber = data.Phone,
+                    Usr_LanguagePreference = data.Language,
+                    Usr_DepId = department.Dep_Id,
+                    Usr_CompId = company.Com_Id,
+                };
+                try {
+                    context.Users.Add(user);
+                    await context.SaveChangesAsync();
+                    Console.WriteLine("Created account for user: (" + user.Usr_FirstName + " " + user.Usr_LastName + " " + user.Usr_Email + ")");
                 }
+                catch (DbUpdateException e) {
+                    System.Console.WriteLine(e);
+                }
+
+                return Ok(user);
             }
             catch (Exception ex) {
                 return BadRequest(ex.Message);
@@ -96,10 +97,13 @@ namespace Viscon_ProjectC_Groep4.Controllers {
 
             List<Claim> claims = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, user.Usr_Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Usr_FirstName + user.Usr_LastName),
+                new Claim(ClaimTypes.Name, user.Usr_FirstName),
+                new Claim(ClaimTypes.Name, user.Usr_LastName),
                 new Claim(ClaimTypes.Email, user.Usr_Email),
                 new Claim(ClaimTypes.MobilePhone, user.Usr_PhoneNumber.ToString()),
                 new Claim(ClaimTypes.Role, user.Usr_Role.ToString()),
+                new Claim("DepartmentId", user.Usr_DepId.ToString()),
+                new Claim("CompanyId", user.Usr_CompId.ToString()),
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
@@ -120,7 +124,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 return tokenString;
             } catch (Exception ex) {
                 Console.WriteLine($"Error creating token: {ex.Message}");
-                return null; // Return null or handle the error as needed
+                return null!;
             }
             
         }
