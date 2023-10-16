@@ -4,18 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Entities;
+using Entities; // Make sure this namespace exists
 using Microsoft.Extensions.Logging;
-public class TicketRequestModel
-{
-    public int MachineId { get; set; }
-    public string MachineName { get; set; }
-    public string Description { get; set; }
-    public string ExpectedAction { get; set; }
-    public string SelfTinkering { get; set; }
-    public int Priority { get; set; }
-    
-}
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {
@@ -23,42 +13,53 @@ namespace Viscon_ProjectC_Groep4.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-        
-        
-        
-
-        
-
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateTicket([FromForm] TicketRequestModel model)
+        [HttpPost("createticket")]
+        public async Task<ActionResult<Tickets>> CreateTicket([FromBody] MachineData data)
         {
-            using (var context = new ApplicationDbContext()) {
-                // Create a new Ticket instance
-                var ticket = new Tickets
+            using (var context = new ApplicationDbContext())
+            {
+                try
                 {
-                    // Set properties from the `model` object
-                    Tick_MachId = 1,
-                    Tick_Creator_UserId = 1,
-                    Tick_Helper_UserId = 1,
-                    Tick_Media = null,
-                    Tick_Resolved = false,
-                    Tick_Title = $"{model.MachineName} {DateTime.UtcNow}", // Create the title as required
-                    Tick_Description = model.Description,
-                    Tick_DateCreated = DateTime.UtcNow,
-                    Tick_Priority = model.Priority,
-                    Tick_ExpectedToBeDone = model.ExpectedAction,
-                    Tick_MadeAnyChanges = model.SelfTinkering,
-                    // Other properties as needed
-                };
-
-                // Save the ticket to the database
-                context.Tickets.Add(ticket);
-                await context.SaveChangesAsync();
-                return CreatedAtAction("GetTicket", new { id = ticket.Tick_Id }, ticket);
+                    var ticket = new Tickets();
+                    ticket.Tick_MachId = context.Machines.Where(m => m.Mach_Name == data.machine).Select(m => m.Mach_Id).FirstOrDefault();
+                    ticket.Tick_Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
+                    ticket.Tick_Description = data.description;
+                    ticket.Tick_DateCreated = DateTime.UtcNow;
+                    ticket.Tick_Priority = 1;
+                    ticket.Tick_ExpectedToBeDone = data.expectedAction;
+                    ticket.Tick_MadeAnyChanges = data.selfTinkering;
+                    ticket.Tick_DepartmentId = 1;
+                    ticket.Tick_MessageId = 1;
+                    ticket.Tick_Creator_UserId = 1;
+                    ticket.Tick_Helper_UserId = 1;
+                    ticket.Tick_Media = "a";
+                    ticket.Tick_Resolved = false;
+                    context.Tickets.Add(ticket);
+                    context.SaveChanges();
+                    return Ok(ticket);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.InnerException != null)
+                    {
+                        // Log or print the inner exception message
+                        System.Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+                    }
+                    System.Console.WriteLine(ex.Message);
+                    return StatusCode(500, ex.Message);
+                }
             }
-
-            
-
+        }
     }
-};
 }
+
+public class MachineData
+{
+    public string machine { get; set; }
+    public string description { get; set; }
+    public string priority { get; set; }
+    
+    public string expectedAction {get; set;}
+    public string selfTinkering {get; set;}
+}
+    

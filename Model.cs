@@ -36,6 +36,7 @@ namespace Viscon_ProjectC_Groep4
             if (!this.Machines.Any())
             {
                 this.Add(new Machines { Mach_Id = 1, Mach_Name = "Dummy", Mach_Type = "Dummy " });
+                this.Add(new Machines { Mach_Id = 2, Mach_Name = "Fruitpers", Mach_Type = "Fruit " });
             }
 
             this.SaveChanges();
