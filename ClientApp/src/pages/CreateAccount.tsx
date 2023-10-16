@@ -11,7 +11,7 @@ function AddAccount() {
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
     const [role, setRole] = useState('');
-    
+
     const [department, setDepartment] = useState('');
     const [departments, setDepartments] = useState<object[]>([]);
 
@@ -26,28 +26,28 @@ function AddAccount() {
     const nav = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
-         e.preventDefault();
-         console.log('Email:', email);
-         console.log('Passw:', password);
-         
-         if (email !== "" && password !== "") {
-             SignupAxios({
-                 email: email,
-                 firstName: firstName,
-                 lastName: lastName,
-                 password: password,
-                 phone: +phone,
-                 company: +company,
-                 role: +role,
-                 department: +department,
-                 language: "EN",
-             }).then(() => {
-                 console.log("User created: ", email, firstName, lastName, password, phone, company, role, department);
-                 nav('/')
-             }).catch(error => {
-                 console.error("Error:", error);
-             });
-         }
+        e.preventDefault();
+        console.log('Email:', email);
+        console.log('Passw:', password);
+
+        if (email !== "" && password !== "") {
+            SignupAxios({
+                email: email,
+                firstName: firstName,
+                lastName: lastName,
+                password: password,
+                phone: +phone,
+                company: usr_role == 1 ? +company : +usr_compId,
+                role: usr_role == 1 ? +role : 4,
+                department: usr_role == 1 ? +department : +usr_depId,
+                language: "EN",
+            }).then(() => {
+                console.log("User created: ", email, firstName, lastName, password, phone, company, role, department);
+                nav('/')
+            }).catch(error => {
+                console.error("Error:", error);
+            });
+        }
     };
 
     useEffect(() => {
@@ -57,7 +57,7 @@ function AddAccount() {
             setDepartments(departments);
         });
     }, []);
-    
+
     return (
         <>
             <div className="flex flex-row h-screen ml-20">
@@ -142,11 +142,13 @@ function AddAccount() {
                             </div>
 
 
-                            <div>
-                                <label htmlFor="role" className="block text-xs font-medium leading-2 text-gray-500">
-                                    User Account:
-                                </label>
-                                {usr_role == 1 ? (
+
+
+                            {usr_role == 1 ? (
+                                <div>
+                                    <label htmlFor="role" className="block text-xs font-medium leading-2 text-gray-500">
+                                        User Account:
+                                    </label>
                                     <select
                                         id="role"
                                         value={role}
@@ -158,22 +160,16 @@ function AddAccount() {
                                         <option value="3">Trained User</option>
                                         <option value="4">User</option>
                                     </select>
-                                ) : (
-                                    <select
-                                        id="role"
-                                        value={role}
-                                        onChange={(e) => setRole(e.target.value)}
-                                        className="w-full border rounded-md p-2 mt-2">
-                                        <option value="4">User</option>
-                                    </select>
-                                )}
-                            </div>
+                                </div>
+                            ) : (
+                                <div/>
+                            )}
 
-                            <div>
-                                <label htmlFor="Department" className="block text-xs font-medium leading-2 text-gray-500">
-                                    Department:
-                                </label>
-                                {usr_role == 1 ? (
+                            {usr_role == 1 ? (
+                                <div>
+                                    <label htmlFor="Department" className="block text-xs font-medium leading-2 text-gray-500">
+                                        Department:
+                                    </label>
                                     <select
                                         id="department"
                                         value={department}
@@ -187,22 +183,16 @@ function AddAccount() {
                                             </option>
                                         ))}
                                     </select>
-                                ) : (
-                                    <select
-                                        id="department"
-                                        value={department}
-                                        onChange={(e) => setRole(e.target.value)}
-                                        className="w-full border rounded-md p-2 mt-2">
-                                        <option value={usr_depId}>{usr_depId}</option>
-                                    </select>
-                                )}
-                            </div>
+                                </div>
+                            ) : (
+                                <div/>
+                            )}
 
-                            <div>
-                                <label htmlFor="machine" className="block text-xs font-medium leading-2 text-gray-500">
-                                    Company:
-                                </label>
-                                {usr_role == 1 ? (
+                            {usr_role == 1 ? (
+                                <div>
+                                    <label htmlFor="machine" className="block text-xs font-medium leading-2 text-gray-500">
+                                        Company:
+                                    </label>
                                     <select
                                         id="company"
                                         value={company}
@@ -216,20 +206,14 @@ function AddAccount() {
                                             </option>
                                         ))}
                                     </select>
-                                ) : (
-                                    <select
-                                        id="company"
-                                        value={company}
-                                        onChange={(e) => setRole(e.target.value)}
-                                        className="w-full border rounded-md p-2 mt-2">
-                                        <option value={usr_compId}>{usr_compId}</option>
-                                    </select>
-                                )}
-                            </div>
+                                </div>
+                            ) : (
+                                <div/>
+                            )}
 
                             <div className={"flex justify-start"}>
                                 <button type="submit"
-                                    className="flex justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+                                        className="flex justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
                                     Add Account
                                 </button>
                             </div>
