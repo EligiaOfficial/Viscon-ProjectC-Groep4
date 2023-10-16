@@ -1,3 +1,4 @@
+import Nav from "../components/Nav"
 import axios from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
@@ -33,8 +34,9 @@ function Login() {
     };
 
     return (
-        <>
-            <div className="flex flex-row h-screen">
+        <div className="h-screen flex flex-col">
+            <Nav/>
+            <div className="flex flex-row h-full">
                 <div className="basis-1/2 hidden md:block">
                     <img className={"object-cover w-full h-full"} src="https://viscongroup.eu/app/mu-plugins/customized-login/dist/images/background.jpg" alt=""/>
                 </div>
@@ -97,7 +99,7 @@ function Login() {
 
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
