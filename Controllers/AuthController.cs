@@ -7,9 +7,11 @@ namespace Viscon_ProjectC_Groep4.Controllers {
     [Route("[controller]")]
     public class AuthController : ControllerBase {
         private readonly IConfiguration _configuration;
+        private readonly IServiceProvider _services;
 
-        public AuthController(IConfiguration configuration) {
+        public AuthController(IConfiguration configuration, IServiceProvider services) {
             _configuration = configuration;
+            _services = services;
         }
 
         [HttpPost]
@@ -18,7 +20,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             try {
                 System.Console.WriteLine(data.email + " is trying to log in.");
 
-                using (var context = new ApplicationDbContext()) {
+                using (var context = _services.GetService<ApplicationDbContext>()) {
                     var user = await context.Users.Where(p => p.Usr_Email == data.email).FirstOrDefaultAsync();
                     if (user == null) {
                         System.Console.WriteLine("User not found");
@@ -48,7 +50,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
 
                 System.Console.WriteLine(data.password, passwordHash, passwordSalt);
 
-                using (var context = new ApplicationDbContext()) {
+                using (var context = _services.GetService<ApplicationDbContext>()) {
                     var company = await context.Departments.Where(p => p.Dep_Id == 1).FirstOrDefaultAsync();
                     if (company == null) return BadRequest("No company found");
                     var user = new Entities.Users {
