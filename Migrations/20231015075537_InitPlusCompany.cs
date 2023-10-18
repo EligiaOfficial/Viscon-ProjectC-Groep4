@@ -7,13 +7,27 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitPlusCompany : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "public");
+
+            migrationBuilder.CreateTable(
+                name: "Companies",
+                schema: "public",
+                columns: table => new
+                {
+                    Com_Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Com_Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.Com_Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Departments",
@@ -72,16 +86,22 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     Usr_Password = table.Column<byte[]>(type: "bytea", nullable: false),
                     Usr_PasswSalt = table.Column<byte[]>(type: "bytea", nullable: false),
                     Usr_Email = table.Column<string>(type: "text", nullable: false),
-                    Usr_Level = table.Column<int>(type: "integer", nullable: false),
-                    Usr_Username = table.Column<string>(type: "text", nullable: false),
-                    Usr_Role = table.Column<string>(type: "text", nullable: false),
+                    Usr_Role = table.Column<int>(type: "integer", nullable: false),
                     Usr_PhoneNumber = table.Column<int>(type: "integer", nullable: false),
                     Usr_LanguagePreference = table.Column<string>(type: "text", nullable: false),
-                    Usr_DepId = table.Column<int>(type: "integer", nullable: false)
+                    Usr_DepId = table.Column<int>(type: "integer", nullable: false),
+                    Usr_CompId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Usr_Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Companies_Usr_CompId",
+                        column: x => x.Usr_CompId,
+                        principalSchema: "public",
+                        principalTable: "Companies",
+                        principalColumn: "Com_Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Users_Departments_Usr_DepId",
                         column: x => x.Usr_DepId,
@@ -181,6 +201,12 @@ namespace Viscon_ProjectC_Groep4.Migrations
                 column: "Tick_MessageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_Usr_CompId",
+                schema: "public",
+                table: "Users",
+                column: "Usr_CompId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_Usr_DepId",
                 schema: "public",
                 table: "Users",
@@ -204,6 +230,10 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users",
+                schema: "public");
+
+            migrationBuilder.DropTable(
+                name: "Companies",
                 schema: "public");
 
             migrationBuilder.DropTable(

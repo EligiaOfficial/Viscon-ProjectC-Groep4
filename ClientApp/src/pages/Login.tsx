@@ -2,6 +2,7 @@ import Nav from "../components/Nav"
 import axios from "axios";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import { LoginAxios } from "../Endpoints/Dto"
 
 function Login() {
 
@@ -18,17 +19,13 @@ function Login() {
             LoginAxios({
                 email: email,
                 password: password,
-            }).then(response => {
-                console.log("User Logged In: ", email);
-                if (response) {
-                    // todo check if logged in
-                    nav('/add')
-                } else {
-                    // todo give wrong combi back
-                    alert("Email and Password combination not found");
-                }
+            }).then(res => {
+                localStorage.setItem("token", res["data"]);
+                console.log("Res: ", res["data"]);
+                nav('/');
             }).catch(error => {
                 console.error("Error:", error);
+                alert("Email and or Password not found")
             });
         }
     };
@@ -104,14 +101,3 @@ function Login() {
 }
 
 export default Login
-
-function LoginAxios(data: { email: string; password: string; }) {
-    console.log('Before Axios request');
-    return axios.post('/api/Auth/Login', data)
-        .then(response => {
-            console.log('Axios request succeeded:', response);
-        })
-        .catch(error => {
-            console.error('Axios request failed:', error);
-        });
-}

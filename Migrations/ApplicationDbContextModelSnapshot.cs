@@ -23,6 +23,23 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Entities.Companies", b =>
+                {
+                    b.Property<int>("Com_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Com_Id"));
+
+                    b.Property<string>("Com_Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Com_Id");
+
+                    b.ToTable("Companies", "public");
+                });
+
             modelBuilder.Entity("Entities.Departments", b =>
                 {
                     b.Property<int>("Dep_Id")
@@ -151,6 +168,9 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Usr_Id"));
 
+                    b.Property<int>("Usr_CompId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Usr_DepId")
                         .HasColumnType("integer");
 
@@ -170,9 +190,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Usr_Level")
-                        .HasColumnType("integer");
-
                     b.Property<byte[]>("Usr_PasswSalt")
                         .IsRequired()
                         .HasColumnType("bytea");
@@ -184,15 +201,12 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.Property<int>("Usr_PhoneNumber")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Usr_Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Usr_Username")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Usr_Role")
+                        .HasColumnType("integer");
 
                     b.HasKey("Usr_Id");
+
+                    b.HasIndex("Usr_CompId");
 
                     b.HasIndex("Usr_DepId");
 
@@ -244,11 +258,19 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
             modelBuilder.Entity("Entities.Users", b =>
                 {
+                    b.HasOne("Entities.Companies", "Companies")
+                        .WithMany()
+                        .HasForeignKey("Usr_CompId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.Departments", "Departments")
                         .WithMany()
                         .HasForeignKey("Usr_DepId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Companies");
 
                     b.Navigation("Departments");
                 });
