@@ -64,6 +64,8 @@ const CreateTicket: React.FC = () => {
         if (response.status === 200) {
           // Handle the success response, e.g., show a success message
           console.log('Ticket created successfully:', response.data);
+          window.location.href = '/success';
+          
         } else {
           // Handle other status codes or error responses
           console.error('Ticket creation failed:', response.data);
@@ -94,39 +96,33 @@ const CreateTicket: React.FC = () => {
     fetchMachines();
   }, []);
 
-  return (
-    <div className="h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-md w-3/4">
-        <h1 className="text-2xl font-bold mb-4 text-center">Create a New Ticket</h1>
-        <form onSubmit={handleSubmit} className="flex flex-wrap">
-          {/* Alert for Validation Errors */}
-          {validationErrors.length > 0 && (
-            <div className="w-full px-2 mb-4">
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                {validationErrors.map((error, index) => (
-                  <p key={index}>{error}</p>
-                ))}
-                <span className="absolute top-0 bottom-0 right-0 px-4 py-3" onClick={() => setValidationErrors([])}>
-                  <svg className="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <title>Close</title>
-                    <path d="M14.95 5.484a1 1 0 10-1.414 1.414L18.586 10l-4.04 4.102a1 1 0 101.414 1.414l4.052-4.05a1 1 0 000-1.414L14.95 5.484z"/>
-                  </svg>
-                </span>
-              </div>
-            </div>
-          )}
 
-          {/* Rest of the form elements */}
-          <div className="w-1/6 px-2">
-            <label htmlFor="machine" className="block text-gray-600">
-              Select a machine:
-            </label>
-            <select
-              id="machine"
-              value={selectedMachine}
-              onChange={(e) => setSelectedMachine(e.target.value)}
-              className="w-full border rounded-md p-2"
-            >
+return (
+  <div className="h-screen flex items-center justify-center bg-gradient-to-r from-blue-300 to-blue-600">
+    <div className="bg-white p-10 rounded-lg w-4/5 shadow-2xl space-y-6">
+      <h1 className="text-3xl font-bold mb-2 text-center text-blue-900">Create a New Ticket</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+
+        {/* Alert for Validation Errors */}
+        {validationErrors.length > 0 && (
+          <div className="bg-red-200 border border-red-500 text-red-800 px-5 py-3 rounded relative" role="alert">
+            {validationErrors.map((error, index) => (
+              <p key={index} className="mb-1">{error}</p>
+            ))}
+            <button className="absolute top-2 right-2 text-red-600 hover:text-red-800" onClick={() => setValidationErrors([])}>
+              <span className="sr-only">Close alert</span>
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* Form elements */}
+        <div className="grid grid-cols-2 gap-6">
+
+          <div>
+            <label htmlFor="machine" className="block text-gray-700 mb-1 font-medium">Select a machine:</label>
+            <select id="machine" value={selectedMachine} onChange={(e) => setSelectedMachine(e.target.value)}
+                    className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
               <option value="">Select a machine</option>
               {machines.map((machine) => (
                 <option key={machine} value={machine}>
@@ -135,74 +131,51 @@ const CreateTicket: React.FC = () => {
               ))}
             </select>
           </div>
-          <div className="w-1/6 px-2">
-            <label htmlFor="description" className="block text-gray-600">
-              What do you see happening?
-            </label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full border rounded-md p-2"
-            />
-          </div>
-          <div className="w-1/6 px-2">
-            <label htmlFor="expectedAction" className="block text-gray-600">
-              What do you expect to be done?
-            </label>
-            <textarea
-              id="expectedAction"
-              value={expectedAction}
-              onChange={(e) => setExpectedAction(e.target.value)}
-              className="w-full border rounded-md p-2"
-            />
-          </div>
-          <div className="w-1/6 px-2">
-            <label htmlFor="selfTinkering" className="block text-gray-600">
-              Have you made any changes to the machine?
-            </label>
-            <textarea
-              id="selfTinkering"
-              value={selfTinkering}
-              onChange={(e) => setSelfTinkering(e.target.value)}
-              className="w-full border rounded-md p-2"
-            />
-          </div>
-          <div className="w-1/6 px-2">
-            <label htmlFor="image" className="block text-gray-600">
-              Add a photo:
-            </label>
-            <input
-              type="file"
-              id="image"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files && e.target.files[0])}
-              className="w-full border rounded-md p-2"
-            />
-          </div>
-          <div className="w-1/6 px-2">
-            <label htmlFor="priority" className="block text-gray-600">
-              Priority Level:
-            </label>
-            <select
-              id="priority"
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className="w-full border rounded-md p-2"
-            >
+
+          <div>
+            <label htmlFor="priority" className="block text-gray-700 mb-1 font-medium">Priority Level:</label>
+            <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}
+                    className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
               <option value="Normal">Normal</option>
               <option value="High">High</option>
             </select>
           </div>
-          <div className="w-1/6 px-2">
-            <button type="submit" className="bg-blue-500 text-white rounded-md p-2 w-full hover:bg-blue-700">
-              Create Ticket
-            </button>
-          </div>
-        </form>
+        
+
+      <div className="col-span-2">
+          <label htmlFor="description" className="block text-gray-700 mb-1 font-medium">What do you see happening?</label>
+          <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)}
+                    className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500" rows={2}></textarea>
       </div>
+      <div className="col-span-2">
+        <label htmlFor="expectedAction" className="block text-gray-700 mb-1 font-medium">What do you expect to be done?</label>
+        <textarea id="expectedAction" value={expectedAction} onChange={(e) => setExpectedAction(e.target.value)}
+                  className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500" rows={2}></textarea>
+      </div>
+
+      <div className="col-span-2">
+        <label htmlFor="selfTinkering" className="block text-gray-700 mb-1 font-medium">Have you made any changes to the machine?</label>
+        <textarea id="selfTinkering" value={selfTinkering} onChange={(e) => setSelfTinkering(e.target.value)}
+                  className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500" rows={2}></textarea>
+      </div>
+
+      <div>
+        <label htmlFor="image" className="block text-gray-700 mb-1 font-medium">Add a photo:</label>
+        <input type="file" id="image" accept="image/*" onChange={(e) => setImage(e.target.files && e.target.files[0])}
+               className="w-full border rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"/>
+      </div>
+
+      <div className="col-span-2">
+        <button type="submit" className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ease-in-out duration-300">
+          Create Ticket
+        </button>
+      </div>
+
     </div>
-  );
-};
+  </form>
+</div>
+</div>
+);
+}
 
 export default CreateTicket;
