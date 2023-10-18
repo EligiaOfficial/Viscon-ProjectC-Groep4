@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import Nav from "../components/Nav"
 import axios from "axios";
 import {useState} from "react";

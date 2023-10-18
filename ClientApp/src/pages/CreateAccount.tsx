@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import {useEffect, useState} from "react";
 import {FetchUserCreationData, SignupAxios} from "../Endpoints/Dto";
 import {useNavigate} from "react-router-dom";

@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import nav from "../components/Nav";
 import {useNavigate} from "react-router-dom";
 import {getName, getEmail, getPhone, getRole, getId, getCompany, getDepartment} from '../Endpoints/Jwt'
@@ -35,6 +39,7 @@ function Home() {
             <hr/>
             <a href="/add">Create Account (Temp)</a>
             <hr/>
+            <a href="Create">Create Ticket (Temp)</a>
             <div>
                 {isLoggedIn ? (
                     <button onClick={logOut} > LogOut </button>
