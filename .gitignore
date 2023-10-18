@@ -4,5 +4,8 @@ bin
 .vscode
 *.log
 .vs
+.sln
+*.sln
+/Viscon-ProjectC-Groep4.csproj.user
 .idea
 .gitignore
