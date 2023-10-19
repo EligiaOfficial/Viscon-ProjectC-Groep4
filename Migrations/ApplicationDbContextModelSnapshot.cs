@@ -96,7 +96,15 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Msg_TickId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TicketsTick_Id")
+                        .HasColumnType("integer");
+
                     b.HasKey("Msg_Id");
+
+                    b.HasIndex("TicketsTick_Id");
 
                     b.ToTable("Messages", "public");
                 });
@@ -126,7 +134,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Tick_Helper_UserId")
+                    b.Property<int?>("Tick_Helper_UserId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Tick_MachId")
@@ -137,11 +145,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Tick_Media")
-                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Tick_MessageId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Tick_Priority")
                         .HasColumnType("integer");
@@ -162,8 +166,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.HasIndex("Tick_Helper_UserId");
 
                     b.HasIndex("Tick_MachId");
-
-                    b.HasIndex("Tick_MessageId");
 
                     b.ToTable("Tickets", "public");
                 });
@@ -221,6 +223,17 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.ToTable("Users", "public");
                 });
 
+            modelBuilder.Entity("Entities.Messages", b =>
+                {
+                    b.HasOne("Entities.Tickets", "Tickets")
+                        .WithMany()
+                        .HasForeignKey("TicketsTick_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tickets");
+                });
+
             modelBuilder.Entity("Entities.Tickets", b =>
                 {
                     b.HasOne("Entities.Users", "Creator")
@@ -237,19 +250,11 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasOne("Entities.Users", "Helper")
                         .WithMany()
-                        .HasForeignKey("Tick_Helper_UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Tick_Helper_UserId");
 
                     b.HasOne("Entities.Machines", "Machines")
                         .WithMany()
                         .HasForeignKey("Tick_MachId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Messages", "Messages")
-                        .WithMany()
-                        .HasForeignKey("Tick_MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -260,8 +265,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.Navigation("Helper");
 
                     b.Navigation("Machines");
-
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Entities.Users", b =>

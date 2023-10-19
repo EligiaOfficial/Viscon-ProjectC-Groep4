@@ -10,10 +10,9 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react", 
+    "jsx": "react-jsx", 
 
     /* Linting */
     "strict": true,

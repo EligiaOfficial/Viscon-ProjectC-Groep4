@@ -6,11 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Cryptography;
 using System.Security.Claims;
 using Entities;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 using Viscon_ProjectC_Groep4.Dto;
 
 namespace Viscon_ProjectC_Groep4.Controllers {
@@ -31,23 +29,22 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             try {
                 System.Console.WriteLine(data.Email + " is trying to log in.");
 
-                using (var context = _services.GetService<ApplicationDbContext>()) {
-                    var user = await context.Users.Where(p => p.Usr_Email == data.email).FirstOrDefaultAsync();
-                    if (user == null) {
-                        System.Console.WriteLine("User not found");
-                        return BadRequest("User not found");
-                    }
-
-                    if (!VerifyPassword(data.Password, user.Usr_Password, user.Usr_PasswSalt)) {
-                        System.Console.WriteLine("Wrong Password");
-                        return BadRequest("Wrong password");
-                    }
-                    System.Console.WriteLine("User and Passw correct", data.Password);
-
-                    var token = CreateToken(user);
-                    
-                    return Ok(token);
+                await using var context = _services.GetService<ApplicationDbContext>();
+                var user = await context.Users.Where(p => p.Usr_Email == data.Email).FirstOrDefaultAsync();
+                if (user == null) {
+                    System.Console.WriteLine("User not found");
+                    return BadRequest("User not found");
                 }
+
+                if (!VerifyPassword(data.Password, user.Usr_Password, user.Usr_PasswSalt)) {
+                    System.Console.WriteLine("Wrong Password");
+                    return BadRequest("Wrong password");
+                }
+                System.Console.WriteLine("User and Passw correct", data.Password);
+
+                var token = CreateToken(user);
+                    
+                return Ok(token);
             }
             catch (Exception ex) {
                 return BadRequest(ex.Message);
@@ -135,8 +132,19 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             
         }
 
-        private string VerifyToken() {
-            return "";
+        public static bool VerifyToken(string token, out int Id) {
+            Id = 0;
+
+            var pre = new JwtSecurityTokenHandler();
+            var jwt = pre.ReadJwtToken(token);
+            
+            if (jwt == null || jwt.ValidFrom > DateTime.UtcNow || jwt.ValidTo < DateTime.UtcNow) {
+                return false;
+            }
+
+            var claim = jwt.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+            Id = Int32.Parse(claim);
+            return true;
         }
 
         private void CreatePassHash(string password, out byte[] passwordHash, out byte[] passwordSalt) {

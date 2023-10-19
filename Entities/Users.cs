@@ -18,11 +18,11 @@ public class Users
     public string Usr_LanguagePreference { get; set; }
 
     [ForeignKey("Departments")]
-    public int Usr_DepId { get; set; } = 0;
+    public int? Usr_DepId { get; set; } = 0;
     public Departments Departments { get; set; }
     
     [ForeignKey("Companies")]
-    public int Usr_CompId { get; set; } = 0;
+    public int? Usr_CompId { get; set; } = 0;
     public Companies Companies { get; set; }
 }
 

@@ -1,8 +1,21 @@
-import React, { useState, useEffect } from 'react';
 import axios from '../../node_modules/axios/index';
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 
 
 const CreateTicket: React.FC = () => {
+
+  // Navigation Module
+  const nav = useNavigate();
+
+  // if not loggedIn redirect to Login
+  const token = localStorage.getItem("token");
+  const usr_role = getRole(token);
+  if (usr_role == 0) {
+    nav('/login')
+  }
+  
   // State for form fields
   const [selectedMachine, setSelectedMachine] = useState('');
   const [description, setDescription] = useState('');
@@ -19,6 +32,9 @@ const CreateTicket: React.FC = () => {
 
   // Function to handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
+    if (usr_role == 4) {
+      return;
+    }
     e.preventDefault();
     
     // Create an array to store validation errors
@@ -45,15 +61,13 @@ const CreateTicket: React.FC = () => {
       try {
         const data = {
           
+          Jtw: token,
           machine: selectedMachine,
           description: description,
           priority: priority, 
           expectedAction: expectedAction,
           selfTinkering: selfTinkering,
-
-
-          
-
+          departmentId: 1, // TODO: Make field for DepartmentId
           
         // Add other fields here
       };
@@ -64,7 +78,7 @@ const CreateTicket: React.FC = () => {
         if (response.status === 200) {
           // Handle the success response, e.g., show a success message
           console.log('Ticket created successfully:', response.data);
-          window.location.href = '/success';
+          nav('/success');
           
         } else {
           // Handle other status codes or error responses
@@ -136,8 +150,8 @@ return (
             <label htmlFor="priority" className="block text-gray-700 mb-1 font-medium">Priority Level:</label>
             <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}
                     className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-              <option value="Normal">Normal</option>
-              <option value="High">High</option>
+              <option value="1">Normal</option>
+              <option value="2">High</option>
             </select>
           </div>
         
