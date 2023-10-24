@@ -23,6 +23,23 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Entities.Companies", b =>
+                {
+                    b.Property<int>("Com_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Com_Id"));
+
+                    b.Property<string>("Com_Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Com_Id");
+
+                    b.ToTable("Companies", "public");
+                });
+
             modelBuilder.Entity("Entities.Departments", b =>
                 {
                     b.Property<int>("Dep_Id")
@@ -79,7 +96,15 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Msg_TickId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TicketsTick_Id")
+                        .HasColumnType("integer");
+
                     b.HasKey("Msg_Id");
+
+                    b.HasIndex("TicketsTick_Id");
 
                     b.ToTable("Messages", "public");
                 });
@@ -105,18 +130,22 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Tick_Helper_UserId")
+                    b.Property<string>("Tick_ExpectedToBeDone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Tick_Helper_UserId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Tick_MachId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Tick_Media")
+                    b.Property<string>("Tick_MadeAnyChanges")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Tick_MessageId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Tick_Media")
+                        .HasColumnType("text");
 
                     b.Property<int>("Tick_Priority")
                         .HasColumnType("integer");
@@ -138,8 +167,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasIndex("Tick_MachId");
 
-                    b.HasIndex("Tick_MessageId");
-
                     b.ToTable("Tickets", "public");
                 });
 
@@ -150,6 +177,9 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Usr_Id"));
+
+                    b.Property<int>("Usr_CompId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Usr_DepId")
                         .HasColumnType("integer");
@@ -170,9 +200,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Usr_Level")
-                        .HasColumnType("integer");
-
                     b.Property<byte[]>("Usr_PasswSalt")
                         .IsRequired()
                         .HasColumnType("bytea");
@@ -184,19 +211,27 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.Property<int>("Usr_PhoneNumber")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Usr_Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Usr_Username")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Usr_Role")
+                        .HasColumnType("integer");
 
                     b.HasKey("Usr_Id");
+
+                    b.HasIndex("Usr_CompId");
 
                     b.HasIndex("Usr_DepId");
 
                     b.ToTable("Users", "public");
+                });
+
+            modelBuilder.Entity("Entities.Messages", b =>
+                {
+                    b.HasOne("Entities.Tickets", "Tickets")
+                        .WithMany()
+                        .HasForeignKey("TicketsTick_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Entities.Tickets", b =>
@@ -215,19 +250,11 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasOne("Entities.Users", "Helper")
                         .WithMany()
-                        .HasForeignKey("Tick_Helper_UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Tick_Helper_UserId");
 
                     b.HasOne("Entities.Machines", "Machines")
                         .WithMany()
                         .HasForeignKey("Tick_MachId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Entities.Messages", "Messages")
-                        .WithMany()
-                        .HasForeignKey("Tick_MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -238,17 +265,23 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.Navigation("Helper");
 
                     b.Navigation("Machines");
-
-                    b.Navigation("Messages");
                 });
 
             modelBuilder.Entity("Entities.Users", b =>
                 {
+                    b.HasOne("Entities.Companies", "Companies")
+                        .WithMany()
+                        .HasForeignKey("Usr_CompId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Entities.Departments", "Departments")
                         .WithMany()
                         .HasForeignKey("Usr_DepId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Companies");
 
                     b.Navigation("Departments");
                 });

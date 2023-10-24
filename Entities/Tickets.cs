@@ -23,23 +23,23 @@ public class Tickets
 
     public int Tick_Priority { get; set; }
 
+    public string Tick_ExpectedToBeDone { get; set; }
+
+    public string Tick_MadeAnyChanges { get; set; }
+
     [ForeignKey("Departments")]
     public int Tick_DepartmentId { get; set; }
     public Departments Departments { get; set; }
-
-    [ForeignKey("Messages")]
-    public int Tick_MessageId { get; set; }
-    public Messages Messages { get; set; }  
 
     [ForeignKey("Creator")] // Hier wordt de juiste navigatie-eigenschap aangegeven
     public int Tick_Creator_UserId { get; set; }
     public Users Creator { get; set; }
 
     [ForeignKey("Helper")] // Hier wordt de juiste navigatie-eigenschap aangegeven
-    public int Tick_Helper_UserId { get; set; }
+    public int? Tick_Helper_UserId { get; set; }
     public Users Helper { get; set; }
 
-    public string Tick_Media { get; set; }
+    public string? Tick_Media { get; set; }
 
     public bool Tick_Resolved {get; set;}
 

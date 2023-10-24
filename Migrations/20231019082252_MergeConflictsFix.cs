@@ -7,13 +7,27 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class MergeConflictsFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "public");
+
+            migrationBuilder.CreateTable(
+                name: "Companies",
+                schema: "public",
+                columns: table => new
+                {
+                    Com_Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Com_Name = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.Com_Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Departments",
@@ -45,22 +59,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Messages",
-                schema: "public",
-                columns: table => new
-                {
-                    Msg_Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Msg_Message = table.Column<string>(type: "text", nullable: false),
-                    Message_Sender = table.Column<int>(type: "integer", nullable: false),
-                    Msg_Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Messages", x => x.Msg_Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 schema: "public",
                 columns: table => new
@@ -72,16 +70,22 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     Usr_Password = table.Column<byte[]>(type: "bytea", nullable: false),
                     Usr_PasswSalt = table.Column<byte[]>(type: "bytea", nullable: false),
                     Usr_Email = table.Column<string>(type: "text", nullable: false),
-                    Usr_Level = table.Column<int>(type: "integer", nullable: false),
-                    Usr_Username = table.Column<string>(type: "text", nullable: false),
-                    Usr_Role = table.Column<string>(type: "text", nullable: false),
+                    Usr_Role = table.Column<int>(type: "integer", nullable: false),
                     Usr_PhoneNumber = table.Column<int>(type: "integer", nullable: false),
                     Usr_LanguagePreference = table.Column<string>(type: "text", nullable: false),
-                    Usr_DepId = table.Column<int>(type: "integer", nullable: false)
+                    Usr_DepId = table.Column<int>(type: "integer", nullable: false),
+                    Usr_CompId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Usr_Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Companies_Usr_CompId",
+                        column: x => x.Usr_CompId,
+                        principalSchema: "public",
+                        principalTable: "Companies",
+                        principalColumn: "Com_Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Users_Departments_Usr_DepId",
                         column: x => x.Usr_DepId,
@@ -103,11 +107,12 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     Tick_Description = table.Column<string>(type: "text", nullable: false),
                     Tick_DateCreated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Tick_Priority = table.Column<int>(type: "integer", nullable: false),
+                    Tick_ExpectedToBeDone = table.Column<string>(type: "text", nullable: false),
+                    Tick_MadeAnyChanges = table.Column<string>(type: "text", nullable: false),
                     Tick_DepartmentId = table.Column<int>(type: "integer", nullable: false),
-                    Tick_MessageId = table.Column<int>(type: "integer", nullable: false),
                     Tick_Creator_UserId = table.Column<int>(type: "integer", nullable: false),
-                    Tick_Helper_UserId = table.Column<int>(type: "integer", nullable: false),
-                    Tick_Media = table.Column<string>(type: "text", nullable: false),
+                    Tick_Helper_UserId = table.Column<int>(type: "integer", nullable: true),
+                    Tick_Media = table.Column<string>(type: "text", nullable: true),
                     Tick_Resolved = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -128,13 +133,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         principalColumn: "Mach_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Tickets_Messages_Tick_MessageId",
-                        column: x => x.Tick_MessageId,
-                        principalSchema: "public",
-                        principalTable: "Messages",
-                        principalColumn: "Msg_Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Tickets_Users_Tick_Creator_UserId",
                         column: x => x.Tick_Creator_UserId,
                         principalSchema: "public",
@@ -146,9 +144,39 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         column: x => x.Tick_Helper_UserId,
                         principalSchema: "public",
                         principalTable: "Users",
-                        principalColumn: "Usr_Id",
+                        principalColumn: "Usr_Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                schema: "public",
+                columns: table => new
+                {
+                    Msg_Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Msg_Message = table.Column<string>(type: "text", nullable: false),
+                    Message_Sender = table.Column<int>(type: "integer", nullable: false),
+                    Msg_Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Msg_TickId = table.Column<int>(type: "integer", nullable: false),
+                    TicketsTick_Id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Msg_Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Tickets_TicketsTick_Id",
+                        column: x => x.TicketsTick_Id,
+                        principalSchema: "public",
+                        principalTable: "Tickets",
+                        principalColumn: "Tick_Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_TicketsTick_Id",
+                schema: "public",
+                table: "Messages",
+                column: "TicketsTick_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_Tick_Creator_UserId",
@@ -175,10 +203,10 @@ namespace Viscon_ProjectC_Groep4.Migrations
                 column: "Tick_MachId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tickets_Tick_MessageId",
+                name: "IX_Users_Usr_CompId",
                 schema: "public",
-                table: "Tickets",
-                column: "Tick_MessageId");
+                table: "Users",
+                column: "Usr_CompId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Usr_DepId",
@@ -191,6 +219,10 @@ namespace Viscon_ProjectC_Groep4.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Messages",
+                schema: "public");
+
+            migrationBuilder.DropTable(
                 name: "Tickets",
                 schema: "public");
 
@@ -199,11 +231,11 @@ namespace Viscon_ProjectC_Groep4.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "Messages",
+                name: "Users",
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "Users",
+                name: "Companies",
                 schema: "public");
 
             migrationBuilder.DropTable(

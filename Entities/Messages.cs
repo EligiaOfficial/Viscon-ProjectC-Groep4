@@ -15,4 +15,8 @@ public class Messages
     public int Message_Sender { get; set; }
 
     public DateTime Msg_Date { get; set; }
+    
+    [ForeignKey("Ticket")]
+    public int Msg_TickId { get; set; }
+    public Tickets Tickets { get; set; }  
 }
