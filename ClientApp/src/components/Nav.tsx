@@ -20,12 +20,12 @@ function Nav() {
     }
 
     return (
-        <div className="h-[50px] p-1 shadow-md shadow-b flex flex-row justify-between">
+        <div className="h-[50px] p-1 shadow-md shadow-stone-200 flex flex-row justify-between">
             <img className="object-contain h-full cursor-pointer" src={visconLogo} />
             <div className="flex items-center justify-between gap-16 pr-10">
                 <div className="z-0 overflow-hidden">
                     <div onClick={() => searchClicked(true)} className={`${search ? "" : "translate-x-[200px]"} transition ease-in-out duration-300 select-none relative group flex flex-row justify-between items-center gap-2 cursor-pointer`}>
-                        <div className="w-[48px] overflow-hidden">
+                        <div className="w-[48px] overflow-hidden border-y border-transparent">
                             <div className={`${search ? "translate-x-[200px]" : ""} transition ease-in-out duration-300 `}>
                                 <span className={`absolute -z-10 left-0`}>Search</span>
                                 <span className={`transition ease-in-out duration-300 group-hover:bg-gradient-to-r from-[#2a3180] via-[#199bd8] to-[#07ab9a] group-hover:bg-clip-text group-hover:text-transparent`}>
@@ -33,9 +33,11 @@ function Nav() {
                                 </span>
                             </div>
                         </div>
-                        <svg className={`${search ? "rotate-90" : ""} transition ease-in-out duration-300 delay-100 object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a]`} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                            <path d="M22.4,24a.663.663,0,0,1-.474-.2l-5.333-5.339a3.577,3.577,0,0,1-.4-.481l-1-1.334A9.368,9.368,0,0,1,9.365,18.69H9.334A9.346,9.346,0,0,1,5.3.92,9.322,9.322,0,0,1,16.653,3.548a9.354,9.354,0,0,1-.061,11.67l1.333.922a3.3,3.3,0,0,1,.574.467l5.333,5.34a.667.667,0,0,1-.026.922l-.934.934A.666.666,0,0,1,22.4,24ZM9.365,2.67a6.677,6.677,0,1,0,6.666,6.676A6.679,6.679,0,0,0,9.365,2.67Z" />
-                        </svg>
+                        <div className={`${search ? "rotate-90" : ""} transition ease-in-out duration-300 delay-100 h-[26px] w-[26px] flex justify-center items-center`}>
+                            <svg className={`object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a]`} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                                <path d="M22.4,24a.663.663,0,0,1-.474-.2l-5.333-5.339a3.577,3.577,0,0,1-.4-.481l-1-1.334A9.368,9.368,0,0,1,9.365,18.69H9.334A9.346,9.346,0,0,1,5.3.92,9.322,9.322,0,0,1,16.653,3.548a9.354,9.354,0,0,1-.061,11.67l1.333.922a3.3,3.3,0,0,1,.574.467l5.333,5.34a.667.667,0,0,1-.026.922l-.934.934A.666.666,0,0,1,22.4,24ZM9.365,2.67a6.677,6.677,0,1,0,6.666,6.676A6.679,6.679,0,0,0,9.365,2.67Z" />
+                            </svg>
+                        </div>
                         <input onBlur={() => searchClicked(false)} placeholder="How can we help you?" ref={searchInputRef} className={`w-[200px] transition ease-in-out duration-300 outline-none border-black group-hover:border-[#07ab9a] border-b`} />
                     </div>
                 </div>
