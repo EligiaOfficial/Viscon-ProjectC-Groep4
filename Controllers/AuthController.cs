@@ -64,7 +64,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 await using var context = _services.GetService<ApplicationDbContext>();
                 var department = await context.Departments.Where(p => p.Dep_Id == data.Department).FirstOrDefaultAsync();
                 var company = await context.Companies.Where(p => p.Com_Id == data.Company).FirstOrDefaultAsync();
-                    
+
+                if (department == null) return BadRequest("No department found");
                 if (company == null) return BadRequest("No company found");
                 var user = new Users {
                     Usr_FirstName = data.FirstName,
@@ -85,6 +86,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 }
                 catch (DbUpdateException e) {
                     System.Console.WriteLine(e);
+                    return BadRequest(e.Message);
                 }
 
                 return Ok(user);
