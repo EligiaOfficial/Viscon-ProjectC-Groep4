@@ -6,6 +6,7 @@ type LoginDto = {
 }
 
 type SignUpDto = {
+    jtw: string,
     email: string,
     firstName: string,
     lastName: string,
@@ -15,6 +16,24 @@ type SignUpDto = {
     role: number,
     department: number,
     language: string
+}
+
+type EditUserDto = {
+    jtw: string,
+    email: string,
+    password: string,
+    phone: number,
+    language: string
+}
+
+export function EditUserAxios(data: EditUserDto) {
+    return axios.post('api/Auth/Edit', data)
+        .then(res => {
+            return res;
+    })
+        .catch(err => {
+            throw err;
+        })
 }
 
 export function LoginAxios(data: LoginDto) {

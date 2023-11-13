@@ -1,7 +1,8 @@
 namespace Viscon_ProjectC_Groep4.Dto;
 
-public class AddDto
-{
+public class AddDto {
+    
+    public string Jtw { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
     public string FirstName { get; set; } = string.Empty;
@@ -35,4 +36,16 @@ public class MachineDataDto
     public string expectedAction {get; set;}
     public string selfTinkering {get; set;}
     public int departmentId { get; set; }
+}
+
+public class EditDto {
+    public string Jtw { get; set; } = string.Empty;
+    
+    public string Email { get; set; } = string.Empty;
+    
+    public string Password { get; set; } = string.Empty;
+    
+    public int Phone { get; set; } = 0;
+    
+    public string Language { get; set; } = string.Empty;
 }

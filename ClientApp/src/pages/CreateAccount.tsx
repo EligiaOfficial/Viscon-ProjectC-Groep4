@@ -36,6 +36,7 @@ function AddAccount() {
 
         if (email !== "" && password !== "") {
             SignupAxios({
+                jtw: token,
                 email: email,
                 firstName: firstName,
                 lastName: lastName,
