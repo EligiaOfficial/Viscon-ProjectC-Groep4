@@ -7,7 +7,7 @@ function Dashboard() {
         <>
             <div className="h-screen flex flex-col">
                 <Nav />
-                <div className="relative h-full w-full">
+                <div className="relative flex flex-row h-full w-full">
                     <SideBar />
                     <div className="pl-[50px] bg-stone-200 h-full w-full">
                         <section className="p-2">
