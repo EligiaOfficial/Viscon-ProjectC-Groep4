@@ -1,9 +1,15 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import { useRef, useState } from "react";
 import visconLogo from "../assets/Viscon-Group_logo-gradient.svg";
 import flagNL from "../assets/nl.svg";
 import flagGB from "../assets/gb.svg";
+import {useNavigate} from "react-router-dom";
 
 function Nav() {
+    const navigate = useNavigate();
     const [search, setSearch] = useState<boolean>(false);
     const [changeLanguage, setChangeLanguage] = useState<boolean>(false);
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -18,10 +24,14 @@ function Nav() {
     const languageToggled = (toggle:boolean) => {
         setChangeLanguage(toggle);
     }
+    
+    const logo = () => {
+        navigate("/");
+    }
 
     return (
         <div className="h-[50px] p-1 shadow-md shadow-stone-200 flex flex-row justify-between">
-            <img className="object-contain h-full cursor-pointer" src={visconLogo} />
+            <img className="object-contain h-full cursor-pointer" src={visconLogo} onClick={logo} />
             <div className="flex items-center justify-between gap-16 pr-10">
                 <div className="z-0 overflow-hidden">
                     <div onClick={() => searchClicked(true)} className={`${search ? "" : "translate-x-[200px]"} transition ease-in-out duration-300 select-none relative group flex flex-row justify-between items-center gap-2 cursor-pointer`}>
