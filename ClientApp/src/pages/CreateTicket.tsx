@@ -116,9 +116,9 @@ const CreateTicket: React.FC = () => {
         <div>
             <div className="h-screen flex flex-col">
                 <Nav />
-                <div className="relative h-full w-full">
+                <div className="flex flex-row relative h-full w-full">
                     <SideBar />
-                    <div className="pl-[50px] bg-stone-200 h-full w-full">
+                    <div className="bg-stone-200 h-full w-full">
                         <section className="p-2">
                             <div className="h-100 flex items-center justify-center">
                                 <div className="p-5 w-4/5">

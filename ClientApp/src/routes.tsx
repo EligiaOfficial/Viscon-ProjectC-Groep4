@@ -7,7 +7,7 @@ import SuccessCreating from "./pages/SuccessCreating";
 
 
 export const routes = [
-    { path: '/', name: 'homepage', component: <Home /> },
+    { path: '/', name: 'dashboard', component: <Dashboard /> },
     { path: '/dashboard', name: 'dashboard', component: <Dashboard /> },
     { path: '/login', name: 'login', component: <Login /> },
     { path: '/add', name: 'add', component: <AddAccount /> },

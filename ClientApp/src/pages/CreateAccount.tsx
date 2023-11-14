@@ -67,9 +67,9 @@ function AddAccount() {
         <>
             <div className="h-screen flex flex-col">
                 <Nav />
-                <div className="relative h-full w-full">
+                <div className="flex flex-row relative h-full w-full">
                     <SideBar />
-                    <div className="pl-[50px] bg-stone-200 h-full w-full">
+                    <div className="bg-stone-200 h-full w-full">
                         <section className="p-2">
                             <div className="ml-20">
                                 <div className="w-100 bg-gray-150 mt-20">
