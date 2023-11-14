@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {getName, getEmail, getPhone, getRole, getId, getCompany, getDepartment} from '../Endpoints/Jwt'
 import Nav from "../components/Nav";
 import {useEffect} from "react";
+import SideBar from "../components/SideBar";
 
 function Home() {
     var token = localStorage.getItem("token");
@@ -43,27 +44,37 @@ function Home() {
     
     return (
         <>
-            <a href="/dashboard">Dashboard</a>
-            <hr />
-            <a href="/add">Add User</a>
-            <hr/>
-            <a href="Create">Create Ticket</a>
-            <div>
-                {isLoggedIn ? (
-                    <button onClick={logOut} > LogOut </button>
-                ) : (
-                    <hr />
-                )}
-            </div>
-            <div>
-                <h3 className={"mt-5"}>Debug Data:</h3>
-                <p>User Id: {id}</p>
-                <p>Name: {name == null ? name : name[0] + " " + name[1]}</p>
-                <p>Email: {email}</p>
-                <p>Role: {role}</p>
-                <p>Phone: {phone}</p>
-                <p>Company: {company}</p>
-                <p>Department: {department}</p>
+            <div className="h-screen flex flex-col">
+                <Nav />
+                <div className="relative h-full w-full">
+                    <SideBar />
+                    <div className="pl-[50px] bg-stone-200 h-full w-full">
+                        <section className="p-2">
+                            <a href="/dashboard">Dashboard</a>
+                            <hr />
+                            <a href="/add">Add User</a>
+                            <hr/>
+                            <a href="Create">Create Ticket</a>
+                            <div>
+                                {isLoggedIn ? (
+                                    <button onClick={logOut} > LogOut </button>
+                                ) : (
+                                    <hr />
+                                )}
+                            </div>
+                            <div>
+                                <h3 className={"mt-5"}>Debug Data:</h3>
+                                <p>User Id: {id}</p>
+                                <p>Name: {name == null ? name : name[0] + " " + name[1]}</p>
+                                <p>Email: {email}</p>
+                                <p>Role: {role}</p>
+                                <p>Phone: {phone}</p>
+                                <p>Company: {company}</p>
+                                <p>Department: {department}</p>
+                            </div>
+                        </section>
+                    </div>
+                </div>
             </div>
         </>
     )

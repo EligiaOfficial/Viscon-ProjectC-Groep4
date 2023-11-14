@@ -59,6 +59,18 @@ function SideBar() {
                 </div>
             </div>
             <div className="mt-auto">
+                {/*{usr_role == 1 ? (*/}
+                {/*    <div className="group flex flex-row justify-start py-2 cursor-pointer">*/}
+                {/*        <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>*/}
+                {/*            <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">*/}
+                {/*                <circle cx="12" cy="12" r="12" stroke-width="4" />*/}
+                {/*            </svg>*/}
+                {/*        </div>*/}
+                {/*        <span className="group-hover:text-white translate duration-300">Add User</span>*/}
+                {/*    </div>*/}
+                {/*) : (*/}
+                {/*    <div/>*/}
+                {/*)}*/}
                 <div className="group flex flex-row justify-start py-2 cursor-pointer">
                     <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
                         <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">

@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import Nav from "../components/Nav";
+import SideBar from "../components/SideBar";
 
 
 const CreateTicket: React.FC = () => {
@@ -113,101 +114,110 @@ const CreateTicket: React.FC = () => {
 
     return (
         <div>
-            <Nav/>
-            <div className="h-100 flex items-center justify-center">
-                <div className="p-5 w-4/5">
-                    <h1 className="text-3xl font-bold mb-2 text-center text-blue-900">Create a New Ticket</h1>
-                    <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="h-screen flex flex-col">
+                <Nav />
+                <div className="relative h-full w-full">
+                    <SideBar />
+                    <div className="pl-[50px] bg-stone-200 h-full w-full">
+                        <section className="p-2">
+                            <div className="h-100 flex items-center justify-center">
+                                <div className="p-5 w-4/5">
+                                    <h1 className="text-3xl font-bold mb-2 text-center text-blue-900">Create a New Ticket</h1>
+                                    <form onSubmit={handleSubmit} className="space-y-4">
 
-                        {/* Alert for Validation Errors */}
-                        {validationErrors.length > 0 && (
-                            <div className="bg-red-200 border border-red-500 text-red-800 px-5 py-3 rounded relative"
-                                 role="alert">
-                                {validationErrors.map((error, index) => (
-                                    <p key={index} className="mb-1">{error}</p>
-                                ))}
-                                <button className="absolute top-2 right-2 text-red-600 hover:text-red-800"
-                                        onClick={() => setValidationErrors([])}>
-                                    <span className="sr-only">Close alert</span>
-                                    ✕
-                                </button>
+                                        {/* Alert for Validation Errors */}
+                                        {validationErrors.length > 0 && (
+                                            <div className="bg-red-200 border border-red-500 text-red-800 px-5 py-3 rounded relative"
+                                                 role="alert">
+                                                {validationErrors.map((error, index) => (
+                                                    <p key={index} className="mb-1">{error}</p>
+                                                ))}
+                                                <button className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                                                        onClick={() => setValidationErrors([])}>
+                                                    <span className="sr-only">Close alert</span>
+                                                    ✕
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {/* Form elements */}
+                                        <div className="grid grid-cols-2 gap-6">
+
+                                            <div>
+                                                <label htmlFor="machine" className="block text-gray-700 mb-1 font-medium">Select a
+                                                    machine:</label>
+                                                <select id="machine" value={selectedMachine}
+                                                        onChange={(e) => setSelectedMachine(e.target.value)}
+                                                        className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                    <option value="">Select a machine</option>
+                                                    {machines.map((machine) => (
+                                                        <option key={machine} value={machine}>
+                                                            {machine}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                                <label htmlFor="priority" className="block text-gray-700 mb-1 font-medium">Priority
+                                                    Level:</label>
+                                                <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}
+                                                        className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                                    <option value="1">Normal</option>
+                                                    <option value="2">High</option>
+                                                </select>
+                                            </div>
+
+
+                                            <div className="col-span-2">
+                                                <label htmlFor="description" className="block text-gray-700 mb-1 font-medium">What do
+                                                    you
+                                                    see happening?</label>
+                                                <textarea id="description" value={description}
+                                                          onChange={(e) => setDescription(e.target.value)}
+                                                          className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                          rows={2}></textarea>
+                                            </div>
+                                            <div className="col-span-2">
+                                                <label htmlFor="expectedAction" className="block text-gray-700 mb-1 font-medium">What do
+                                                    you
+                                                    expect to be done?</label>
+                                                <textarea id="expectedAction" value={expectedAction}
+                                                          onChange={(e) => setExpectedAction(e.target.value)}
+                                                          className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                          rows={2}></textarea>
+                                            </div>
+
+                                            <div className="col-span-2">
+                                                <label htmlFor="selfTinkering" className="block text-gray-700 mb-1 font-medium">Have you
+                                                    made any changes to the machine?</label>
+                                                <textarea id="selfTinkering" value={selfTinkering}
+                                                          onChange={(e) => setSelfTinkering(e.target.value)}
+                                                          className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                                                          rows={2}></textarea>
+                                            </div>
+
+                                            <div>
+                                                <label htmlFor="image" className="block text-gray-700 mb-1 font-medium">Add a
+                                                    photo:</label>
+                                                <input type="file" id="image" accept="image/*"
+                                                       onChange={(e) => setImage(e.target.files && e.target.files[0])}
+                                                       className="w-full border rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"/>
+                                            </div>
+
+                                            <div className="col-span-2">
+                                                <button type="submit"
+                                                        className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ease-in-out duration-300">
+                                                    Create Ticket
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        )}
-
-                        {/* Form elements */}
-                        <div className="grid grid-cols-2 gap-6">
-
-                            <div>
-                                <label htmlFor="machine" className="block text-gray-700 mb-1 font-medium">Select a
-                                    machine:</label>
-                                <select id="machine" value={selectedMachine}
-                                        onChange={(e) => setSelectedMachine(e.target.value)}
-                                        className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="">Select a machine</option>
-                                    {machines.map((machine) => (
-                                        <option key={machine} value={machine}>
-                                            {machine}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            <div>
-                                <label htmlFor="priority" className="block text-gray-700 mb-1 font-medium">Priority
-                                    Level:</label>
-                                <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}
-                                        className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="1">Normal</option>
-                                    <option value="2">High</option>
-                                </select>
-                            </div>
-
-
-                            <div className="col-span-2">
-                                <label htmlFor="description" className="block text-gray-700 mb-1 font-medium">What do
-                                    you
-                                    see happening?</label>
-                                <textarea id="description" value={description}
-                                          onChange={(e) => setDescription(e.target.value)}
-                                          className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                          rows={2}></textarea>
-                            </div>
-                            <div className="col-span-2">
-                                <label htmlFor="expectedAction" className="block text-gray-700 mb-1 font-medium">What do
-                                    you
-                                    expect to be done?</label>
-                                <textarea id="expectedAction" value={expectedAction}
-                                          onChange={(e) => setExpectedAction(e.target.value)}
-                                          className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                          rows={2}></textarea>
-                            </div>
-
-                            <div className="col-span-2">
-                                <label htmlFor="selfTinkering" className="block text-gray-700 mb-1 font-medium">Have you
-                                    made any changes to the machine?</label>
-                                <textarea id="selfTinkering" value={selfTinkering}
-                                          onChange={(e) => setSelfTinkering(e.target.value)}
-                                          className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                                          rows={2}></textarea>
-                            </div>
-
-                            <div>
-                                <label htmlFor="image" className="block text-gray-700 mb-1 font-medium">Add a
-                                    photo:</label>
-                                <input type="file" id="image" accept="image/*"
-                                       onChange={(e) => setImage(e.target.files && e.target.files[0])}
-                                       className="w-full border rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"/>
-                            </div>
-
-                            <div className="col-span-2">
-                                <button type="submit"
-                                        className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ease-in-out duration-300">
-                                    Create Ticket
-                                </button>
-                            </div>
-
-                        </div>
-                    </form>
+                        </section>
+                    </div>
                 </div>
             </div>
         </div>
