@@ -16,10 +16,12 @@ namespace Viscon_ProjectC_Groep4.Controllers {
     [Route("[controller]")]
     public class AuthController : ControllerBase {
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthController> _logger;
         private readonly IServiceProvider _services;
 
-        public AuthController(IConfiguration configuration, IServiceProvider services) {
+        public AuthController(IConfiguration configuration, ILogger<AuthController> logger, IServiceProvider services) {
             _configuration = configuration;
+            _logger = logger;
             _services = services;
         }
 
@@ -27,20 +29,20 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [Route("Login")]
         public async Task<IActionResult> Login(LoginDto data) {
             try {
-                System.Console.WriteLine(data.Email + " is trying to log in.");
+                _logger.LogInformation(data.Email + " is trying to log in.");
 
                 await using var context = _services.GetService<ApplicationDbContext>();
                 var user = await context.Users.Where(p => p.Usr_Email == data.Email).FirstOrDefaultAsync();
                 if (user == null) {
-                    System.Console.WriteLine("User not found");
+                    _logger.LogError("User not found");
                     return BadRequest("User not found");
                 }
 
                 if (!VerifyPassword(data.Password, user.Usr_Password, user.Usr_PasswSalt)) {
-                    System.Console.WriteLine("Wrong Password");
+                    _logger.LogError("Wrong Password");
                     return BadRequest("Wrong password");
                 }
-                System.Console.WriteLine("User and Passw correct", data.Password);
+                _logger.LogInformation("User and Passw correct", data.Password);
 
                 var token = CreateToken(user);
                     
@@ -55,11 +57,11 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [Route("Add")]
         public async Task<IActionResult> Add(AddDto data) {
             try {
-                System.Console.WriteLine(data.FirstName + " " + data.LastName + " is trying to be created");
+                _logger.LogInformation(data.FirstName + " " + data.LastName + " is trying to be created");
 
                 CreatePassHash(data.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-                System.Console.WriteLine(data.Password, passwordHash, passwordSalt);
+                _logger.LogInformation(data.Password, passwordHash, passwordSalt);
 
                 await using var context = _services.GetService<ApplicationDbContext>();
                 var department = await context.Departments.Where(p => p.Dep_Id == data.Department).FirstOrDefaultAsync();
@@ -82,10 +84,10 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 try {
                     context.Users.Add(user);
                     await context.SaveChangesAsync();
-                    Console.WriteLine("Created account for user: (" + user.Usr_FirstName + " " + user.Usr_LastName + " " + user.Usr_Email + ")");
+                    _logger.LogInformation("Created account for user: (" + user.Usr_FirstName + " " + user.Usr_LastName + " " + user.Usr_Email + ")");
                 }
                 catch (DbUpdateException e) {
-                    System.Console.WriteLine(e);
+                    _logger.LogError(e.ToString());
                     return BadRequest(e.Message);
                 }
 
@@ -96,9 +98,9 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             }
         }
         
-        private static string CreateToken(User user) {
+        private string CreateToken(User user) {
 
-            Console.WriteLine($"Creating Token for {user.Usr_Email}");
+            _logger.LogInformation($"Creating Token for {user.Usr_Email}");
 
             List<Claim> claims = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, user.Usr_Id.ToString()),
@@ -125,10 +127,10 @@ namespace Viscon_ProjectC_Groep4.Controllers {
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 string tokenString = tokenHandler.WriteToken(token);
-                Console.WriteLine($"Token created successfully. {token}");
+                _logger.LogInformation($"Token created successfully. {token}");
                 return tokenString;
             } catch (Exception ex) {
-                Console.WriteLine($"Error creating token: {ex.Message}");
+                _logger.LogError($"Error creating token: {ex.Message}");
                 return null!;
             }
             

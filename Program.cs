@@ -11,6 +11,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
     )
 );
 builder.Services.AddControllersWithViews();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 
