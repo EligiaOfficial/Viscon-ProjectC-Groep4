@@ -16,7 +16,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         
         private readonly IServiceProvider _services;
 
-        public MachineController(IConfiguration configuration, IServiceProvider services) {
+        public MachineController(IServiceProvider services) {
             _services = services;
         }
         
