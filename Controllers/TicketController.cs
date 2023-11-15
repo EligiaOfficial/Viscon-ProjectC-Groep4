@@ -9,9 +9,9 @@ namespace Viscon_ProjectC_Groep4.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-        
         private readonly IServiceProvider _services;
-        public TicketController(IConfiguration configuration, IServiceProvider services) {
+
+        public TicketController(IServiceProvider services) {
             _services = services;
         }
             
