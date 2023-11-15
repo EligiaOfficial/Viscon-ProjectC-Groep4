@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-public class Tickets
+public class Ticket
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -12,7 +12,7 @@ public class Tickets
 
     [ForeignKey("Machines")]
     public int Tick_MachId { get; set; }
-    public Machines Machines { get; set; }
+    public Machine Machines { get; set; }
 
     public string Tick_Title { get; set; }
 
@@ -29,15 +29,15 @@ public class Tickets
 
     [ForeignKey("Departments")]
     public int Tick_DepartmentId { get; set; }
-    public Departments Departments { get; set; }
+    public Department Departments { get; set; }
 
     [ForeignKey("Creator")] // Hier wordt de juiste navigatie-eigenschap aangegeven
     public int Tick_Creator_UserId { get; set; }
-    public Users Creator { get; set; }
+    public User Creator { get; set; }
 
     [ForeignKey("Helper")] // Hier wordt de juiste navigatie-eigenschap aangegeven
     public int? Tick_Helper_UserId { get; set; }
-    public Users Helper { get; set; }
+    public User Helper { get; set; }
 
     public string? Tick_Media { get; set; }
 

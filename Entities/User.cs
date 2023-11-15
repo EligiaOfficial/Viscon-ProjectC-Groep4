@@ -3,7 +3,7 @@ namespace Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-public class Users
+public class User
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,11 +19,11 @@ public class Users
 
     [ForeignKey("Departments")]
     public int? Usr_DepId { get; set; } = 0;
-    public Departments Departments { get; set; }
+    public Department Departments { get; set; }
     
     [ForeignKey("Companies")]
     public int? Usr_CompId { get; set; } = 0;
-    public Companies Companies { get; set; }
+    public Company Companies { get; set; }
 }
 
 public enum RoleTypes : int

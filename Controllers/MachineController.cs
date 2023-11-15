@@ -24,7 +24,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         // GET: api/Machine
         
         [HttpGet("fetchmachines")]
-        public async Task<ActionResult<IEnumerable<Machines>>> GetMachines() {
+        public async Task<ActionResult<IEnumerable<Machine>>> GetMachines() {
             await using var context = _services.GetService<ApplicationDbContext>();;
             try
             {
