@@ -67,7 +67,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
 
                 if (department == null) return BadRequest("No department found");
                 if (company == null) return BadRequest("No company found");
-                var user = new Users {
+                var user = new User {
                     Usr_FirstName = data.FirstName,
                     Usr_LastName = data.LastName,
                     Usr_Email = data.Email,
@@ -96,7 +96,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             }
         }
         
-        private static string CreateToken(Users user) {
+        private static string CreateToken(User user) {
 
             Console.WriteLine($"Creating Token for {user.Usr_Email}");
 
