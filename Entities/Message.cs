@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-public class Messages
+public class Message
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,5 +18,5 @@ public class Messages
     
     [ForeignKey("Ticket")]
     public int Msg_TickId { get; set; }
-    public Tickets Tickets { get; set; }  
+    public Ticket Tickets { get; set; }  
 }
