@@ -5,13 +5,13 @@ import {getName, getEmail, getPhone, getRole, getId, getCompany, getDepartment} 
 function Home() {
 
     var token = localStorage.getItem("token");
-    var {id,name,email,phone,role,company,department} = "Empty";
+    var {id,name,email,phone,usr_role,company,department} = "Empty";
     var isLoggedIn = false;
     try {
         name = getName(token);
         email = getEmail(token);
         phone = "+"+31+getPhone(token);
-        role = getRole(token);
+        usr_role = getRole(token);
         id = getId(token);
         company = getCompany(token);
         department = getDepartment(token);
@@ -48,7 +48,7 @@ function Home() {
                 <p>User Id: {id}</p>
                 <p>Name: {name == null ? name : name[0] + " " + name[1]}</p>
                 <p>Email: {email}</p>
-                <p>Role: {role}</p>
+                <p>Role: {usr_role}</p>
                 <p>Phone: {phone}</p>
                 <p>Company: {company}</p>
                 <p>Department: {department}</p>
