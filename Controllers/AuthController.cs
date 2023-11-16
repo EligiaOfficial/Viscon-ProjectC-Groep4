@@ -99,7 +99,6 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         }
         
         private string CreateToken(User user) {
-
             _logger.LogInformation($"Creating Token for {user.Usr_Email}");
 
             List<Claim> claims = new List<Claim> {
