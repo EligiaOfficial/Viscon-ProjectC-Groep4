@@ -75,7 +75,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                     Usr_Email = data.Email,
                     Usr_Password = passwordHash,
                     Usr_PasswSalt = passwordSalt,
-                    Usr_Role = data.Role,
+                    Usr_Role = (RoleTypes)data.Role,
                     Usr_PhoneNumber = data.Phone,
                     Usr_LanguagePreference = data.Language,
                     Usr_DepId = department.Dep_Id,
