@@ -17,13 +17,13 @@ namespace Viscon_ProjectC_Groep4.Controllers
             
             
         [HttpPost("createticket")]
-        public async Task<ActionResult<Tickets>> CreateTicket([FromBody] MachineDataDto data) {
+        public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data) {
             System.Console.WriteLine("API Fetched");
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
                 if (VerifyToken(data.Jtw, out int Id)) {
                     System.Console.WriteLine("Token Correct");
-                    var ticket = new Tickets();
+                    var ticket = new Ticket();
                     ticket.Tick_MachId = context.Machines.Where(m => m.Mach_Name == data.machine).Select(m => m.Mach_Id).FirstOrDefault();
                     ticket.Tick_Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                     ticket.Tick_Description = data.description;
