@@ -9,20 +9,22 @@ namespace Viscon_ProjectC_Groep4.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
+        private readonly ILogger<TicketController> _logger;
         private readonly IServiceProvider _services;
 
-        public TicketController(IServiceProvider services) {
+        public TicketController(ILogger<TicketController> logger, IServiceProvider services) {
+            _logger = logger;
             _services = services;
         }
             
             
         [HttpPost("createticket")]
         public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data) {
-            System.Console.WriteLine("API Fetched");
+            _logger.LogInformation("API Fetched");
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
                 if (VerifyToken(data.Jtw, out int Id)) {
-                    System.Console.WriteLine("Token Correct");
+                    _logger.LogInformation("Token Correct");
                     var ticket = new Ticket();
                     ticket.Tick_MachId = context.Machines.Where(m => m.Mach_Name == data.machine).Select(m => m.Mach_Id).FirstOrDefault();
                     ticket.Tick_Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
@@ -41,7 +43,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     return Ok(ticket);
                 }
                 else {
-                    System.Console.WriteLine("Token Error");
+                    _logger.LogError("Token Error");
                     return Unauthorized("Invalid Token");
                 }
             }
@@ -51,12 +53,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 if (ex.InnerException != null)
                 {
                     // Log or print the inner exception message
-                    System.Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+                    _logger.LogError("Inner Exception: " + ex.InnerException.Message);
                 }
-                System.Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                 return StatusCode(500, ex.Message);
             }
         }
     }
 }
-    

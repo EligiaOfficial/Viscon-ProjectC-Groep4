@@ -14,9 +14,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
     public class MachineController : ControllerBase
     {
         
+        private readonly ILogger<FetchController> _logger;
         private readonly IServiceProvider _services;
 
-        public MachineController(IServiceProvider services) {
+        public MachineController(ILogger<FetchController> logger, IServiceProvider services) {
+            _logger = logger;
             _services = services;
         }
         
@@ -34,7 +36,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
             catch (Exception ex)
             {
                     
-                System.Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                     
                 return StatusCode(500, ex.Message);
             }
