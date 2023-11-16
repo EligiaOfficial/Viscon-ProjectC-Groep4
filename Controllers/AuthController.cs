@@ -38,14 +38,14 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 _logger.LogInformation(data.Email + " is trying to log in.");
 
                 await using var context = _services.GetService<ApplicationDbContext>();
-                var user = await context.Users.Where(p => p.Usr_Email == data.Email).FirstOrDefaultAsync();
+                var user = await context.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
                 if (user == null) {
                     _logger.LogError("User not found");
                     return BadRequest("User not found");
                 }
 
                 if (!_authenticator.VerifyPassword(
-                    data.Password, user.Usr_Password, user.Usr_PasswSalt
+                    data.Password, user.Password, user.PasswSalt
                 )) {
                     _logger.LogError("Wrong Password");
                     return BadRequest("Wrong password");
@@ -75,27 +75,27 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 _logger.LogInformation(data.Password, passwordHash, passwordSalt);
 
                 await using var context = _services.GetService<ApplicationDbContext>();
-                var department = await context.Departments.Where(p => p.Dep_Id == data.Department).FirstOrDefaultAsync();
-                var company = await context.Companies.Where(p => p.Com_Id == data.Company).FirstOrDefaultAsync();
+                var department = await context.Departments.Where(p => p.Id == data.Department).FirstOrDefaultAsync();
+                var company = await context.Companies.Where(p => p.Id == data.Company).FirstOrDefaultAsync();
 
                 if (department == null) return BadRequest("No department found");
                 if (company == null) return BadRequest("No company found");
                 var user = new User {
-                    Usr_FirstName = data.FirstName,
-                    Usr_LastName = data.LastName,
-                    Usr_Email = data.Email,
-                    Usr_Password = passwordHash,
-                    Usr_PasswSalt = passwordSalt,
-                    Usr_Role = data.Role,
-                    Usr_PhoneNumber = data.Phone,
-                    Usr_LanguagePreference = data.Language,
-                    Usr_DepId = department.Dep_Id,
-                    Usr_CompId = company.Com_Id,
+                    FirstName = data.FirstName,
+                    LastName = data.LastName,
+                    Email = data.Email,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
+                    Role = data.Role,
+                    PhoneNumber = data.Phone,
+                    LanguagePreference = data.Language,
+                    DepartmentId = department.Id,
+                    CompanyId = company.Id,
                 };
                 try {
                     context.Users.Add(user);
                     await context.SaveChangesAsync();
-                    _logger.LogInformation("Created account for user: (" + user.Usr_FirstName + " " + user.Usr_LastName + " " + user.Usr_Email + ")");
+                    _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " + user.Email + ")");
                 }
                 catch (DbUpdateException e) {
                     _logger.LogError(e.ToString());

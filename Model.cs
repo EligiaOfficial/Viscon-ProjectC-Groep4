@@ -34,24 +34,24 @@ namespace Viscon_ProjectC_Groep4
 
         public void SeedDb() {
             if (!this.Departments.Any()) {
-                this.Add(new Department {Dep_Id = 1, Dep_Speciality = "Viscon Plant Technology"});
-                this.Add(new Department {Dep_Id = 2, Dep_Speciality = "Viscon Fresh Produce"});
-                this.Add(new Department {Dep_Id = 3, Dep_Speciality = "Viscon Logistics"});
-                this.Add(new Department {Dep_Id = 4, Dep_Speciality = "Viscon Hatchery Automation"});
+                this.Add(new Department {Id = 1, Speciality = "Viscon Plant Technology"});
+                this.Add(new Department {Id = 2, Speciality = "Viscon Fresh Produce"});
+                this.Add(new Department {Id = 3, Speciality = "Viscon Logistics"});
+                this.Add(new Department {Id = 4, Speciality = "Viscon Hatchery Automation"});
             }
 
             if (!this.Machines.Any()) {
-                this.Add(new Machine {Mach_Id = 1, Mach_Name = "T-800", Mach_Type = "Schwarzenegger"});
-                this.Add(new Machine {Mach_Id = 2, Mach_Name = "Rev-9", Mach_Type = "Liquid Nano-particles"});
-                this.Add(new Machine {Mach_Id = 3, Mach_Name = "Model X", Mach_Type = "Car"});
+                this.Add(new Machine {Id = 1, Name = "T-800", Type = "Schwarzenegger"});
+                this.Add(new Machine {Id = 2, Name = "Rev-9", Type = "Liquid Nano-particles"});
+                this.Add(new Machine {Id = 3, Name = "Model X", Type = "Car"});
             }
-            
+
             if (!this.Companies.Any()) {
-                this.Add(new Company {Com_Id = 1, Com_Name = "Viscon Group"});
-                this.Add(new Company {Com_Id = 2, Com_Name = "Viscon Poland"});
-                this.Add(new Company {Com_Id = 3, Com_Name = "Neste"});
-                this.Add(new Company {Com_Id = 4, Com_Name = "Green Farmers"});
-                this.Add(new Company {Com_Id = 5, Com_Name = "Vinovo"});
+                this.Add(new Company {Id = 1, Name = "Viscon Group"});
+                this.Add(new Company {Id = 2, Name = "Viscon Poland"});
+                this.Add(new Company {Id = 3, Name = "Neste"});
+                this.Add(new Company {Id = 4, Name = "Green Farmers"});
+                this.Add(new Company {Id = 5, Name = "Vinovo"});
             }
 
             this.SaveChanges();
@@ -60,52 +60,52 @@ namespace Viscon_ProjectC_Groep4
                 const string password = "Viscon";
                 CreatePassHash(password, out byte[] passwordHash, out byte[] passwordSalt);
                 this.Add(new User {
-                    Usr_FirstName = "Admin",
-                    Usr_LastName = "Account",
-                    Usr_Email = "admin@viscon.com",
-                    Usr_Role = 1, 
-                    Usr_CompId = Companies.FirstOrDefault()!.Com_Id, 
-                    Usr_DepId = Departments.FirstOrDefault()!.Dep_Id,
-                    Usr_LanguagePreference = "NL",
-                    Usr_PhoneNumber = 0612345678,
-                    Usr_Password = passwordHash,
-                    Usr_PasswSalt = passwordSalt,
+                    FirstName = "Admin",
+                    LastName = "Account",
+                    Email = "admin@viscon.com",
+                    Role = 1,
+                    CompanyId = Companies.FirstOrDefault()!.Id,
+                    DepartmentId = Departments.FirstOrDefault()!.Id,
+                    LanguagePreference = "NL",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
                 }); // Admin Login: admin@viscon.com Viscon
                 this.Add(new User {
-                    Usr_FirstName = "VisconEmployee",
-                    Usr_LastName = "Account",
-                    Usr_Email = "viscon@viscon.com",
-                    Usr_Role = 2, 
-                    Usr_CompId = Companies.FirstOrDefault()!.Com_Id, 
-                    Usr_DepId = Departments.FirstOrDefault()!.Dep_Id,
-                    Usr_LanguagePreference = "NL",
-                    Usr_PhoneNumber = 0612345678,
-                    Usr_Password = passwordHash,
-                    Usr_PasswSalt = passwordSalt,
+                    FirstName = "VisconEmployee",
+                    LastName = "Account",
+                    Email = "viscon@viscon.com",
+                    Role = 2,
+                    CompanyId = Companies.FirstOrDefault()!.Id,
+                    DepartmentId = Departments.FirstOrDefault()!.Id,
+                    LanguagePreference = "NL",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
                 }); // Viscon Employee Login: viscon@viscon.com Viscon
                 this.Add(new User {
-                    Usr_FirstName = "KeyUser",
-                    Usr_LastName = "Account",
-                    Usr_Email = "key@viscon.com",
-                    Usr_Role = 3, 
-                    Usr_CompId = Companies.FirstOrDefault()!.Com_Id, 
-                    Usr_DepId = Departments.FirstOrDefault()!.Dep_Id,
-                    Usr_LanguagePreference = "NL",
-                    Usr_PhoneNumber = 0612345678,
-                    Usr_Password = passwordHash,
-                    Usr_PasswSalt = passwordSalt,
+                    FirstName = "KeyUser",
+                    LastName = "Account",
+                    Email = "key@viscon.com",
+                    Role = 3,
+                    CompanyId = Companies.FirstOrDefault()!.Id,
+                    DepartmentId = Departments.FirstOrDefault()!.Id,
+                    LanguagePreference = "NL",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
                 }); // KeyUser Login: key@viscon.com Viscon
                 this.Add(new User {
-                    Usr_FirstName = "User",
-                    Usr_LastName = "Account",
-                    Usr_Email = "user@viscon.com",
-                    Usr_Role = 4, 
-                    Usr_CompId = Companies.FirstOrDefault()!.Com_Id, 
-                    Usr_DepId = Departments.FirstOrDefault()!.Dep_Id,
-                    Usr_LanguagePreference = "NL",
-                    Usr_PhoneNumber = 0612345678,
-                    Usr_Password = passwordHash,
-                    Usr_PasswSalt = passwordSalt,
+                    FirstName = "User",
+                    LastName = "Account",
+                    Email = "user@viscon.com",
+                    Role = 4,
+                    CompanyId = Companies.FirstOrDefault()!.Id,
+                    DepartmentId = Departments.FirstOrDefault()!.Id,
+                    LanguagePreference = "NL",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
                 }); // User Login: user@viscon.com Viscon
             }
 

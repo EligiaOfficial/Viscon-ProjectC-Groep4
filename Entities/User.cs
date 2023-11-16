@@ -7,23 +7,23 @@ public class User
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Usr_Id { get; set; }
-    public string Usr_FirstName { get; set; }
-    public string Usr_LastName { get; set; }
-    public byte[] Usr_Password { get; set; }
-    public byte[] Usr_PasswSalt { get; set; }
-    public string Usr_Email { get; set; }
-    public int Usr_Role { get; set; } = 0;
-    public int Usr_PhoneNumber { get; set; }
-    public string Usr_LanguagePreference { get; set; }
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public byte[] Password { get; set; }
+    public byte[] PasswSalt { get; set; }
+    public string Email { get; set; }
+    public int Role { get; set; } = 0;
+    public int PhoneNumber { get; set; }
+    public string LanguagePreference { get; set; }
 
     [ForeignKey("Departments")]
-    public int? Usr_DepId { get; set; } = 0;
-    public Department Departments { get; set; }
-    
+    public int? DepartmentId { get; set; } = 0;
+    public Department Department { get; set; }
+
     [ForeignKey("Companies")]
-    public int? Usr_CompId { get; set; } = 0;
-    public Company Companies { get; set; }
+    public int? CompanyId { get; set; } = 0;
+    public Company Company { get; set; }
 }
 
 public enum RoleTypes : int

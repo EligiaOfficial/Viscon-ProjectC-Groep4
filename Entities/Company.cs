@@ -8,7 +8,7 @@ public class Company
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Com_Id { get; set; }
+    public int Id { get; set; }
 
-    public string Com_Name {get; set;}
+    public string Name {get; set;}
 }

@@ -8,14 +8,14 @@ using Entities;
 public class Authenticator {
     public string CreateToken(User user) {
         List<Claim> claims = new List<Claim> {
-            new Claim(ClaimTypes.NameIdentifier, user.Usr_Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Usr_FirstName),
-            new Claim(ClaimTypes.Name, user.Usr_LastName),
-            new Claim(ClaimTypes.Email, user.Usr_Email),
-            new Claim(ClaimTypes.MobilePhone, user.Usr_PhoneNumber.ToString()),
-            new Claim(ClaimTypes.Role, user.Usr_Role.ToString()),
-            new Claim("DepartmentId", user.Usr_DepId.ToString()),
-            new Claim("CompanyId", user.Usr_CompId.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.FirstName),
+            new Claim(ClaimTypes.Name, user.LastName),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.MobilePhone, user.PhoneNumber.ToString()),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
+            new Claim("DepartmentId", user.DepartmentId.ToString()),
+            new Claim("CompanyId", user.CompanyId.ToString()),
         };
 
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8

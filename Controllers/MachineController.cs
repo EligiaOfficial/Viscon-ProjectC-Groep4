@@ -30,7 +30,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
             await using var context = _services.GetService<ApplicationDbContext>();;
             try
             {
-                var machines = context!.Machines.Select(machines => machines.Mach_Name).ToList();
+                var machines = context!.Machines.Select(machines => machines.Name).ToList();
                 return Ok(machines);
             }
             catch (Exception ex)
