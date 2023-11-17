@@ -8,15 +8,15 @@ public class Message
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Msg_Id { get; set; }
+    public int Id { get; set; }
 
-    public string Msg_Message { get; set; } 
+    public string Content { get; set; }
 
-    public int Message_Sender { get; set; }
+    public int Sender { get; set; }
 
-    public DateTime Msg_Date { get; set; }
-    
+    public DateTime TimeSent { get; set; }
+
     [ForeignKey("Ticket")]
-    public int Msg_TickId { get; set; }
-    public Ticket Tickets { get; set; }  
+    public int TicketId { get; set; }
+    public Ticket RelatedTicket { get; set; }
 }

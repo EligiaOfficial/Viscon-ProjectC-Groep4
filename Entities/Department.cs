@@ -8,7 +8,7 @@ public class Department
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Dep_Id { get; set; }
+    public int Id { get; set; }
 
-    public string Dep_Speciality {get; set;}
+    public string Speciality {get; set;}
 }

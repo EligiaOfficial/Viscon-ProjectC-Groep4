@@ -1,15 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Viscon_ProjectC_Groep4;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseNpgsql(
-        builder.Configuration["database:connection_string"]
+builder.Services
+    .AddDbContext<ApplicationDbContext>(
+        options => options.UseNpgsql(
+            builder.Configuration["database:connection_string"]
+        )
     )
-);
+    .AddSingleton<Authenticator>();
 builder.Services.AddControllersWithViews();
 builder.Logging.AddConsole();
 
