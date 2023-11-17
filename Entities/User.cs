@@ -13,7 +13,7 @@ public class User
     public byte[] Password { get; set; }
     public byte[] PasswSalt { get; set; }
     public string Email { get; set; }
-    public int Role { get; set; } = 0;
+    public RoleTypes Role { get; set; } = RoleTypes.NONE;
     public int PhoneNumber { get; set; }
     public string LanguagePreference { get; set; }
 
