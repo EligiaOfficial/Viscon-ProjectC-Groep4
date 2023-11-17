@@ -86,7 +86,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                     Email = data.Email,
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
-                    Role = data.Role,
+                    Role = (RoleTypes)data.Role,
                     PhoneNumber = data.Phone,
                     LanguagePreference = data.Language,
                     DepartmentId = department.Id,
