@@ -36,6 +36,8 @@ function Home() {
             <a href="/add">Create Account (Temp)</a>
             <hr/>
             <a href="Create">Create Ticket (Temp)</a>
+            <hr/>
+            <a href="Ticket">Ticket (Temp)</a>
             <div>
                 {isLoggedIn ? (
                     <button onClick={logOut} > LogOut </button>
