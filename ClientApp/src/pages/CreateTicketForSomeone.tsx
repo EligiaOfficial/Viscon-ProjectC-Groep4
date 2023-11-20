@@ -5,17 +5,17 @@ import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import {UserRoles} from "../UserRoles";
 
 
-const CreateTicket: React.FC = () => {
+const CreateTicketForSomeone: React.FC = () => {
 
   // Navigation Module
   const nav = useNavigate();
 
   // if not loggedIn redirect to Login
   const token = localStorage.getItem("token");
-  const usr_role = getRole(token);
-  if (usr_role == 0) {
-    nav('/login')
-  }
+//   const usr_role = getRole(token);
+//   if (usr_role == 0) {
+//     nav('/login')
+//   }
   
   // State for form fields
   const [selectedMachine, setSelectedMachine] = useState('');
@@ -24,6 +24,7 @@ const CreateTicket: React.FC = () => {
   const [selfTinkering, setSelfTinkering] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [priority, setPriority] = useState('Normal'); // Added state for priority
+  const [userEmail, setUserEmail] = useState('');
 
   // State for machines fetched from the API
   const [machines, setMachines] = useState<string[]>([]);
@@ -69,12 +70,13 @@ const CreateTicket: React.FC = () => {
           expectedAction: expectedAction,
           selfTinkering: selfTinkering,
           departmentId: 1, // TODO: Make field for DepartmentId
+          userEmail: userEmail,
           
         // Add other fields here
       };
 
 
-        const response = await axios.post('api/ticket/createticket', data);
+        const response = await axios.post('api/ticket/createticketforsomeone', data);
         
         if (response.status === 200) {
           // Handle the success response, e.g., show a success message
@@ -133,6 +135,19 @@ return (
 
         {/* Form elements */}
         <div className="grid grid-cols-2 gap-6">
+
+        <div>
+            <label htmlFor="userEmail" className="block text-gray-700 mb-1 font-medium">User Email:</label>
+            <input
+                type="text"
+                id="userEmail"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+                className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                required // Verplicht veld
+            />
+            </div>
+
 
           <div>
             <label htmlFor="machine" className="block text-gray-700 mb-1 font-medium">Select a machine:</label>
@@ -193,4 +208,4 @@ return (
 );
 }
 
-export default CreateTicket;
+export default CreateTicketForSomeone;
