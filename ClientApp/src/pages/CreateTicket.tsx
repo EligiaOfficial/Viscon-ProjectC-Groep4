@@ -2,7 +2,6 @@ import axios from '../../node_modules/axios/index';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
-import {UserRoles} from "../UserRoles";
 
 
 const CreateTicket: React.FC = () => {
@@ -54,7 +53,7 @@ const CreateTicket: React.FC = () => {
     }
 
     if (selfTinkering.trim() === '') {
-      errors.push('Self Tinkering information is required.');
+      errors.push('Self Made Changes is required.');
     }
 
     // If there are no validation errors, proceed with form submission

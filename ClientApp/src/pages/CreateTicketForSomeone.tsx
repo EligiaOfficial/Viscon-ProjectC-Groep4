@@ -12,10 +12,10 @@ const CreateTicketForSomeone: React.FC = () => {
 
   // if not loggedIn redirect to Login
   const token = localStorage.getItem("token");
-//   const usr_role = getRole(token);
-//   if (usr_role == 0) {
-//     nav('/login')
-//   }
+  const usr_role = getRole(token);
+  if (usr_role == 0) {
+    nav('/login')
+  }
   
   // State for form fields
   const [selectedMachine, setSelectedMachine] = useState('');
@@ -46,6 +46,10 @@ const CreateTicketForSomeone: React.FC = () => {
       errors.push('Machine is required.');
     }
 
+    if (userEmail === '') {
+        errors.push('Machine is required.');
+      }
+
     if (description.trim() === '') {
       errors.push('Description is required.');
     }
@@ -55,7 +59,7 @@ const CreateTicketForSomeone: React.FC = () => {
     }
 
     if (selfTinkering.trim() === '') {
-      errors.push('Self Tinkering information is required.');
+      errors.push('Self Made Changes is required.');
     }
 
     // If there are no validation errors, proceed with form submission

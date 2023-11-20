@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import SuccessCreating from "./pages/SuccessCreating";
+import CreateTicketForSomeone from "./pages/CreateTicketForSomeone";
 
 
 export const routes = [
@@ -13,4 +14,7 @@ export const routes = [
     { path: '/add', name: 'add', component: <AddAccount /> },
     { path: '/create', name: 'create', component: <CreateTicket /> },
     { path: '/success', name: 'success', component: <SuccessCreating /> },
+    {path: '/createforsomeone' , name : 'createforsomeone' , component : <CreateTicketForSomeone />},
+    { path: '*', name: 'notfound', component: <h1>404 Not Found</h1> },
+    {path: '/createforsomeone' , name : 'createforsomeone' , component : <CreateTicketForSomeone />}
 ]

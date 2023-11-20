@@ -5,9 +5,9 @@ public class AddDto
     public string Email { get; set; } = string.Empty;
 
     public string FirstName { get; set; } = string.Empty;
-    
+
     public string LastName { get; set; } = string.Empty;
-    
+
     public string Password { get; set; } = string.Empty;
 
     public int Phone { get; set; } = 0;
@@ -32,7 +32,8 @@ public class MachineDataDto
     public string machine { get; set; }
     public string description { get; set; }
     public string priority { get; set; }
-    public string expectedAction {get; set;}
-    public string selfTinkering {get; set;}
+    public string expectedAction { get; set; }
+    public string selfTinkering { get; set; }
     public int departmentId { get; set; }
+    public string userEmail { get; set; }
 }
