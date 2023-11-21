@@ -1,13 +1,10 @@
-import nav from "../components/Nav";
 import {useNavigate} from "react-router-dom";
 import {getName, getEmail, getPhone, getRole, getId, getCompany, getDepartment} from '../Endpoints/Jwt'
 import Nav from "../components/Nav";
-import GradientNav from "../components/GradientNav";
 import SideBar from "../components/SideBar";
 import RoundButton from "../components/RoundButton";
-import {FetchTicketAxios, SignupAxios} from "../Endpoints/Dto";
-import axios from "axios";
-import {useState} from "react";
+import {FetchTicketAxios} from "../Endpoints/Dto";
+import {useEffect, useState} from "react";
 
 function Ticket() {
 
@@ -36,7 +33,7 @@ function Ticket() {
 
     return (
         <>
-            <div className="h-screen flex flex-col">
+            <div className="h-full flex flex-col">
                 <Nav />
                 <div className="relative h-full w-full">
                     <SideBar />
@@ -71,46 +68,49 @@ export function TicketChat() {
                 setTicket(ticket)
         });
     }
+
+    useEffect(() => {
+        fetchTicket();
+    }, []);
     
     return (
         <div className={"w-5/6 bg-stone-200 flex items-center justify-center"}>
             <div className={"h-full md:w-5/6 w-full flex flex-col items-center"}>
                 <div className={"py-5 md:w-3/4 w-full"}>
-                    <h1 className={"text-3xl font-bold"}>{ticket["Tick_Id"]}</h1>
-                    <h2 className={"text-md font-bold"}>Possible extremely long description Possible extremely long description </h2>
+                    <h1 className={"text-3xl font-bold"}>{"title"}</h1>
+                    <h2 className={"text-md font-bold"}>Description of what's broken</h2>
+                    <h2 className={"text-md font-bold"}>What did I do, what do I want to see</h2>
                 </div>
 
-                <div className="md:w-3/4 w-full bg-white border">
-                    <div>
+                <div className="md:w-3/4 w-full bg-white border rounded-lg">
+                    <div className={"w-11/12 mx-auto pt-7"}>
                         <textarea id="message" rows="4"
-                                  className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                  className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                                   placeholder="Write your thoughts here..."/>
                     </div>
-                    <div className={""}>
+                    <div className={"w-11/12 mx-auto"}>
                         <label className="block mb-2 text-sm dark:text-white"
                                htmlFor="file_input"><p className={"font-medium text-gray-900"}>Upload File(s)</p></label>
-                        <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg
-                            cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700
+                        <input className="block w-full text-sm text-gray-900 border rounded-lg
+                            cursor-pointer
                             dark:border-gray-600 dark:placeholder-gray-400" id="multiple_files" type="file" multiple/>
                         <div className={"flex flex-row justify-between"}>
                             <p className={"font-medium text-gray-900"}>SVG, PNG or JPG</p>
-                            <button>Test</button>    
+                            <button type="submit"
+                                    className="flex justify-center rounded-md bg-gray-600 px-3 py-1.5 mx-1.5 my-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+                                Submit
+                            </button>   
                         </div>
                     </div>
                 </div>
 
-                <div className={"md:w-3/4 w-full border bg-white"}>
+                <div className={"md:w-3/4 w-full border rounded-lg mt-2.5 bg-white"}>
                     <div className={"mx-10"}>
                         <ChatField/>
-                        <ChatField/>
                         <ChatFieldImg/>
-                        <ChatFieldImg/>
-                        <ChatField/>
                         <ChatField/>
                         <ChatFieldImg/>
                         <ChatField/>
-                        <ChatField/>
-                        <ChatField/>  
                     </div>
                 </div>
                 
@@ -123,7 +123,7 @@ export function ChatField() {
     return (
         <div className={"w-full pt-5"}>
             <div className={""}>
-                <h1 className={"text-2xl"}>Name</h1>
+                <h1 className={"text-2xl font-bold"}>Name</h1>
                 <p className={"text-md"}>Lorem Ipsum </p>
             </div>
             <hr className="h-[2px] mt-5 bg-gray-200 border-0 dark:bg-gray-700"/>
@@ -136,7 +136,7 @@ export function ChatFieldImg() {
         <div className={"w-full"}>
             <div className={"flex md:flex-row flex-col pt-5"}>
                 <div className={"md:w-2/5 w-full"}>
-                    <h1 className={"text-2xl"}>Name</h1>
+                    <h1 className={"text-2xl font-bold"}>Name</h1>
                     <p className={"text-md"}>Lorem Ipsum</p>
                 </div>
                 <div className={"md:w-3/5 w-full"}>
@@ -193,31 +193,31 @@ export function Carousel() {
 
 export function TicketInfo() {
     return (
-        <div className={"w-1/6 h-full bg-stone-300 flex flex-col items-center"}>
+        <div className={"w-1/6 h-[calc(100vh-50px)] bg-stone-300 flex flex-col items-center"}>
 
             <div className="flex flex-col">
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
-                        <h1 className="flex">Requestor</h1>
+                        <h1 className="flex text-xl">Requestor</h1>
                         <input type="text" disabled value={"Ticket Creator"}/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
-                        <h1 className="flex">Company</h1>
+                        <h1 className="flex text-xl">Company</h1>
                         <input type="text" disabled value={"Company Name"}/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
-                        <h1 className="flex">Machine</h1>
+                        <h1 className="flex text-xl">Machine</h1>
                         <input type="text" disabled value={"Machine"}/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex w-full flex-col items-start justify-center min-w-[50px]`}>
-                        <h1 className="flex">Department</h1>
-                        {2 == 1 ? (
+                        <h1 className="flex text-xl">Department</h1>
+                        {1 == 1 ? (
                             <input type="text" disabled value={"Department"}/>
                         ) : (
                             <select
@@ -230,7 +230,7 @@ export function TicketInfo() {
                 </div>
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
-                        <h1 className="flex">Assignee</h1>
+                        <h1 className="flex text-xl">Assignee</h1>
                         <input type="text" disabled value={"Viscon Employee"}/>
                     </div>
                 </div>
@@ -239,13 +239,13 @@ export function TicketInfo() {
             <div className="w-[200px] flex flex-col mt-auto">
                 <div className="group flex flex-row justify-start">
                     <div className={`w-[200px] flex items-center justify-between`}>
-                        <span className="">Publish Ticket</span>
+                        <span className="text-xl">Publish Ticket</span>
                         <RoundButton/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start">
                     <div className={`w-[200px] flex items-center justify-between`}>
-                        <span className="">Resolved</span>
+                        <span className="text-xl">Resolved</span>
                         <RoundButton/>
                     </div>
                 </div>
