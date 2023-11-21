@@ -35,9 +35,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
             }
             catch (Exception ex)
             {
-                    
                 _logger.LogError(ex.Message);
-                    
                 return StatusCode(500, ex.Message);
             }
         }

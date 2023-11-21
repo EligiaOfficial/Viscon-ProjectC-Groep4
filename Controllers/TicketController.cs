@@ -30,7 +30,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     ticket.Tick_Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                     ticket.Tick_Description = data.description;
                     ticket.Tick_DateCreated = DateTime.UtcNow;
-                    ticket.Tick_Priority = int.Parse(data.priority);
+                    ticket.Tick_Priority = 1; //int.Parse(data.priority);
                     ticket.Tick_ExpectedToBeDone = data.expectedAction;
                     ticket.Tick_MadeAnyChanges = data.selfTinkering;
                     ticket.Tick_DepartmentId = data.departmentId;

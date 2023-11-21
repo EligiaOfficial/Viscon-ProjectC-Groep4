@@ -3,7 +3,7 @@ import {getName, getEmail, getPhone, getRole, getId, getCompany, getDepartment} 
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
 import RoundButton from "../components/RoundButton";
-import {FetchTicketAxios} from "../Endpoints/Dto";
+import {FetchTicketAxios, FetchUserCreationData} from "../Endpoints/Dto";
 import {useEffect, useState} from "react";
 
 function Ticket() {
@@ -54,18 +54,20 @@ export default Ticket
 export function TicketChat() {
     var token = localStorage.getItem("token");
     const id = getId(token!);
-    const [department, setDepartment] = useState<object[]>([]);
-    const [user, setUser] = useState<object[]>([]);
-    const [ticket, setTicket] = useState<object[]>([]);
+    const [department, setDepartment] = useState<object>([]);
+    const [user, setUser] = useState<object>([]);
+    const [ticket, setTicket] = useState<object>([]);
         
     const fetchTicket = () => {
-        FetchTicketAxios( {
-            id: 1,
-        }).then(res => {
+        FetchTicketAxios({Id: 1}).then(res => {
                 const { ticket, department, user } = res.data;
                 setUser(user);
                 setDepartment(department); 
                 setTicket(ticket)
+            console.log("Ticket with ID 1:")
+            console.log(ticket)
+            console.log(department)
+            console.log(user)
         });
     }
 
@@ -77,9 +79,10 @@ export function TicketChat() {
         <div className={"w-5/6 bg-stone-200 flex items-center justify-center"}>
             <div className={"h-full md:w-5/6 w-full flex flex-col items-center"}>
                 <div className={"py-5 md:w-3/4 w-full"}>
-                    <h1 className={"text-3xl font-bold"}>{"title"}</h1>
-                    <h2 className={"text-md font-bold"}>Description of what's broken</h2>
-                    <h2 className={"text-md font-bold"}>What did I do, what do I want to see</h2>
+                    <h1 className={"text-3xl font-bold"}>{ticket["tick_Title"]}</h1>
+                    <h2 className={"text-md font-bold"}>{ticket["tick_Description"]}</h2>
+                    <h2 className={"text-md font-bold"}>{ticket["tick_MadeAnyChanges"]}</h2>
+                    <h2 className={"text-md font-bold"}>{ticket["tick_ExpectedToBeDone"]}</h2>
                 </div>
 
                 <div className="md:w-3/4 w-full bg-white border rounded-lg">
@@ -106,6 +109,8 @@ export function TicketChat() {
 
                 <div className={"md:w-3/4 w-full border rounded-lg mt-2.5 bg-white"}>
                     <div className={"mx-10"}>
+                        <ChatField/>
+                        <ChatField/>
                         <ChatField/>
                         <ChatFieldImg/>
                         <ChatField/>

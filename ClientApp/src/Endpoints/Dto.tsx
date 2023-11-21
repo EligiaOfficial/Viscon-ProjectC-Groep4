@@ -18,7 +18,7 @@ type SignUpDto = {
 }
 
 type FetchTicketDto = {
-    id : number
+    Id : number
 }
 
 export function LoginAxios(data: LoginDto) {
@@ -46,7 +46,7 @@ export function SignupAxios(data: SignUpDto) {
 }
 
 export function FetchTicketAxios(data: FetchTicketDto) {
-    return axios.get('api/Fetch/TicketData', data)
+    return axios.post('api/Fetch/TicketData', data);
 }
 
 export function FetchUserCreationData() {

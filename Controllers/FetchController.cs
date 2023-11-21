@@ -1,5 +1,7 @@
+using System.Runtime.Intrinsics.Arm;
 using Microsoft.AspNetCore.Mvc;
 using Entities;
+using Viscon_ProjectC_Groep4.Dto;
 
 namespace Viscon_ProjectC_Groep4.Controllers {
     
@@ -26,18 +28,21 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             }
         }
         
-        [HttpGet("TicketData")]
-        public async Task<ActionResult<IEnumerable<Machine>>> GetTicketData(int Id) {
+        [HttpPost("TicketData")]
+        public async Task<ActionResult> GetTicketData(fetchDto data) {
+            Console.WriteLine(data.Id);
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
-                var ticket = context?.Tickets.FirstOrDefault(x => x.Tick_Id == Id);
-                var department = ticket?.Departments;
-                var creator = ticket?.Creator;
-                return Ok(new {Ticket = ticket, Departments = department, User = creator});
+                var ticket = context!.Tickets.FirstOrDefault(x => x.Tick_Id == 1);
+                var department = context.Departments.FirstOrDefault(_ => _.Dep_Id == ticket.Tick_DepartmentId);
+                var creator = context.Users.FirstOrDefault(_ => _.Usr_Id == ticket.Tick_Creator_UserId);
+                return Ok(new {Ticket = ticket, Department = department, User = creator});
             }
             catch (Exception ex) {
+                Console.WriteLine("Catched");
                 return StatusCode(500, ex.Message);
             }
         }
+        
     }
 }
