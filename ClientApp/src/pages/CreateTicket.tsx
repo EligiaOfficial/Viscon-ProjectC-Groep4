@@ -60,7 +60,6 @@ const CreateTicket: React.FC = () => {
     if (errors.length === 0) {
       try {
         const data = {
-          
           Jtw: token,
           machine: selectedMachine,
           description: description,

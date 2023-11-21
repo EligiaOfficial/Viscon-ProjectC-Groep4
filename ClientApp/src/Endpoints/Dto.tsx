@@ -17,6 +17,10 @@ type SignUpDto = {
     language: string
 }
 
+type FetchTicketDto = {
+    id : number
+}
+
 export function LoginAxios(data: LoginDto) {
     console.log('Before Axios request');
     return axios.post('api/Auth/Login', data)
@@ -39,6 +43,10 @@ export function SignupAxios(data: SignUpDto) {
         .catch(error => {
             console.error('Axios request failed:', error);
         });
+}
+
+export function FetchTicketAxios(data: FetchTicketDto) {
+    return axios.get('api/Fetch/TicketData', data)
 }
 
 export function FetchUserCreationData() {
