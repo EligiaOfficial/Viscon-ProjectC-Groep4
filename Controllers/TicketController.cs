@@ -16,6 +16,36 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _logger = logger;
             _services = services;
         }
+
+        [HttpPost]
+        [Route("AddMessage")]
+        public async Task<IActionResult> AddMessage(MessageDto data) {
+            _logger.LogInformation("API Fetched");
+            _logger.LogInformation("\n\n\n");
+            await using var context = _services.GetService<ApplicationDbContext>();
+            try {
+                var message = new Message{
+                    Msg_Date = DateTime.UtcNow,
+                    Msg_TickId = context!.Tickets.Where(_ => _.Tick_Id == data.tick_Id).Select(_ => _.Tick_Id).FirstOrDefault(), // TODO: FK Restraint fixes
+                    Msg_Message = data.Msg,
+                    Message_Sender = data.usr_Id
+                };
+                try {
+                    context!.Messages.Add(message);
+                    await context.SaveChangesAsync();
+                    _logger.LogInformation("Added message to tickId " + message.Msg_TickId);
+                }
+                catch (Exception ex) {
+                    _logger.LogError(ex.ToString());
+                    return Ok("Error");
+                }
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex.ToString());
+                return Ok("Error");
+            }
+            return Ok("Message Added");
+        }
             
             
         [HttpPost("createticket")]
@@ -26,7 +56,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 if (VerifyToken(data.Jtw, out int Id)) {
                     _logger.LogInformation("Token Correct");
                     var ticket = new Ticket();
-                    ticket.Tick_MachId = context.Machines.Where(m => m.Mach_Name == data.machine).Select(m => m.Mach_Id).FirstOrDefault();
+                    ticket.Tick_MachId = context!.Machines.Where(m => m.Mach_Name == data.machine).Select(m => m.Mach_Id).FirstOrDefault();
                     ticket.Tick_Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                     ticket.Tick_Description = data.description;
                     ticket.Tick_DateCreated = DateTime.UtcNow;

@@ -30,7 +30,6 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         
         [HttpPost("TicketData")]
         public async Task<ActionResult> GetTicketData(fetchDto data) {
-            Console.WriteLine(data.Id);
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
                 var ticket = context!.Tickets.FirstOrDefault(x => x.Tick_Id == 1);

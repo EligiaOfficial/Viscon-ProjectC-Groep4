@@ -45,6 +45,24 @@ export function SignupAxios(data: SignUpDto) {
         });
 }
 
+type MessageDto = {
+    msg: string,
+    img: any,
+    tick_id: number,
+    usr_id: number
+}
+
+export function createMessageAxios(data: MessageDto) {
+    console.log('Before Axios request', data);
+    return axios.post('api/Ticket/AddMessage', data)
+        .then(response => {
+            console.log('Axios request succeeded:', response);
+        })
+        .catch(error => {
+            console.error('Axios request failed:', error);
+        });
+}
+
 export function FetchTicketAxios(data: FetchTicketDto) {
     return axios.post('api/Fetch/TicketData', data);
 }

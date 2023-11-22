@@ -3,10 +3,10 @@ import {getName, getEmail, getPhone, getRole, getId, getCompany, getDepartment} 
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
 import RoundButton from "../components/RoundButton";
-import {FetchTicketAxios, FetchUserCreationData} from "../Endpoints/Dto";
+import {createMessageAxios, FetchTicketAxios, FetchUserCreationData, SignupAxios} from "../Endpoints/Dto";
 import {useEffect, useState} from "react";
 
-function Ticket() {
+const Ticket = () => {
     const nav = useNavigate();
 
     const token = localStorage.getItem("token");
@@ -56,6 +56,28 @@ function Ticket() {
 export default Ticket
 
 const TicketChat = ({ticket, messages}) => {
+
+    const [msg, setMsg] = useState('');
+    const [img] = useState('');
+    const token = localStorage.getItem("token");
+        
+    const submitMessage = (e) => {
+        e.preventDefault();
+        console.log('msg: ' + msg);
+
+        if (msg !== "") {
+            createMessageAxios({
+                msg: msg,
+                img: "", // TODO: Add Images & Img Converter
+                tick_id: ticket["tick_Id"],
+                usr_id: +getId(token)
+            }).then(() => {
+                console.log(msg, img);
+            }).catch(error => {
+                console.error("Error:", error);
+            });
+        }
+    }
     
     return (
         <div className={"w-5/6 bg-stone-200 flex items-center justify-center"}>
@@ -70,10 +92,11 @@ const TicketChat = ({ticket, messages}) => {
                 <div className="md:w-3/4 w-full bg-white border rounded-lg">
                     <div className={"w-11/12 mx-auto pt-7"}>
                         <textarea id="message" rows="4"
+                                  onChange={(e) => setMsg(e.target.value)}
                                   className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
                                   placeholder="Write your thoughts here..."/>
                     </div>
-                    <div className={"w-11/12 mx-auto"}>
+                    <form className={"w-11/12 mx-auto"} onSubmit={submitMessage}>
                         <label className="block mb-2 text-sm dark:text-white"
                                htmlFor="file_input"><p className={"font-medium text-gray-900"}>Upload File(s)</p></label>
                         <input className="block w-full text-sm text-gray-900 border rounded-lg
@@ -86,14 +109,14 @@ const TicketChat = ({ticket, messages}) => {
                                 Submit
                             </button>   
                         </div>
-                    </div>
+                    </form>
                 </div>
 
                 {messages.length > 0 ? (
                     <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
                         <div className="mx-10">
                             {messages.map((message, index) => (
-                                <ChatField key={index} message={message} />
+                                <ChatField key={index} message={message["msg_Message"]} user={message["message_Sender"]}/>
                             ))}
                         </div>
                     </div>
@@ -115,12 +138,13 @@ const TicketChat = ({ticket, messages}) => {
     );
 }
 
-export function ChatField() {
+// Todo: ID to Username
+let ChatField = ({user, message}) => {
     return (
         <div className={"w-full pt-5"}>
             <div className={""}>
-                <h1 className={"text-2xl font-bold"}>Name</h1>
-                <p className={"text-md"}>Lorem Ipsum </p>
+                <h1 className={"text-2xl font-bold"}>{user || "No name Found"}</h1>
+                <p className={"text-md"}>{message}</p>
             </div>
             <hr className="h-[2px] mt-5 bg-gray-200 border-0 dark:bg-gray-700"/>
         </div>

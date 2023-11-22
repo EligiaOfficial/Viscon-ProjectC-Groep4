@@ -31,7 +31,7 @@ namespace Viscon_ProjectC_Groep4
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.HasDefaultSchema("public");
         }
-
+        
         public void SeedDb() {
             if (!this.Departments.Any()) {
                 this.Add(new Department {Dep_Id = 1, Dep_Speciality = "Viscon Plant Technology"});
