@@ -7,30 +7,34 @@ import {FetchTicketAxios, FetchUserCreationData} from "../Endpoints/Dto";
 import {useEffect, useState} from "react";
 
 function Ticket() {
-
-    var token = localStorage.getItem("token");
-    var {id,name,email,phone,role,company,department} = "Empty";
-    var isLoggedIn = false;
-    try {
-        name = getName(token);
-        email = getEmail(token);
-        phone = "+"+31+getPhone(token);
-        role = getRole(token);
-        id = getId(token);
-        company = getCompany(token);
-        department = getDepartment(token);
-        isLoggedIn = true;
-    } catch (e) {
-        console.log(e);
-    }
-
     const nav = useNavigate();
-    
-    const logOut = () => {
-        localStorage.removeItem('token');
-        nav('/login');
+
+    const token = localStorage.getItem("token");
+    const [ticket, setTicket] = useState<object>([]);
+    const [department, setDepartment] = useState<object>([]);
+    const [user, setUser] = useState<object>([]);
+    const [helper, setHelper] = useState<object>([]);
+    const [company, setCompany] = useState<object>([]);
+    const [machine, setMachine] = useState<object>([]);
+    const [messages, setMessages] = useState<object[]>([]);
+
+    const fetchTicket = () => {
+        FetchTicketAxios({Id: 1}).then(res => {
+            const { ticket, department, user, helper, company, machine, messages } = res.data;
+            setUser(user); // TODO: Make this safe
+            setDepartment(department);
+            setTicket(ticket)
+            setHelper(helper)
+            setCompany(company)
+            setMachine(machine)
+            setMessages(messages)
+        });
     }
 
+    useEffect(() => {
+        fetchTicket();
+    }, []);
+    
     return (
         <>
             <div className="h-full flex flex-col">
@@ -39,8 +43,8 @@ function Ticket() {
                     <SideBar />
                     <div className="pl-[50px] bg-stone-200 h-full w-full">
                         <section className="flex h-full">
-                            <TicketInfo/>
-                            <TicketChat/>
+                            <TicketInfo assignee={( helper && helper["usr_FirstName"] + " " + helper["usr_LastName"]) || "Unassigned"} company={company["com_Name"]} department={department["dep_Speciality"]} machine={machine["mach_Name"]} requestor={user["usr_FirstName"] + " " + user["usr_LastName"]} />
+                            <TicketChat ticket={ticket} messages={messages || []}/>
                         </section>
                     </div>
                 </div>
@@ -51,29 +55,7 @@ function Ticket() {
 
 export default Ticket
 
-export function TicketChat() {
-    var token = localStorage.getItem("token");
-    const id = getId(token!);
-    const [department, setDepartment] = useState<object>([]);
-    const [user, setUser] = useState<object>([]);
-    const [ticket, setTicket] = useState<object>([]);
-        
-    const fetchTicket = () => {
-        FetchTicketAxios({Id: 1}).then(res => {
-                const { ticket, department, user } = res.data;
-                setUser(user);
-                setDepartment(department); 
-                setTicket(ticket)
-            console.log("Ticket with ID 1:")
-            console.log(ticket)
-            console.log(department)
-            console.log(user)
-        });
-    }
-
-    useEffect(() => {
-        fetchTicket();
-    }, []);
+const TicketChat = ({ticket, messages}) => {
     
     return (
         <div className={"w-5/6 bg-stone-200 flex items-center justify-center"}>
@@ -107,17 +89,26 @@ export function TicketChat() {
                     </div>
                 </div>
 
-                <div className={"md:w-3/4 w-full border rounded-lg mt-2.5 bg-white"}>
-                    <div className={"mx-10"}>
-                        <ChatField/>
-                        <ChatField/>
-                        <ChatField/>
-                        <ChatFieldImg/>
-                        <ChatField/>
-                        <ChatFieldImg/>
-                        <ChatField/>
+                {messages.length > 0 ? (
+                    <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
+                        <div className="mx-10">
+                            {messages.map((message, index) => (
+                                <ChatField key={index} message={message} />
+                            ))}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
+                        <div className="mx-10">
+                            <div className={"w-full py-5"}>
+                                <div className={""}>
+                                    <p className={"text-md"}>No messages found yet...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 
             </div>
         </div>
@@ -196,7 +187,7 @@ export function Carousel() {
     );
 }
 
-export function TicketInfo() {
+const TicketInfo = ({requestor, company, machine, department, assignee}) => {
     return (
         <div className={"w-1/6 h-[calc(100vh-50px)] bg-stone-300 flex flex-col items-center"}>
 
@@ -204,31 +195,31 @@ export function TicketInfo() {
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
                         <h1 className="flex text-xl">Requestor</h1>
-                        <input type="text" disabled value={"Ticket Creator"}/>
+                        <input type="text" disabled value={requestor}/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
                         <h1 className="flex text-xl">Company</h1>
-                        <input type="text" disabled value={"Company Name"}/>
+                        <input type="text" disabled value={company}/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
                         <h1 className="flex text-xl">Machine</h1>
-                        <input type="text" disabled value={"Machine"}/>
+                        <input type="text" disabled value={machine}/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex w-full flex-col items-start justify-center min-w-[50px]`}>
                         <h1 className="flex text-xl">Department</h1>
-                        {1 == 1 ? (
-                            <input type="text" disabled value={"Department"}/>
+                        {2 == 1 ? (
+                            <input type="text" disabled value={department}/>
                         ) : (
                             <select
                                 id="role"
                                 className="w-full">
-                                <option value="0">Department</option>
+                                <option value="0">{department}</option>
                             </select>
                         )}
                     </div>
@@ -236,7 +227,7 @@ export function TicketInfo() {
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
                         <h1 className="flex text-xl">Assignee</h1>
-                        <input type="text" disabled value={"Viscon Employee"}/>
+                        <input type="text" disabled value={assignee}/>
                     </div>
                 </div>
             </div>

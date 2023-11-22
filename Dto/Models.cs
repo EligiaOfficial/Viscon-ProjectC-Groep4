@@ -27,7 +27,7 @@ public class LoginDto
 }
 
 public class fetchDto {
-    public int Id = -1;
+    public int Id { get; set; } = 0;
 }
 
 public class MachineDataDto

@@ -35,8 +35,16 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             try {
                 var ticket = context!.Tickets.FirstOrDefault(x => x.Tick_Id == 1);
                 var department = context.Departments.FirstOrDefault(_ => _.Dep_Id == ticket.Tick_DepartmentId);
+                var machine = context.Machines.FirstOrDefault(_ => _.Mach_Id == ticket.Tick_MachId);
+                
                 var creator = context.Users.FirstOrDefault(_ => _.Usr_Id == ticket.Tick_Creator_UserId);
-                return Ok(new {Ticket = ticket, Department = department, User = creator});
+                var company = context.Companies.FirstOrDefault(_ => _.Com_Id == creator.Usr_CompId);
+                
+                var helper = context.Users.FirstOrDefault(_ => _.Usr_Id == ticket.Tick_Helper_UserId);
+
+                var messages = context.Messages.Where(_ => _.Msg_TickId == ticket.Tick_Id).ToList();
+                
+                return Ok(new {Ticket = ticket, Department = department, User = creator, Helper = helper, Company = company, Machine = machine, Messages = messages});
             }
             catch (Exception ex) {
                 Console.WriteLine("Catched");
