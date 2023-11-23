@@ -7,12 +7,12 @@ function Dashboard() {
         <>
             <div className="h-screen flex flex-col">
                 <Nav />
-                <div className="relative flex flex-row h-full w-full">
+                <div className="relative flex flex-row h-full w-full overflow-y-hidden">
                     <SideBar />
-                    <div className="bg-stone-200 h-full w-full">
-                        <div className="p-2 flex flex-col gap-4 w-full h-full">
+                    <div className="bg-stone-200 h-full w-full bg-red-600 overflow-y-scroll">
+                        <div className="p-2 flex flex-col gap-4 w-full">
                             <span className="text-2xl">Dashboard</span>
-                            <div className="bg-white h-full w-full p-2">
+                            <div className="bg-white w-full p-2">
                                 <table className="w-full">
                                     <tbody>
                                         <tr className="text-left">

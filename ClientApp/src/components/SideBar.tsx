@@ -5,13 +5,13 @@ function SideBar() {
     const [menu, setMenu] = useState<bool>(false);
 
     return (
-        <div className={`${menu ? "w-[200px]" : "w-[50px]"} relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-[#07ab9a] overflow-hidden`}>
+        <div className={`${menu ? "w-[200px]" : "w-[50px]"} relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}>
             <div className="flex flex-row justify-end py-2">
-                <div onClick={() => setMenu(!menu)} className={`fill-black hover:fill-white translate duration-300 flex items-center justify-center min-w-[50px] cursor-pointer`}>
+                <div onClick={() => setMenu(!menu)} className={`fill-black translate flex items-center justify-center min-w-[50px] cursor-pointer`}>
                     <svg width="24" height="24">
-                        <rect y="2" width="24" height="3"></rect>
+                        <rect className={`${menu ? "translate-x-[10px]" : ""} translate duration-300`} y="2" width="24" height="3"></rect>
                         <rect y="11" width="24" height="3"></rect>
-                        <rect y="20" width="24" height="3"></rect>
+                        <rect className={`${menu ? "translate-x-[-10px]" : ""} translate duration-300`} y="20" width="24" height="3"></rect>
                     </svg>
                 </div>
                 <span></span>
