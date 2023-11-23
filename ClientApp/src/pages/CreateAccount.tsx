@@ -7,7 +7,6 @@ import {FetchUserCreationData, SignupAxios} from "../Endpoints/Dto";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
-import {UserRoles} from "../UserRoles";
 
 function AddAccount() {
     const [password, setPassword] = useState('');
@@ -42,9 +41,9 @@ function AddAccount() {
                 lastName: lastName,
                 password: password,
                 phone: +phone,
-                company: usr_role == UserRoles.ADMIN ? +company : +usr_compId,
+                company: usr_role == 1 ? +company : +usr_compId,
                 role: usr_role == 1 ? +role : 4,
-                department: usr_role == UserRoles.ADMIN ? +department : +usr_depId,
+                department: usr_role == 1 ? +department : +usr_depId,
                 language: "EN",
             }).then(() => {
                 console.log("User created: ", email, firstName, lastName, password, phone, company, role, department);
@@ -149,7 +148,7 @@ function AddAccount() {
 
 
 
-                            {usr_role == UserRoles.ADMIN ? (
+                            {usr_role == 1 ? (
                                 <div>
                                     <label htmlFor="role" className="block text-xs font-medium leading-2 text-gray-500">
                                         User Account:
@@ -170,7 +169,7 @@ function AddAccount() {
                                 <div/>
                             )}
 
-                            {usr_role == UserRoles.ADMIN ? (
+                            {usr_role == 1 ? (
                                 <div>
                                     <label htmlFor="Department" className="block text-xs font-medium leading-2 text-gray-500">
                                         Department:
@@ -193,7 +192,7 @@ function AddAccount() {
                                 <div/>
                             )}
 
-                            {usr_role == UserRoles.ADMIN ? (
+                            {usr_role == 1 ? (
                                 <div>
                                     <label htmlFor="machine" className="block text-xs font-medium leading-2 text-gray-500">
                                         Company:

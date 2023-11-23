@@ -36,7 +36,6 @@ function Login() {
 
     return (
         <div className="h-screen flex flex-col">
-            <Nav/>
             <div className="flex flex-row h-full">
                 <div className="basis-1/2 hidden md:block">
                     <img className={"object-cover w-full h-full"} src="https://viscongroup.eu/app/mu-plugins/customized-login/dist/images/background.jpg" alt=""/>
