@@ -32,10 +32,10 @@ const CreateTicket: React.FC = () => {
 
     // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
         if (usr_role == 4) {
             return;
         }
-        e.preventDefault();
 
         // Create an array to store validation errors
         const errors: string[] = [];
