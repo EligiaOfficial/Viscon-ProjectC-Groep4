@@ -24,7 +24,7 @@ public class Ticket
     public int Tick_Priority { get; set; }
 
     public string Tick_ExpectedToBeDone { get; set; }
-
+    
     public string Tick_MadeAnyChanges { get; set; }
 
     [ForeignKey("Departments")]

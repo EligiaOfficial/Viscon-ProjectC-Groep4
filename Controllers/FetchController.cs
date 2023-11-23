@@ -28,6 +28,18 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             }
         }
         
+        [HttpPost("UserName")]
+        public async Task<IActionResult> GetUser(getUserDto data) {
+            await using var context = _services.GetService<ApplicationDbContext>();
+            try {
+                var user = context.Users.FirstOrDefault(_ => _.Usr_Id == data.Id);
+                return Ok(user.Usr_FirstName + " " + user.Usr_LastName);
+            }
+            catch (Exception ex) {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        
         [HttpPost("TicketData")]
         public async Task<ActionResult> GetTicketData(fetchDto data) {
             await using var context = _services.GetService<ApplicationDbContext>();

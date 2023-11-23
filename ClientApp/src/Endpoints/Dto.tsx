@@ -52,6 +52,15 @@ type MessageDto = {
     usr_id: number
 }
 
+type UserIdDto = {
+    id: number
+}
+
+export function fetchUser(data: UserIdDto) {
+    console.log("Fetching User")
+    return axios.post('api/Fetch/UserName', data)
+}
+
 export function createMessageAxios(data: MessageDto) {
     console.log('Before Axios request', data);
     return axios.post('api/Ticket/AddMessage', data)

@@ -49,3 +49,7 @@ public class MachineDataDto
     public string selfTinkering {get; set;}
     public int departmentId { get; set; }
 }
+
+public class getUserDto {
+    public int Id { get; set; }
+}

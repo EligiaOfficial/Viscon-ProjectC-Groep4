@@ -1,15 +1,20 @@
 import {useNavigate} from "react-router-dom";
-import {getName, getEmail, getPhone, getRole, getId, getCompany, getDepartment} from '../Endpoints/Jwt'
+import {getId, getRole} from '../Endpoints/Jwt'
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
 import RoundButton from "../components/RoundButton";
-import {createMessageAxios, FetchTicketAxios, FetchUserCreationData, SignupAxios} from "../Endpoints/Dto";
+import {createMessageAxios, FetchTicketAxios, fetchUser} from "../Endpoints/Dto";
 import {useEffect, useState} from "react";
 
-const Ticket = () => {
+const Ticket = ({Id}: {Id: number}) => {
     const nav = useNavigate();
-
+    const TicketId = Id ?? 1;
     const token = localStorage.getItem("token");
+
+    if (token && getRole(token) == "0") {
+        nav('/login');
+    }
+
     const [ticket, setTicket] = useState<object>([]);
     const [department, setDepartment] = useState<object>([]);
     const [user, setUser] = useState<object>([]);
@@ -19,7 +24,7 @@ const Ticket = () => {
     const [messages, setMessages] = useState<object[]>([]);
 
     const fetchTicket = () => {
-        FetchTicketAxios({Id: 1}).then(res => {
+        FetchTicketAxios({Id: TicketId}).then(res => {
             const { ticket, department, user, helper, company, machine, messages } = res.data;
             setUser(user); // TODO: Make this safe
             setDepartment(department);
@@ -43,7 +48,7 @@ const Ticket = () => {
                     <SideBar />
                     <div className="pl-[50px] bg-stone-200 h-full w-full">
                         <section className="flex h-full">
-                            <TicketInfo assignee={( helper && helper["usr_FirstName"] + " " + helper["usr_LastName"]) || "Unassigned"} company={company["com_Name"]} department={department["dep_Speciality"]} machine={machine["mach_Name"]} requestor={user["usr_FirstName"] + " " + user["usr_LastName"]} />
+                            <TicketInfo assignee={( helper && helper["usr_FirstName"] + " " + helper["usr_LastName"]) || "Unassigned"} company={company["com_Name"]} department={department["dep_Speciality"]} machine={machine["mach_Name"]} requester={user["usr_FirstName"] + " " + user["usr_LastName"]} />
                             <TicketChat ticket={ticket} messages={messages || []}/>
                         </section>
                     </div>
@@ -55,14 +60,14 @@ const Ticket = () => {
 
 export default Ticket
 
-const TicketChat = ({ticket, messages}) => {
+const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) => {
 
     const [msg, setMsg] = useState('');
     const [img] = useState('');
     const token = localStorage.getItem("token");
         
     const submitMessage = (e) => {
-        e.preventDefault();
+        // e.preventDefault(); TODO: Reload Chat ipv Page
         console.log('msg: ' + msg);
 
         if (msg !== "") {
@@ -131,15 +136,21 @@ const TicketChat = ({ticket, messages}) => {
                         </div>
                     </div>
                 )}
-
-                
             </div>
         </div>
     );
 }
 
 // Todo: ID to Username
-let ChatField = ({user, message, timestamp}) => {
+let ChatField = ({user, message, timestamp}: {user: string, message: string, timestamp: string}) => {
+
+    const [userName, setUsername] = useState('');
+    useEffect(() => {
+        fetchUser({
+            id: +user,
+        }).then(res=>{setUsername(res.data)})
+        console.log(userName)
+    }, []);
 
     const date = new Date(timestamp);
     const formattedDate = new Intl.DateTimeFormat('en-GB', {
@@ -157,7 +168,7 @@ let ChatField = ({user, message, timestamp}) => {
         <div className={"w-full pt-5"}>
             <div className={""}>
                 <div className={"flex flex-row items-center justify-between"}>
-                    <h1 className={"text-2xl font-bold"}>{user || "No name Found"}</h1>
+                    <h1 className={"text-2xl font-bold"}>{userName || "No name Found"}</h1>
                     <p className={"text-sm mr-2.5"}>{formattedDate}</p>
                 </div>
                 <p className={"text-md"}>{message}</p>
@@ -167,7 +178,7 @@ let ChatField = ({user, message, timestamp}) => {
     );
 }
 
-let ChatFieldImg = ({user, message, timestamp}) => {
+let ChatFieldImg = ({user, message, timestamp}: {user: string, message: string, timestamp: string}) => {
 
     const date = new Date(timestamp);
     const formattedDate = new Intl.DateTimeFormat('en-GB', {
@@ -243,7 +254,7 @@ export function Carousel() {
     );
 }
 
-const TicketInfo = ({requestor, company, machine, department, assignee}) => {
+const TicketInfo = ({requester, company, machine, department, assignee} : {requester: string, company: string, machine: string, department: string, assignee: string}) => {
     return (
         <div className={"w-1/6 h-[calc(100vh-50px)] bg-stone-300 flex flex-col items-center"}>
 
@@ -251,7 +262,7 @@ const TicketInfo = ({requestor, company, machine, department, assignee}) => {
                 <div className="group flex flex-row justify-start py-2">
                     <div className={`flex flex-col items-start justify-center min-w-[50px]`}>
                         <h1 className="flex text-xl">Requestor</h1>
-                        <input type="text" disabled value={requestor}/>
+                        <input type="text" disabled value={requester}/>
                     </div>
                 </div>
                 <div className="group flex flex-row justify-start py-2">
