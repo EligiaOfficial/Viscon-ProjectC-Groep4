@@ -115,8 +115,8 @@ const TicketChat = ({ticket, messages}) => {
                 {messages.length > 0 ? (
                     <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
                         <div className="mx-10">
-                            {messages.map((message, index) => (
-                                <ChatField key={index} message={message["msg_Message"]} user={message["message_Sender"]}/>
+                            {messages.slice().reverse().map((message, index) => (
+                                <ChatField key={index} message={message["msg_Message"]} user={message["message_Sender"]} timestamp={message["msg_Date"]}/>
                             ))}
                         </div>
                     </div>
@@ -139,11 +139,27 @@ const TicketChat = ({ticket, messages}) => {
 }
 
 // Todo: ID to Username
-let ChatField = ({user, message}) => {
+let ChatField = ({user, message, timestamp}) => {
+
+    const date = new Date(timestamp);
+    const formattedDate = new Intl.DateTimeFormat('en-GB', {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    }).format(date);
+
+    console.log(formattedDate);
+    
     return (
         <div className={"w-full pt-5"}>
             <div className={""}>
-                <h1 className={"text-2xl font-bold"}>{user || "No name Found"}</h1>
+                <div className={"flex flex-row items-center justify-between"}>
+                    <h1 className={"text-2xl font-bold"}>{user || "No name Found"}</h1>
+                    <p className={"text-sm mr-2.5"}>{formattedDate}</p>
+                </div>
                 <p className={"text-md"}>{message}</p>
             </div>
             <hr className="h-[2px] mt-5 bg-gray-200 border-0 dark:bg-gray-700"/>
@@ -151,13 +167,29 @@ let ChatField = ({user, message}) => {
     );
 }
 
-export function ChatFieldImg() {
+let ChatFieldImg = ({user, message, timestamp}) => {
+
+    const date = new Date(timestamp);
+    const formattedDate = new Intl.DateTimeFormat('en-GB', {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+    }).format(date);
+
+    console.log(formattedDate);
+    
     return (
         <div className={"w-full"}>
             <div className={"flex md:flex-row flex-col pt-5"}>
                 <div className={"md:w-2/5 w-full"}>
-                    <h1 className={"text-2xl font-bold"}>Name</h1>
-                    <p className={"text-md"}>Lorem Ipsum</p>
+                    <div className={"flex flex-row items-center justify-between"}>
+                        <h1 className={"text-2xl font-bold"}>{user || "No name Found"}</h1>
+                        <p className={"text-sm mr-2.5"}>{formattedDate}</p>
+                    </div>
+                    <p className={"text-md"}>{message}</p>
                 </div>
                 <div className={"md:w-3/5 w-full"}>
                     <Carousel/>
