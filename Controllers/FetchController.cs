@@ -32,8 +32,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         public async Task<IActionResult> GetUser(getUserDto data) {
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
-                var user = context.Users.FirstOrDefault(_ => _.Usr_Id == data.Id);
-                return Ok(user.Usr_FirstName + " " + user.Usr_LastName);
+                var user = context.Users.FirstOrDefault(_ => _.Id == data.Id);
+                return Ok(user.FirstName + " " + user.LastName);
             }
             catch (Exception ex) {
                 return StatusCode(500, ex.Message);
@@ -44,16 +44,13 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         public async Task<ActionResult> GetTicketData(fetchDto data) {
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
-                var ticket = context!.Tickets.FirstOrDefault(x => x.Tick_Id == 1);
-                var department = context.Departments.FirstOrDefault(_ => _.Dep_Id == ticket.Tick_DepartmentId);
-                var machine = context.Machines.FirstOrDefault(_ => _.Mach_Id == ticket.Tick_MachId);
-                
-                var creator = context.Users.FirstOrDefault(_ => _.Usr_Id == ticket.Tick_Creator_UserId);
-                var company = context.Companies.FirstOrDefault(_ => _.Com_Id == creator.Usr_CompId);
-                
-                var helper = context.Users.FirstOrDefault(_ => _.Usr_Id == ticket.Tick_Helper_UserId);
-
-                var messages = context.Messages.Where(_ => _.Msg_TickId == ticket.Tick_Id).ToList();
+                var ticket = context!.Tickets.FirstOrDefault(x => x.Id == data.Id);
+                var department = context.Departments.FirstOrDefault(_ => _.Id == ticket.Id);
+                var machine = context.Machines.FirstOrDefault(_ => _.Id == ticket.MachineId);
+                var creator = context.Users.FirstOrDefault(_ => _.Id == ticket.CreatorUserId);
+                var company = context.Companies.FirstOrDefault(_ => _.Id == creator.CompanyId);
+                var helper = context.Users.FirstOrDefault(_ => _.Id == ticket.HelperUserId);
+                var messages = context.Messages.Where(_ => _.TicketId == ticket.Id).ToList();
                 
                 return Ok(new {Ticket = ticket, Department = department, User = creator, Helper = helper, Company = company, Machine = machine, Messages = messages});
             }

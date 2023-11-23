@@ -46,10 +46,9 @@ export function SignupAxios(data: SignUpDto) {
 }
 
 type MessageDto = {
-    msg: string,
-    img: any,
-    tick_id: number,
-    usr_id: number
+    content: string,
+    ticketId: number,
+    sender: number
 }
 
 type UserIdDto = {

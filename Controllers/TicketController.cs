@@ -30,15 +30,15 @@ namespace Viscon_ProjectC_Groep4.Controllers
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
                 var message = new Message{
-                    Msg_Date = DateTime.UtcNow,
-                    Msg_TickId = context!.Tickets.Where(_ => _.Tick_Id == data.tick_Id).Select(_ => _.Tick_Id).FirstOrDefault(), // TODO: FK Restraint fixes
-                    Msg_Message = data.Msg,
-                    Message_Sender = data.usr_Id
+                    TimeSent = DateTime.UtcNow,
+                    TicketId = context!.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
+                    Content = data.content,
+                    Sender = data.sender
                 };
                 try {
                     context!.Messages.Add(message);
                     await context.SaveChangesAsync();
-                    _logger.LogInformation("Added message to tickId " + message.Msg_TickId);
+                    _logger.LogInformation("Added message to tickId " + message.TicketId);
                 }
                 catch (Exception ex) {
                     _logger.LogError(ex.ToString());
@@ -60,18 +60,18 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 if (_authenticator.VerifyToken(data.Jtw, out int Id)) {
                     _logger.LogInformation("Token Correct");
                     var ticket = new Ticket();
-                    ticket.Tick_MachId = context!.Machines.Where(m => m.Mach_Name == data.machine).Select(m => m.Mach_Id).FirstOrDefault();
-                    ticket.Tick_Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
-                    ticket.Tick_Description = data.description;
-                    ticket.Tick_DateCreated = DateTime.UtcNow;
-                    ticket.Tick_Priority = 1; //int.Parse(data.priority);
-                    ticket.Tick_ExpectedToBeDone = data.expectedAction;
-                    ticket.Tick_MadeAnyChanges = data.selfTinkering;
-                    ticket.Tick_DepartmentId = data.departmentId;
-                    ticket.Tick_Creator_UserId = Id;
+                    ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
+                    ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
+                    ticket.Description = data.description;
+                    ticket.DateCreated = DateTime.UtcNow;
+                    ticket.Priority = 1; //int.Parse(data.priority);
+                    ticket.ExpectedToBeDone = data.expectedAction;
+                    ticket.MadeAnyChanges = data.selfTinkering;
+                    ticket.DepartmentId = data.departmentId;
+                    ticket.CreatorUserId = Id;
                     // ticket.Tick_Helper_UserId = null;
                     // ticket.Tick_Media = null;
-                    ticket.Tick_Resolved = false;
+                    ticket.Resolved = false;
                     context.Tickets.Add(ticket);
                     context.SaveChanges();
                     return Ok(ticket);

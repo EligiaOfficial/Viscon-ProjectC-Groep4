@@ -11,9 +11,9 @@ const Ticket = ({Id}: {Id: number}) => {
     const TicketId = Id ?? 1;
     const token = localStorage.getItem("token");
 
-    if (token && getRole(token) == "0") {
-        nav('/login');
-    }
+    // if (token && getRole(token) == "0") {
+    //     nav('/login');
+    // }
 
     const [ticket, setTicket] = useState<object>([]);
     const [department, setDepartment] = useState<object>([]);
@@ -26,6 +26,7 @@ const Ticket = ({Id}: {Id: number}) => {
     const fetchTicket = () => {
         FetchTicketAxios({Id: TicketId}).then(res => {
             const { ticket, department, user, helper, company, machine, messages } = res.data;
+            console.log(res.data)
             setUser(user); // TODO: Make this safe
             setDepartment(department);
             setTicket(ticket)
@@ -42,13 +43,13 @@ const Ticket = ({Id}: {Id: number}) => {
     
     return (
         <>
-            <div className="h-full flex flex-col">
+            <div className="h-screen flex flex-col">
                 <Nav />
-                <div className="relative h-full w-full">
+                <div className="flex flex-row relative h-full w-full">
                     <SideBar />
-                    <div className="pl-[50px] bg-stone-200 h-full w-full">
+                    <div className="bg-stone-200 h-full w-full">
                         <section className="flex h-full">
-                            <TicketInfo assignee={( helper && helper["usr_FirstName"] + " " + helper["usr_LastName"]) || "Unassigned"} company={company["com_Name"]} department={department["dep_Speciality"]} machine={machine["mach_Name"]} requester={user["usr_FirstName"] + " " + user["usr_LastName"]} />
+                            <TicketInfo assignee={( helper && helper["firstName"] + " " + helper["lastName"]) || "Unassigned"} company={company["name"]} department={department["speciality"]} machine={machine["name"]} requester={user["firstName"] + " " + user["lastName"]} />
                             <TicketChat ticket={ticket} messages={messages || []}/>
                         </section>
                     </div>
@@ -62,22 +63,21 @@ export default Ticket
 
 const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) => {
 
-    const [msg, setMsg] = useState('');
+    const [content, setMsg] = useState('');
     const [img] = useState('');
     const token = localStorage.getItem("token");
         
     const submitMessage = (e) => {
-        // e.preventDefault(); TODO: Reload Chat ipv Page
-        console.log('msg: ' + msg);
+        // e.preventDefault(); // TODO: Reload Chat ipv Page
+        console.log('msg: ' + content);
 
-        if (msg !== "") {
+        if (content !== "") {
             createMessageAxios({
-                msg: msg,
-                img: "", // TODO: Add Images & Img Converter
-                tick_id: ticket["tick_Id"],
-                usr_id: +getId(token)
+                content: content,
+                ticketId: +ticket["id"],
+                sender: +getId(token)
             }).then(() => {
-                console.log(msg, img);
+                console.log(content, img);
             }).catch(error => {
                 console.error("Error:", error);
             });
@@ -88,10 +88,10 @@ const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) =>
         <div className={"w-5/6 bg-stone-200 flex items-center justify-center"}>
             <div className={"h-full md:w-5/6 w-full flex flex-col items-center"}>
                 <div className={"py-5 md:w-3/4 w-full"}>
-                    <h1 className={"text-3xl font-bold"}>{ticket["tick_Title"]}</h1>
-                    <h2 className={"text-md font-bold"}>{ticket["tick_Description"]}</h2>
-                    <h2 className={"text-md font-bold"}>{ticket["tick_MadeAnyChanges"]}</h2>
-                    <h2 className={"text-md font-bold"}>{ticket["tick_ExpectedToBeDone"]}</h2>
+                    <h1 className={"text-3xl font-bold"}>{ticket["title"]}</h1>
+                    <h2 className={"text-md font-bold"}>{ticket["description"]}</h2>
+                    <h2 className={"text-md font-bold"}>{ticket["madeAnyChanges"]}</h2>
+                    <h2 className={"text-md font-bold"}>{ticket["expectedToBeDone"]}</h2>
                 </div>
 
                 <div className="md:w-3/4 w-full bg-white border rounded-lg">
@@ -121,7 +121,7 @@ const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) =>
                     <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
                         <div className="mx-10">
                             {messages.slice().reverse().map((message, index) => (
-                                <ChatField key={index} message={message["msg_Message"]} user={message["message_Sender"]} timestamp={message["msg_Date"]}/>
+                                <ChatField key={index} message={message["content"]} user={message["sender"]} timestamp={message["timeSent"]}/>
                             ))}
                         </div>
                     </div>

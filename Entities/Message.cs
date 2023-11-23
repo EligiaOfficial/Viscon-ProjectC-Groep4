@@ -16,10 +16,8 @@ public class Message
 
     public DateTime TimeSent { get; set; }
 
-    [ForeignKey("Tickets")]
-    public int TickId { get; set; }
-    public Ticket Tickets { get; set; }  
-    
-    public DateTime date { get; set; }
+    [ForeignKey("Ticket")]
+    public int TicketId { get; set; }
+    public Ticket RelatedTicket { get; set; }
 
 }

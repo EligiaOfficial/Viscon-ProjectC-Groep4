@@ -33,10 +33,9 @@ public class fetchDto {
 }
 
 public class MessageDto {
-    public string Msg { get; set; }
-    public string Img { get; set; } = "";
-    public int usr_Id { get; set; }
-    public int tick_Id { get; set; }
+    public string content { get; set; }
+    public int ticketId { get; set; }
+    public int sender { get; set; }
 }
 
 public class MachineDataDto
