@@ -14,9 +14,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
     public class MachineController : ControllerBase
     {
         
+        private readonly ILogger<FetchController> _logger;
         private readonly IServiceProvider _services;
 
-        public MachineController(IConfiguration configuration, IServiceProvider services) {
+        public MachineController(ILogger<FetchController> logger, IServiceProvider services) {
+            _logger = logger;
             _services = services;
         }
         
@@ -24,17 +26,17 @@ namespace Viscon_ProjectC_Groep4.Controllers
         // GET: api/Machine
         
         [HttpGet("fetchmachines")]
-        public async Task<ActionResult<IEnumerable<Machines>>> GetMachines() {
+        public async Task<ActionResult<IEnumerable<Machine>>> GetMachines() {
             await using var context = _services.GetService<ApplicationDbContext>();;
             try
             {
-                var machines = context!.Machines.Select(machines => machines.Mach_Name).ToList();
+                var machines = context!.Machines.Select(machines => machines.Name).ToList();
                 return Ok(machines);
             }
             catch (Exception ex)
             {
                     
-                System.Console.WriteLine(ex.Message);
+                _logger.LogError(ex.Message);
                     
                 return StatusCode(500, ex.Message);
             }

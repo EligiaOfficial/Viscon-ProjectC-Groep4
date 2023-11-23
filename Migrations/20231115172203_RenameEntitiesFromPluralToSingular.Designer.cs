@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Viscon_ProjectC_Groep4;
@@ -11,9 +12,11 @@ using Viscon_ProjectC_Groep4;
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115172203_RenameEntitiesFromPluralToSingular")]
+    partial class RenameEntitiesFromPluralToSingular
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,258 +28,261 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
             modelBuilder.Entity("Entities.Company", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Com_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Com_Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Com_Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Com_Id");
 
                     b.ToTable("Companies", "public");
                 });
 
             modelBuilder.Entity("Entities.Department", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Dep_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Dep_Id"));
 
-                    b.Property<string>("Speciality")
+                    b.Property<string>("Dep_Speciality")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Dep_Id");
 
                     b.ToTable("Departments", "public");
                 });
 
             modelBuilder.Entity("Entities.Machine", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Mach_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Mach_Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Mach_Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Type")
+                    b.Property<string>("Mach_Type")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Mach_Id");
 
                     b.ToTable("Machines", "public");
                 });
 
             modelBuilder.Entity("Entities.Message", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Msg_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Msg_Id"));
 
-                    b.Property<string>("Content")
+                    b.Property<int>("Message_Sender")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Msg_Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Msg_Message")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Sender")
+                    b.Property<int>("Msg_TickId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("TicketId")
+                    b.Property<int>("TicketsTick_Id")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("TimeSent")
-                        .HasColumnType("timestamp with time zone");
+                    b.HasKey("Msg_Id");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("TicketId");
+                    b.HasIndex("TicketsTick_Id");
 
                     b.ToTable("Messages", "public");
                 });
 
             modelBuilder.Entity("Entities.Ticket", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Tick_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Tick_Id"));
 
-                    b.Property<int>("CreatorUserId")
+                    b.Property<int>("Tick_Creator_UserId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DateCreated")
+                    b.Property<DateTime>("Tick_DateCreated")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DepartmentId")
+                    b.Property<int>("Tick_DepartmentId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Tick_Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ExpectedToBeDone")
+                    b.Property<string>("Tick_ExpectedToBeDone")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("HelperUserId")
+                    b.Property<int?>("Tick_Helper_UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MachineId")
+                    b.Property<int>("Tick_MachId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("MadeAnyChanges")
+                    b.Property<string>("Tick_MadeAnyChanges")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Media")
+                    b.Property<string>("Tick_Media")
                         .HasColumnType("text");
 
-                    b.Property<int>("Priority")
+                    b.Property<int>("Tick_Priority")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("Resolved")
+                    b.Property<bool>("Tick_Resolved")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Tick_Title")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("Tick_Id");
 
-                    b.HasIndex("CreatorUserId");
+                    b.HasIndex("Tick_Creator_UserId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("Tick_DepartmentId");
 
-                    b.HasIndex("HelperUserId");
+                    b.HasIndex("Tick_Helper_UserId");
 
-                    b.HasIndex("MachineId");
+                    b.HasIndex("Tick_MachId");
 
                     b.ToTable("Tickets", "public");
                 });
 
             modelBuilder.Entity("Entities.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Usr_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Usr_Id"));
 
-                    b.Property<int?>("CompanyId")
+                    b.Property<int?>("Usr_CompId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int?>("Usr_DepId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Usr_Email")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("Usr_FirstName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LanguagePreference")
+                    b.Property<string>("Usr_LanguagePreference")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Usr_LastName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("PasswSalt")
+                    b.Property<byte[]>("Usr_PasswSalt")
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<byte[]>("Password")
+                    b.Property<byte[]>("Usr_Password")
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<int>("PhoneNumber")
+                    b.Property<int>("Usr_PhoneNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Role")
+                    b.Property<int>("Usr_Role")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("Usr_Id");
 
-                    b.HasIndex("CompanyId");
+                    b.HasIndex("Usr_CompId");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("Usr_DepId");
 
                     b.ToTable("Users", "public");
                 });
 
             modelBuilder.Entity("Entities.Message", b =>
                 {
-                    b.HasOne("Entities.Ticket", "RelatedTicket")
+                    b.HasOne("Entities.Ticket", "Tickets")
                         .WithMany()
-                        .HasForeignKey("TicketId")
+                        .HasForeignKey("TicketsTick_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("RelatedTicket");
+                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("Entities.Ticket", b =>
                 {
                     b.HasOne("Entities.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorUserId")
+                        .HasForeignKey("Tick_Creator_UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Department", "Department")
+                    b.HasOne("Entities.Department", "Departments")
                         .WithMany()
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("Tick_DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Entities.User", "Helper")
                         .WithMany()
-                        .HasForeignKey("HelperUserId");
+                        .HasForeignKey("Tick_Helper_UserId");
 
-                    b.HasOne("Entities.Machine", "Machine")
+                    b.HasOne("Entities.Machine", "Machines")
                         .WithMany()
-                        .HasForeignKey("MachineId")
+                        .HasForeignKey("Tick_MachId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Creator");
 
-                    b.Navigation("Department");
+                    b.Navigation("Departments");
 
                     b.Navigation("Helper");
 
-                    b.Navigation("Machine");
+                    b.Navigation("Machines");
                 });
 
             modelBuilder.Entity("Entities.User", b =>
                 {
-                    b.HasOne("Entities.Company", "Company")
+                    b.HasOne("Entities.Company", "Companies")
                         .WithMany()
-                        .HasForeignKey("CompanyId");
+                        .HasForeignKey("Usr_CompId");
 
-                    b.HasOne("Entities.Department", "Department")
+                    b.HasOne("Entities.Department", "Departments")
                         .WithMany()
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("Usr_DepId");
 
-                    b.Navigation("Company");
+                    b.Navigation("Companies");
 
-                    b.Navigation("Department");
+                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }

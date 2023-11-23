@@ -13,6 +13,7 @@ function Home() {
     var token = localStorage.getItem("token");
     var {id,name,email,phone,company,department} = "Empty";
     var role = "0";
+
     var isLoggedIn = false;
     try {
         name = getName(token);
@@ -51,10 +52,12 @@ function Home() {
                     <div className="pl-[50px] bg-stone-200 h-full w-full">
                         <section className="p-2">
                             <a href="/dashboard">Dashboard</a>
-                            <hr />
-                            <a href="/add">Add User</a>
                             <hr/>
-                            <a href="Create">Create Ticket</a>
+                            <a href="/login">Login</a>
+                            <hr/>
+                            <a href="/add">Create Account (Temp)</a>
+                            <hr/>
+                            <a href="Create">Create Ticket (Temp)</a>
                             <div>
                                 {isLoggedIn ? (
                                     <button onClick={logOut} > LogOut </button>

@@ -4,12 +4,43 @@ import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
-
+import {UserRoles} from "../UserRoles";
 
 const CreateTicket: React.FC = () => {
 
-    // Navigation Module
-    const nav = useNavigate();
+  // Navigation Module
+  const nav = useNavigate();
+
+  // if not loggedIn redirect to Login
+  const token = localStorage.getItem("token");
+  const usr_role = getRole(token);
+  if (usr_role == UserRoles.NONE) {
+    nav('/login')
+  }
+  
+  // State for form fields
+  const [selectedMachine, setSelectedMachine] = useState('');
+  const [description, setDescription] = useState('');
+  const [expectedAction, setExpectedAction] = useState('');
+  const [selfTinkering, setSelfTinkering] = useState('');
+  const [image, setImage] = useState<File | null>(null);
+  const [priority, setPriority] = useState('Normal'); // Added state for priority
+
+  // State for machines fetched from the API
+  const [machines, setMachines] = useState<string[]>([]);
+
+  // State to keep track of form validation errors
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  // Function to handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    if (usr_role == UserRoles.USER) {
+      return;
+    }
+    e.preventDefault();
+    
+    // Create an array to store validation errors
+    const errors: string[] = [];
 
     // if not loggedIn redirect to Login
     const token = localStorage.getItem("token");

@@ -14,7 +14,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         }
         
         [HttpGet("AccountData")]
-        public async Task<ActionResult<IEnumerable<Machines>>> GetData() {
+        public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
                 var department = context.Departments.ToList();

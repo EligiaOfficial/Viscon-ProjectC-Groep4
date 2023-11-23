@@ -4,11 +4,13 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-public class Departments
+public class Machine
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Dep_Id { get; set; }
+    public int Id { get; set; }
 
-    public string Dep_Speciality {get; set;}
+    public string Name { get; set; }
+
+    public string Type { get; set; }
 }

@@ -8,6 +8,7 @@ import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
+import {UserRoles} from "../UserRoles";
 
 function AddAccount() {
     const [password, setPassword] = useState('');
@@ -42,9 +43,9 @@ function AddAccount() {
                 lastName: lastName,
                 password: password,
                 phone: +phone,
-                company: usr_role == 1 ? +company : +usr_compId,
+                company: usr_role == UserRoles.ADMIN ? +company : +usr_compId,
                 role: usr_role == 1 ? +role : 4,
-                department: usr_role == 1 ? +department : +usr_depId,
+                department: usr_role == UserRoles.ADMIN ? +department : +usr_depId,
                 language: "EN",
             }).then(() => {
                 console.log("User created: ", email, firstName, lastName, password, phone, company, role, department);
@@ -247,7 +248,68 @@ function AddAccount() {
                                             </div>
                                         </form>
                                     </div>
+                            {usr_role == UserRoles.ADMIN ? (
+                                <div>
+                                    <label htmlFor="role" className="block text-xs font-medium leading-2 text-gray-500">
+                                        User Account:
+                                    </label>
+                                    <select
+                                        id="role"
+                                        value={role}
+                                        onChange={(e) => setRole(e.target.value)}
+                                        className="w-full border rounded-md p-2 mt-2">
+                                        <option value="0">Select User Type</option>
+                                        <option value="1">Admin</option>
+                                        <option value="2">Viscon Employee</option>
+                                        <option value="3">Trained User</option>
+                                        <option value="4">User</option>
+                                    </select>
+                                </div>
+                            ) : (
+                                <div/>
+                            )}
 
+                            {usr_role == UserRoles.ADMIN ? (
+                                <div>
+                                    <label htmlFor="Department" className="block text-xs font-medium leading-2 text-gray-500">
+                                        Department:
+                                    </label>
+                                    <select
+                                        id="department"
+                                        value={department}
+                                        onChange={(e) => setDepartment(e.target.value)}
+                                        className="w-full border rounded-md p-2 mt-2">
+                                        <option value="">Select a Department</option>
+                                        <option value="0">Inapplicable</option>
+                                        {departments.map((dep) => (
+                                            <option key={dep["dep_Id"]} value={dep["dep_Id"]}>
+                                                {dep["dep_Speciality"]}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            ) : (
+                                <div/>
+                            )}
+
+                            {usr_role == UserRoles.ADMIN ? (
+                                <div>
+                                    <label htmlFor="machine" className="block text-xs font-medium leading-2 text-gray-500">
+                                        Company:
+                                    </label>
+                                    <select
+                                        id="company"
+                                        value={company}
+                                        onChange={(e) => setCompany(e.target.value)}
+                                        className="w-full border rounded-md p-2 mt-2">
+                                        <option value="">Select a Company</option>
+                                        <option value="">Inapplicable</option>
+                                        {companies.map((comp) => (
+                                            <option key={comp["com_Id"]} value={comp["com_Id"]}>
+                                                {comp["com_Name"]}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                         </section>

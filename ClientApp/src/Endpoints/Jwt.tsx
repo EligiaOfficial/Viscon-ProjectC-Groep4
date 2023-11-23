@@ -1,3 +1,4 @@
+import { UserRoles } from "../UserRoles";
 
 export function getName(data: string): string {
     const token = parseJwt(data)
@@ -14,9 +15,9 @@ export function getPhone(data: string): string {
     return Object(token)["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/mobilephone"];
 }
 
-export function getRole(data: string): string {
+export function getRole(data: string): UserRoles{
     const token = parseJwt(data);
-    return Object(token)["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+    return UserRoles[Object(token)["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]];
 }
 
 export function getId(data: string): string {
