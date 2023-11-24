@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {getId, getRole} from '../Endpoints/Jwt'
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
@@ -8,6 +8,8 @@ import {useEffect, useState} from "react";
 
 const Ticket = ({Id}: {Id: number}) => {
     const nav = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    Id = searchParams.get('id');
     const TicketId = Id ?? 1;
     const token = localStorage.getItem("token");
 
@@ -24,7 +26,7 @@ const Ticket = ({Id}: {Id: number}) => {
     const [messages, setMessages] = useState<object[]>([]);
 
     const fetchTicket = () => {
-        FetchTicketAxios({Id: TicketId}).then(res => {
+        FetchTicketAxios(TicketId).then(res => {
             const { ticket, department, user, helper, company, machine, messages } = res.data;
             console.log(res.data)
             setUser(user); // TODO: Make this safe

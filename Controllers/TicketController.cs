@@ -91,5 +91,25 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [HttpGet("ticketdata")]
+        public async Task<ActionResult> GetTicketData([FromQuery] int id) {
+            await using var context = _services.GetService<ApplicationDbContext>();
+            try {
+                var ticket = context!.Tickets.FirstOrDefault(x => x.Id == id);
+                var department = context.Departments.FirstOrDefault(_ => _.Id == ticket.Id);
+                var machine = context.Machines.FirstOrDefault(_ => _.Id == ticket.MachineId);
+                var creator = context.Users.FirstOrDefault(_ => _.Id == ticket.CreatorUserId);
+                var company = context.Companies.FirstOrDefault(_ => _.Id == creator.CompanyId);
+                var helper = context.Users.FirstOrDefault(_ => _.Id == ticket.HelperUserId);
+                var messages = context.Messages.Where(_ => _.TicketId == ticket.Id).ToList();
+
+                return Ok(new {Ticket = ticket, Department = department, User = creator, Helper = helper, Company = company, Machine = machine, Messages = messages});
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Catched");
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
