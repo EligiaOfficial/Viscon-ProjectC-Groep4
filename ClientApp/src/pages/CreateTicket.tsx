@@ -1,4 +1,5 @@
-import axios from '../../node_modules/axios/index';
+//import axios from '../../node_modules/axios/index';
+import {axiosInstance} from '../axiosInstance';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
@@ -99,7 +100,7 @@ const CreateTicket: React.FC = () => {
   // Function to fetch machines from the API
   const fetchMachines = async () => {
     try {
-      const response = await axios.get('/api/machine/fetchmachines');
+      const response = await axiosInstance.get('/api/machine/fetchmachines');
       setMachines(response.data);
     } catch (error) {
       console.error('Error fetching machines:', error);

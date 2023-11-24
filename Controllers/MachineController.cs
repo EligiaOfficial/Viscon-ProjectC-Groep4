@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         
 
         // GET: api/Machine
-        
+        [Authorize(Policy = "user")]
         [HttpGet("fetchmachines")]
         public async Task<ActionResult<IEnumerable<Machine>>> GetMachines() {
             await using var context = _services.GetService<ApplicationDbContext>();;
