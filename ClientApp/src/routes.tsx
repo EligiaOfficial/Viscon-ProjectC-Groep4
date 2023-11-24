@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import SuccessCreating from "./pages/SuccessCreating";
 import Ticket from "./pages/Ticket";
+import New from "./pages/Dashboard/New";
 
 
 export const routes = [
@@ -15,4 +16,5 @@ export const routes = [
     { path: '/create', name: 'create', component: <CreateTicket /> },
     { path: '/success', name: 'success', component: <SuccessCreating /> },
     { path: '/ticket', name: 'ticket', component: <Ticket /> },
+    { path: '/new', name: 'tickets_new', component: <New /> },
 ]
