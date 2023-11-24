@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {axiosInstance} from '../axiosInstance';
 
 type LoginDto = {
     email: string,
@@ -15,10 +16,6 @@ type SignUpDto = {
     role: number,
     department: number,
     language: string
-}
-
-type FetchTicketDto = {
-    Id : number
 }
 
 export function LoginAxios(data: LoginDto) {
@@ -71,8 +68,8 @@ export function createMessageAxios(data: MessageDto) {
         });
 }
 
-export function FetchTicketAxios(data: FetchTicketDto) {
-    return axios.post('api/Fetch/TicketData', data);
+export function FetchTicketAxios(id: number) {
+    return axiosInstance.get(`api/ticket/ticketdata?id=${id}`);
 }
 
 export function FetchUserCreationData() {
