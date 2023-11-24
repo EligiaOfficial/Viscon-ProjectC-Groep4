@@ -1,42 +1,45 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 import {useNavigate, useSearchParams} from "react-router-dom";
+
 import {getId, getRole} from '../Endpoints/Jwt'
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
 import RoundButton from "../components/RoundButton";
-import {createMessageAxios, FetchTicketAxios, fetchUser} from "../Endpoints/Dto";
+import {createMessageAxios, FetchTicketAxios} from "../Endpoints/Dto";
 import {useEffect, useState} from "react";
 
-const Ticket = ({Id}: {Id: number}) => {
-    const nav = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
-    Id = searchParams.get('id');
-    const TicketId = Id ?? 1;
-    const token = localStorage.getItem("token");
+const Ticket = () => {
+    const [searchParams] = useSearchParams();
+    const Id = searchParams.get('id') || " ";
+    const TicketId = parseInt(Id, 10);
 
-    // if (token && getRole(token) == "0") {
-    //     nav('/login');
-    // }
+    if (isNaN(TicketId)) {
+        return <div>Invalid Ticket</div>;
+    }
 
     const [ticket, setTicket] = useState<object>([]);
-    const [department, setDepartment] = useState<object>([]);
-    const [user, setUser] = useState<object>([]);
-    const [helper, setHelper] = useState<object>([]);
-    const [company, setCompany] = useState<object>([]);
-    const [machine, setMachine] = useState<object>([]);
+    const [department, setDepartment] = useState<string>("");
+    const [creator, setCreator] = useState<string>("");
+    const [helper, setHelper] = useState<string>("");
+    const [company, setCompany] = useState<string>("");
+    const [machine, setMachine] = useState<string>("");
     const [messages, setMessages] = useState<object[]>([]);
 
     const fetchTicket = () => {
         FetchTicketAxios(TicketId).then(res => {
-            const { ticket, department, user, helper, company, machine, messages } = res.data;
-            console.log(res.data)
-            setUser(user); // TODO: Make this safe
+            const { company, creator, department, helper, machine, messages, ticket } = res.data;
+            setCompany(company);
+            setCreator(creator);
             setDepartment(department);
-            setTicket(ticket)
-            setHelper(helper)
-            setCompany(company)
+            setHelper(helper);
             setMachine(machine)
-            setMessages(messages)
-        });
+            setMessages(messages);
+            setTicket(ticket);
+        })
+            .catch(err => console.log(err));
     }
 
     useEffect(() => {
@@ -51,7 +54,7 @@ const Ticket = ({Id}: {Id: number}) => {
                     <SideBar />
                     <div className="bg-stone-200 h-full w-full">
                         <section className="flex h-full">
-                            <TicketInfo assignee={( helper && helper["firstName"] + " " + helper["lastName"]) || "Unassigned"} company={company["name"]} department={department["speciality"]} machine={machine["name"]} requester={user["firstName"] + " " + user["lastName"]} />
+                            <TicketInfo assignee={helper} company={company} department={department} machine={machine} requester={creator} />
                             <TicketChat ticket={ticket} messages={messages || []}/>
                         </section>
                     </div>
@@ -64,7 +67,10 @@ const Ticket = ({Id}: {Id: number}) => {
 export default Ticket
 
 const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) => {
-
+    const { ID } = useParams();
+    let TicketId = parseInt(ID, 10);
+    parseInt(ID, 10)
+    
     const [content, setMsg] = useState('');
     const [img] = useState('');
     const token = localStorage.getItem("token");
@@ -76,7 +82,7 @@ const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) =>
         if (content !== "") {
             createMessageAxios({
                 content: content,
-                ticketId: +ticket["id"],
+                ticketId: +TicketId,
                 sender: +getId(token)
             }).then(() => {
                 console.log(content, img);
@@ -122,7 +128,7 @@ const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) =>
                 {messages.length > 0 ? (
                     <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
                         <div className="mx-10">
-                            {messages.slice().reverse().map((message, index) => (
+                            {messages.map((message, index) => (
                                 <ChatField key={index} message={message["content"]} user={message["sender"]} timestamp={message["timeSent"]}/>
                             ))}
                         </div>
@@ -143,16 +149,7 @@ const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) =>
     );
 }
 
-// Todo: ID to Username
 let ChatField = ({user, message, timestamp}: {user: string, message: string, timestamp: string}) => {
-
-    const [userName, setUsername] = useState('');
-    useEffect(() => {
-        fetchUser({
-            id: +user,
-        }).then(res=>{setUsername(res.data)})
-        console.log(userName)
-    }, []);
 
     const date = new Date(timestamp);
     const formattedDate = new Intl.DateTimeFormat('en-GB', {
@@ -163,14 +160,12 @@ let ChatField = ({user, message, timestamp}: {user: string, message: string, tim
         minute: '2-digit',
         second: '2-digit',
     }).format(date);
-
-    console.log(formattedDate);
     
     return (
         <div className={"w-full pt-5"}>
             <div className={""}>
                 <div className={"flex flex-row items-center justify-between"}>
-                    <h1 className={"text-2xl font-bold"}>{userName || "No name Found"}</h1>
+                    <h1 className={"text-2xl font-bold"}>{user}</h1>
                     <p className={"text-sm mr-2.5"}>{formattedDate}</p>
                 </div>
                 <p className={"text-md"}>{message}</p>
@@ -191,15 +186,13 @@ let ChatFieldImg = ({user, message, timestamp}: {user: string, message: string, 
         minute: '2-digit',
         second: '2-digit',
     }).format(date);
-
-    console.log(formattedDate);
     
     return (
         <div className={"w-full"}>
             <div className={"flex md:flex-row flex-col pt-5"}>
                 <div className={"md:w-2/5 w-full"}>
                     <div className={"flex flex-row items-center justify-between"}>
-                        <h1 className={"text-2xl font-bold"}>{user || "No name Found"}</h1>
+                        <h1 className={"text-2xl font-bold"}>{user}</h1>
                         <p className={"text-sm mr-2.5"}>{formattedDate}</p>
                     </div>
                     <p className={"text-md"}>{message}</p>

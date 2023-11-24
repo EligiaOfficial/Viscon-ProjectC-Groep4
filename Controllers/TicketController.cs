@@ -1,7 +1,12 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Entities; // Make sure this namespace exists
+using Entities;
+using Microsoft.EntityFrameworkCore; // Make sure this namespace exists
 using Services;
 using Viscon_ProjectC_Groep4.Dto;
 
@@ -56,7 +61,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         }
 
         [Authorize(Policy = "user")]
-        [HttpPost("createticket")]
+        [HttpPost("CreateTicket")]
         public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data) {
             _logger.LogInformation("API Fetched");
             int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -92,24 +97,66 @@ namespace Viscon_ProjectC_Groep4.Controllers
             }
         }
 
-        [HttpGet("ticketdata")]
-        public async Task<ActionResult> GetTicketData([FromQuery] int id) {
+        [Authorize(Policy = "user")]
+        [HttpPost("UserName")]
+        public async Task<IActionResult> GetUser(getUserDto data) {
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
-                var ticket = context!.Tickets.FirstOrDefault(x => x.Id == id);
-                var department = context.Departments.FirstOrDefault(_ => _.Id == ticket.Id);
-                var machine = context.Machines.FirstOrDefault(_ => _.Id == ticket.MachineId);
-                var creator = context.Users.FirstOrDefault(_ => _.Id == ticket.CreatorUserId);
-                var company = context.Companies.FirstOrDefault(_ => _.Id == creator.CompanyId);
-                var helper = context.Users.FirstOrDefault(_ => _.Id == ticket.HelperUserId);
-                var messages = context.Messages.Where(_ => _.TicketId == ticket.Id).ToList();
-
-                return Ok(new {Ticket = ticket, Department = department, User = creator, Helper = helper, Company = company, Machine = machine, Messages = messages});
+                var user = context.Users.FirstOrDefault(_ => _.Id == data.Id);
+                return Ok(user.FirstName + " " + user.LastName);
             }
             catch (Exception ex) {
-                Console.WriteLine("Catched");
                 return StatusCode(500, ex.Message);
             }
         }
+        
+        [Authorize(Policy = "user")]
+        [HttpPost("TicketData")]
+        public async Task<ActionResult> GetTicketData([FromQuery] int id) {
+            await using var context = _services.GetService<ApplicationDbContext>();
+            try {
+                var ticket = context!.Tickets
+                    .Include(t => t.Department)
+                    .Include(t => t.Machine)
+                    .Include(t => t.Creator)
+                    .ThenInclude(u => u.Company)
+                    .Include(t => t.Helper)
+                    .FirstOrDefault(x => x.Id == data.Id);
+                if (ticket == null) return Ok("No Ticket Found");
+                var messages = context.Messages
+                    .Where(m => m.TicketId == ticket.Id)
+                    .Join(context.Users,
+                        message => message.Sender,
+                        user => user.Id,
+                        (message, user) => new
+                        {
+                            Content = message.Content,
+                            Sender = $"{user.FirstName} {user.LastName}",
+                            TimeSent = message.TimeSent
+                        })
+                    .ToList();
+                var result = new
+                {
+                    Helper = ticket.HelperUserId != null ? $"{ticket.Helper.FirstName} {ticket.Helper.LastName}" : "Unassigned",
+                    Company = ticket.Creator.Company.Name,
+                    Department = ticket.Department.Speciality,
+                    Machine = ticket.Machine.Name,
+                    Creator = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
+                    Ticket = new
+                    {
+                        title = ticket.Title,
+                        description = ticket.Description,
+                        madeAnyChanges = ticket.MadeAnyChanges,
+                        expectedToBeDone = ticket.ExpectedToBeDone
+                    },
+                    Messages = messages
+                };
+                return Ok(result);
+
+            }
+            catch (Exception ex) {
+                return StatusCode(500, ex.Message);
+            }
+
     }
 }

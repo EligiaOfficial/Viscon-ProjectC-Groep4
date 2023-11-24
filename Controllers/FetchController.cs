@@ -1,3 +1,7 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 using System.Runtime.Intrinsics.Arm;
 using Microsoft.AspNetCore.Mvc;
 using Entities;
@@ -22,18 +26,6 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 var department = context?.Departments.ToList();
                 var company = context?.Companies.ToList();
                 return Ok(new {Companies = company, Departments = department});
-            }
-            catch (Exception ex) {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        
-        [HttpPost("UserName")]
-        public async Task<IActionResult> GetUser(getUserDto data) {
-            await using var context = _services.GetService<ApplicationDbContext>();
-            try {
-                var user = context.Users.FirstOrDefault(_ => _.Id == data.Id);
-                return Ok(user.FirstName + " " + user.LastName);
             }
             catch (Exception ex) {
                 return StatusCode(500, ex.Message);
