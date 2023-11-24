@@ -109,9 +109,9 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        
+
         [Authorize(Policy = "user")]
-        [HttpPost("ticketdata")]
+        [HttpGet("ticketdata")]
         public async Task<ActionResult> GetTicketData([FromQuery] int id) {
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
