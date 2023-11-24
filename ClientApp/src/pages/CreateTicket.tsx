@@ -70,8 +70,7 @@ const CreateTicket: React.FC = () => {
 
                     // Add other fields here
                 };
-
-
+                
                 const response = await axiosInstance.post('api/ticket/createticket', data);
 
                 if (response.status === 200) {

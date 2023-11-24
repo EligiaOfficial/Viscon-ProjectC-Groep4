@@ -52,39 +52,11 @@ type UserIdDto = {
 }
 
 export function createMessageAxios(data: MessageDto) {
-    console.log('Before Axios request', data);
     return axiosInstance.post('/api/Ticket/AddMessage', data)
-        .then(response => {
-            console.log('Axios request succeeded:', response);
-        })
-        .catch(error => {
-            if (error.response) {
-                console.error('Axios request failed with response data:', error.response.data);
-                console.error('Status code:', error.response.status);
-            } else if (error.request) {
-                console.error('Axios request made but no response received. Check network connection.');
-            } else {
-                console.error('Error setting up Axios request:', error.message);
-            }
-        });
 }
 
 export function FetchTicketAxios(id: number) {
-    console.log('Before Axios request', id);
     return axiosInstance.get(`/api/ticket/ticketdata?id=${id}`)
-        .then(response => {
-            console.log('Axios request succeeded:', response);
-        })
-        .catch(error => {
-            if (error.response) {
-                console.error('Axios request failed with response data:', error.response.data);
-                console.error('Status code:', error.response.status);
-            } else if (error.request) {
-                console.error('Axios request made but no response received. Check network connection.');
-            } else {
-                console.error('Error setting up Axios request:', error.message);
-            }
-        });
 }
 
 export function FetchUserCreationData() {
