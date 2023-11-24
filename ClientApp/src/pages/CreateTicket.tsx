@@ -1,4 +1,5 @@
-import axios from '../../node_modules/axios/index';
+//import axios from '../../node_modules/axios/index';
+import {axiosInstance} from '../axiosInstance';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
@@ -60,7 +61,6 @@ const CreateTicket: React.FC = () => {
         if (errors.length === 0) {
             try {
                 const data = {
-                    Jtw: token,
                     machine: selectedMachine,
                     description: description,
                     priority: priority,
@@ -72,7 +72,7 @@ const CreateTicket: React.FC = () => {
                 };
 
 
-                const response = await axios.post('api/ticket/createticket', data);
+                const response = await axiosInstance.post('api/ticket/createticket', data);
 
                 if (response.status === 200) {
                     // Handle the success response, e.g., show a success message
@@ -97,13 +97,12 @@ const CreateTicket: React.FC = () => {
     // Function to fetch machines from the API
     const fetchMachines = async () => {
         try {
-            const response = await axios.get('/api/machine/fetchmachines');
+            const response = await axiosInstance.get('/api/machine/fetchmachines');
             setMachines(response.data);
         } catch (error) {
             console.error('Error fetching machines:', error);
         }
     };
-
     // Call the fetchMachines function when the component mounts
     useEffect(() => {
         fetchMachines();
