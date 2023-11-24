@@ -54,28 +54,6 @@ namespace Viscon_ProjectC_Groep4
                 this.Add(new Company {Id = 5, Name = "Vinovo"});
             }
 
-            // if (!this.Tickets.Any()) {
-            //     this.Add(new Ticket {
-            //         Tick_Id = 1,
-            //         Machines = Machines.FirstOrDefault(x => x.Mach_Id == 1)!,
-            //         Tick_MachId = Machines.FirstOrDefault(x => x.Mach_Id == 1)!.Mach_Id,
-            //         Tick_Title = "Dummy Ticket",
-            //         Tick_Description = "Lorem Ipsum Description",
-            //         Tick_DateCreated = DateTime.Now,
-            //         Tick_Priority = 0,
-            //         Tick_ExpectedToBeDone = "Lorem Ipsum Motha Fucka",
-            //         Tick_MadeAnyChanges = "Lorem Ipsum Motha Fucka",
-            //         Departments = Departments.FirstOrDefault(x => x.Dep_Id == 1)!,
-            //         Tick_DepartmentId = Departments.FirstOrDefault(x => x.Dep_Id == 1)!.Dep_Id,
-            //         Creator = Users.FirstOrDefault(x => x.Usr_Id == 1)!,
-            //         Tick_Creator_UserId = Users.FirstOrDefault(x => x.Usr_Id == 1)!.Usr_Id,
-            //         Helper = Users.FirstOrDefault(x => x.Usr_Id == 2)!,
-            //         Tick_Helper_UserId = Users.FirstOrDefault(x => x.Usr_Id == 2)!.Usr_Id,
-            //         Tick_Media = "",
-            //         Tick_Resolved = false,
-            //     });
-            // }
-
             this.SaveChanges();
 
             if (!this.Users.Any()) {
