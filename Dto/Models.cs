@@ -28,7 +28,6 @@ public class LoginDto
 
 public class MachineDataDto
 {
-    public string Jtw { get; set; }
     public string machine { get; set; }
     public string description { get; set; }
     public string priority { get; set; }

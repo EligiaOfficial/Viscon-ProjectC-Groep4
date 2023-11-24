@@ -62,8 +62,6 @@ const CreateTicket: React.FC = () => {
     if (errors.length === 0) {
       try {
         const data = {
-          
-          Jtw: token,
           machine: selectedMachine,
           description: description,
           priority: priority, 
@@ -75,7 +73,7 @@ const CreateTicket: React.FC = () => {
       };
 
 
-        const response = await axios.post('api/ticket/createticket', data);
+        const response = await axiosInstance.post('api/ticket/createticket', data);
         
         if (response.status === 200) {
           // Handle the success response, e.g., show a success message
@@ -88,7 +86,7 @@ const CreateTicket: React.FC = () => {
         }
       } catch (error) {
         // Handle network or other errors
-        console.error('Error creating ticket:');
+        console.error('Error creating ticket:', error);
       }
         }
         else {
