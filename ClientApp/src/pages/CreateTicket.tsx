@@ -1,8 +1,8 @@
-//import axios from '../../node_modules/axios/index';
 import {axiosInstance} from '../axiosInstance';
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
+import {getRole} from "../Endpoints/Jwt";
+import {UserRoles} from "../UserRoles";
 
 
 const CreateTicket: React.FC = () => {
@@ -13,7 +13,7 @@ const CreateTicket: React.FC = () => {
     // if not loggedIn redirect to Login
     const token = localStorage.getItem("token");
     const usr_role = getRole(token);
-    if (usr_role == 0) {
+    if (usr_role == UserRoles.NONE) {
         nav('/login')
     }
 
@@ -70,8 +70,7 @@ const CreateTicket: React.FC = () => {
 
                     // Add other fields here
                 };
-
-
+                
                 const response = await axiosInstance.post('api/ticket/createticket', data);
 
                 if (response.status === 200) {

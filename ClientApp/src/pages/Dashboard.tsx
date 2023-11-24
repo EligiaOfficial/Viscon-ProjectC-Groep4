@@ -1,7 +1,10 @@
 import Nav from "../components/Nav"
 import SideBar from "../components/SideBar"
+import {useNavigate} from "react-router-dom";
 
 function Dashboard() {
+    
+    const nav = useNavigate();
 
     return (
         <>
@@ -25,7 +28,7 @@ function Dashboard() {
                                             <th>Created</th>
                                             <th>Modified</th>
                                         </tr>
-                                        <tr className="hover:bg-stone-200 cursor-pointer translate duration-100">
+                                        <tr className="hover:bg-stone-200 cursor-pointer translate duration-100" onClick={ () => nav('/ticket?id=1') }>
                                             <td>10293181</td>
                                             <td>Open</td>
                                             <td>Freek Jansen</td>
