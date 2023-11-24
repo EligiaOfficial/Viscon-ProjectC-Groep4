@@ -1,4 +1,4 @@
-import axios from 'axios';
+import {axiosInstance} from '../axiosInstance';
 
 type LoginDto = {
     email: string,
@@ -23,7 +23,7 @@ type FetchTicketDto = {
 
 export function LoginAxios(data: LoginDto) {
     console.log('Before Axios request');
-    return axios.post('api/Auth/Login', data)
+    return axiosInstance.post('api/Auth/Login', data)
         .then(response => {
             console.log('Axios request succeeded:', response);
             return response;
@@ -36,7 +36,7 @@ export function LoginAxios(data: LoginDto) {
 
 export function SignupAxios(data: SignUpDto) {
     console.log('Before Axios request', data);
-    return axios.post('/api/Auth/Add', data)
+    return axiosInstance.post('/api/Auth/Add', data)
         .then(response => {
             console.log('Axios request succeeded:', response);
         })
@@ -55,14 +55,9 @@ type UserIdDto = {
     id: number
 }
 
-export function fetchUser(data: UserIdDto) {
-    console.log("Fetching User")
-    return axios.post('api/Fetch/UserName', data)
-}
-
 export function createMessageAxios(data: MessageDto) {
     console.log('Before Axios request', data);
-    return axios.post('api/Ticket/AddMessage', data)
+    return axiosInstance.post('/api/Ticket/AddMessage', data)
         .then(response => {
             console.log('Axios request succeeded:', response);
         })
@@ -72,9 +67,9 @@ export function createMessageAxios(data: MessageDto) {
 }
 
 export function FetchTicketAxios(data: FetchTicketDto) {
-    return axios.post('api/Fetch/TicketData', data);
+    return axiosInstance.post('/api/Ticket/TicketData', data);
 }
 
 export function FetchUserCreationData() {
-    return axios.get('api/Fetch/AccountData')
+    return axiosInstance.get('api/Fetch/AccountData')
 }
