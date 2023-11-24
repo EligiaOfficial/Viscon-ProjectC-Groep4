@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Entities; // Make sure this namespace exists
 using Services;
@@ -109,6 +110,20 @@ namespace Viscon_ProjectC_Groep4.Controllers
             catch (Exception ex) {
                 Console.WriteLine("Catched");
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize(Policy = "viscon")]
+        [HttpGet("newtickets")]
+        public async Task<ActionResult<ICollection<Ticket>>> NewTickets() {
+            await using (var context = _services.GetService<ApplicationDbContext>()) {
+                return context.Tickets
+                    .Where(t => !t.Resolved)
+                    .Include(t => t.Machine)
+                    .Include(t => t.Department)
+                    .Include(t => t.Creator)
+                    .Include(t => t.Helper)
+                    .ToArray();
             }
         }
     }
