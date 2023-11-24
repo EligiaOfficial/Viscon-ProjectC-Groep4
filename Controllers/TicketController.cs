@@ -111,7 +111,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         }
         
         [Authorize(Policy = "user")]
-        [HttpPost("TicketData")]
+        [HttpPost("ticketdata")]
         public async Task<ActionResult> GetTicketData([FromQuery] int id) {
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
@@ -121,29 +121,28 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     .Include(t => t.Creator)
                     .ThenInclude(u => u.Company)
                     .Include(t => t.Helper)
-                    .FirstOrDefault(x => x.Id == data.Id);
+                    .FirstOrDefault(x => x.Id == id);
                 if (ticket == null) return Ok("No Ticket Found");
                 var messages = context.Messages
                     .Where(m => m.TicketId == ticket.Id)
                     .Join(context.Users,
                         message => message.Sender,
                         user => user.Id,
-                        (message, user) => new
-                        {
+                        (message, user) => new {
                             Content = message.Content,
                             Sender = $"{user.FirstName} {user.LastName}",
                             TimeSent = message.TimeSent
                         })
                     .ToList();
-                var result = new
-                {
-                    Helper = ticket.HelperUserId != null ? $"{ticket.Helper.FirstName} {ticket.Helper.LastName}" : "Unassigned",
+                var result = new {
+                    Helper = ticket.HelperUserId != null
+                        ? $"{ticket.Helper.FirstName} {ticket.Helper.LastName}"
+                        : "Unassigned",
                     Company = ticket.Creator.Company.Name,
                     Department = ticket.Department.Speciality,
                     Machine = ticket.Machine.Name,
                     Creator = $"{ticket.Creator.FirstName} {ticket.Creator.LastName}",
-                    Ticket = new
-                    {
+                    Ticket = new {
                         title = ticket.Title,
                         description = ticket.Description,
                         madeAnyChanges = ticket.MadeAnyChanges,
@@ -157,6 +156,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
             catch (Exception ex) {
                 return StatusCode(500, ex.Message);
             }
-
+        }
     }
 }

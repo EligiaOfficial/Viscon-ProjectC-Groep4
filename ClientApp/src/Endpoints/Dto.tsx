@@ -1,7 +1,3 @@
-/*
- *   Copyright (c) 2023 
- *   All rights reserved.
- */
 import {axiosInstance} from '../axiosInstance';
 
 type LoginDto = {
@@ -23,7 +19,7 @@ type SignUpDto = {
 
 export function LoginAxios(data: LoginDto) {
     console.log('Before Axios request');
-    return axiosInstance.post('api/Auth/Login', data)
+    return axiosInstance.post('/api/Auth/Login', data)
         .then(response => {
             console.log('Axios request succeeded:', response);
             return response;
@@ -62,12 +58,33 @@ export function createMessageAxios(data: MessageDto) {
             console.log('Axios request succeeded:', response);
         })
         .catch(error => {
-            console.error('Axios request failed:', error);
+            if (error.response) {
+                console.error('Axios request failed with response data:', error.response.data);
+                console.error('Status code:', error.response.status);
+            } else if (error.request) {
+                console.error('Axios request made but no response received. Check network connection.');
+            } else {
+                console.error('Error setting up Axios request:', error.message);
+            }
         });
 }
 
 export function FetchTicketAxios(id: number) {
-    return axiosInstance.get(`api/ticket/ticketdata?id=${id}`);
+    console.log('Before Axios request', id);
+    return axiosInstance.get(`/api/ticket/ticketdata?id=${id}`)
+        .then(response => {
+            console.log('Axios request succeeded:', response);
+        })
+        .catch(error => {
+            if (error.response) {
+                console.error('Axios request failed with response data:', error.response.data);
+                console.error('Status code:', error.response.status);
+            } else if (error.request) {
+                console.error('Axios request made but no response received. Check network connection.');
+            } else {
+                console.error('Error setting up Axios request:', error.message);
+            }
+        });
 }
 
 export function FetchUserCreationData() {

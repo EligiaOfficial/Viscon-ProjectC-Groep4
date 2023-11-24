@@ -14,5 +14,5 @@ export const routes = [
     { path: '/add', name: 'add', component: <AddAccount /> },
     { path: '/create', name: 'create', component: <CreateTicket /> },
     { path: '/success', name: 'success', component: <SuccessCreating /> },
-    { path: '/ticket/:ID', name: 'ticket', component: <Ticket /> },
+    { path: '/ticket', name: 'ticket', component: <Ticket /> },
 ]

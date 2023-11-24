@@ -2,9 +2,9 @@
  *   Copyright (c) 2023 
  *   All rights reserved.
  */
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 
-import {getId, getRole} from '../Endpoints/Jwt'
+import {getId} from '../Endpoints/Jwt'
 import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
 import RoundButton from "../components/RoundButton";
@@ -15,7 +15,6 @@ const Ticket = () => {
     const [searchParams] = useSearchParams();
     const Id = searchParams.get('id') || " ";
     const TicketId = parseInt(Id, 10);
-
     if (isNaN(TicketId)) {
         return <div>Invalid Ticket</div>;
     }
@@ -67,9 +66,9 @@ const Ticket = () => {
 export default Ticket
 
 const TicketChat = ({ticket, messages}: {ticket: object, messages: object[]}) => {
-    const { ID } = useParams();
-    let TicketId = parseInt(ID, 10);
-    parseInt(ID, 10)
+    const [searchParams] = useSearchParams();
+    const Id = searchParams.get('id') || " ";
+    const TicketId = parseInt(Id, 10);
     
     const [content, setMsg] = useState('');
     const [img] = useState('');
