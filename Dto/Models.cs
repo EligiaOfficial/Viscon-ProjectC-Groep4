@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+
 namespace Viscon_ProjectC_Groep4.Dto;
 
 public class AddDto
@@ -26,6 +28,16 @@ public class LoginDto
     public string Password { get; set; } = string.Empty;
 }
 
+public class fetchDto {
+    public int Id { get; set; } = 0;
+}
+
+public class MessageDto {
+    public string content { get; set; }
+    public int ticketId { get; set; }
+    public int sender { get; set; }
+}
+
 public class MachineDataDto
 {
     public string Jtw { get; set; }
@@ -35,4 +47,8 @@ public class MachineDataDto
     public string expectedAction {get; set;}
     public string selfTinkering {get; set;}
     public int departmentId { get; set; }
+}
+
+public class getUserDto {
+    public int Id { get; set; }
 }

@@ -21,6 +21,36 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _authenticator = authenticator;
             _services = services;
         }
+
+        [HttpPost]
+        [Route("AddMessage")]
+        public async Task<IActionResult> AddMessage(MessageDto data) {
+            _logger.LogInformation("API Fetched");
+            _logger.LogInformation("\n\n\n");
+            await using var context = _services.GetService<ApplicationDbContext>();
+            try {
+                var message = new Message{
+                    TimeSent = DateTime.UtcNow,
+                    TicketId = context!.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
+                    Content = data.content,
+                    Sender = data.sender
+                };
+                try {
+                    context!.Messages.Add(message);
+                    await context.SaveChangesAsync();
+                    _logger.LogInformation("Added message to tickId " + message.TicketId);
+                }
+                catch (Exception ex) {
+                    _logger.LogError(ex.ToString());
+                    return Ok("Error");
+                }
+            }
+            catch (Exception ex) {
+                _logger.LogError(ex.ToString());
+                return Ok("Error");
+            }
+            return Ok("Message Added");
+        }
             
         [HttpPost("createticket")]
         public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data) {
@@ -30,17 +60,17 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 if (_authenticator.VerifyToken(data.Jtw, out int Id)) {
                     _logger.LogInformation("Token Correct");
                     var ticket = new Ticket();
-                    ticket.MachineId = context.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
+                    ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
                     ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                     ticket.Description = data.description;
                     ticket.DateCreated = DateTime.UtcNow;
-                    ticket.Priority = int.Parse(data.priority);
+                    ticket.Priority = 1; //int.Parse(data.priority);
                     ticket.ExpectedToBeDone = data.expectedAction;
                     ticket.MadeAnyChanges = data.selfTinkering;
                     ticket.DepartmentId = data.departmentId;
                     ticket.CreatorUserId = Id;
-                    // ticket.Helper_UserId = null;
-                    // ticket.Media = null;
+                    // ticket.Tick_Helper_UserId = null;
+                    // ticket.Tick_Media = null;
                     ticket.Resolved = false;
                     context.Tickets.Add(ticket);
                     context.SaveChanges();
