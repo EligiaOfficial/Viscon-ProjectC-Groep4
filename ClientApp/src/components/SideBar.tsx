@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Logout from "../pages/Logout";
 import {getRole} from "../Endpoints/Jwt";
 import {useNavigate} from "react-router-dom";
 
