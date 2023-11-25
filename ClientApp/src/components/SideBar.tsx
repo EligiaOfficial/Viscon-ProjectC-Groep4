@@ -1,12 +1,9 @@
-import {useState} from "react";
+import { useState } from "react";
 import {getRole} from "../Endpoints/Jwt";
-import {UserRoles} from "../UserRoles";
 import {useNavigate} from "react-router-dom";
 
 function SideBar() {
-
     const [menu, setMenu] = useState<boolean>(false);
-    const token = localStorage.getItem("token");
     const nav = useNavigate();
 
     function navToAddAccount() {
@@ -14,8 +11,7 @@ function SideBar() {
     }
     
     function navToLogout() {
-        localStorage.removeItem("token");
-        nav('/login')
+        nav('/logout')
     }
 
     return (
