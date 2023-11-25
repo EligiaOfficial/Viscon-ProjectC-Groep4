@@ -5,7 +5,8 @@ import {useNavigate} from "react-router-dom";
 function SideBar() {
     const [menu, setMenu] = useState<boolean>(false);
     const nav = useNavigate();
-
+    const token = localStorage.getItem("token");
+    const UserRoles = getRole(token);
     function navToAddAccount() {
         nav('/add')
     }
