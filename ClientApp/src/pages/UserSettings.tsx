@@ -2,11 +2,11 @@
  *   Copyright (c) 2023 
  *   All rights reserved.
  */
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {EditUserAxios} from "../Endpoints/Dto";
 import {useNavigate} from "react-router-dom";
-import axios from "axios";
-import {getCompany, getDepartment, getEmail, getName, getPhone, getRole} from "../Endpoints/Jwt";
+import {getEmail, getName, getPhone, getRole} from "../Endpoints/Jwt";
+import {UserRoles} from "../UserRoles";
 
 function AddAccount() {
     const [password, setPassword] = useState('');
@@ -21,7 +21,7 @@ function AddAccount() {
     const usr_email = getEmail(token);
     const usr_phone = getPhone(token);
     
-    if (!["1","2","3","4"].includes(usr_role)) {
+    if (![UserRoles.ADMIN, UserRoles.VISCON, UserRoles.KEYUSER, UserRoles.USER].includes(usr_role)) {
         nav('/login');
     }
 
@@ -32,7 +32,6 @@ function AddAccount() {
 
         if (password == confirmPassowrd) {
             EditUserAxios({
-                jtw: token,
                 email: email,
                 password: password,
                 phone: +phone,

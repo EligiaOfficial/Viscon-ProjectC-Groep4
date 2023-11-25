@@ -2,12 +2,14 @@
  *   Copyright (c) 2023 
  *   All rights reserved.
  */
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Viscon_ProjectC_Groep4.Dto;
 using Services;
@@ -31,45 +33,46 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             _services = services;
         }
 
+        [Authorize(Policy = "user")]
         [HttpPost]
         [Route("Edit")]
         public async Task<IActionResult> Edit(EditDto data) {
-            if (VerifyToken(data.Jtw, out int Id)) {
-                try {
-                    await using var context = _services.GetService<ApplicationDbContext>();
-                    var user = await context!.Users
-                        .Where(u => u.Usr_Id == Id)
-                        .FirstOrDefaultAsync();
+            int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            try {
+                await using var context = _services.GetService<ApplicationDbContext>();
+                var user = await context!.Users
+                    .Where(u => u.Id == id)
+                    .FirstOrDefaultAsync();
 
-                    if (user == null) return BadRequest();
-                    
-                    if (data.Password != string.Empty) {
-                        CreatePassHash(data.Password, out byte[] passwordHash, out byte[] passwordSalt);
-                        user.Usr_Password = passwordHash;
-                        user.Usr_PasswSalt = passwordSalt;
-                    }
+                if (user == null) return BadRequest();
 
-                    if (data.Email != string.Empty) {
-                        user.Usr_Email = data.Email;
-                    }
-
-                    if (data.Phone != 0) {
-                        user.Usr_PhoneNumber = data.Phone;
-                    }
-
-                    if (data.Language != string.Empty) {
-                        user.Usr_LanguagePreference = data.Language;
-                    }
-
-                    await context.SaveChangesAsync();
-                    var token = CreateToken(user);
-                    return Ok(token);
+                if (data.Password != string.Empty) {
+                    _authenticator.CreatePassHash(
+                        data.Password, out byte[] passwordHash, out byte[] passwordSalt
+                    );
+                    user.Password = passwordHash;
+                    user.PasswSalt = passwordSalt;
                 }
-                catch (Exception ex) {
-                    return BadRequest(ex.Message);
+
+                if (data.Email != string.Empty) {
+                    user.Email = data.Email;
                 }
+
+                if (data.Phone != 0) {
+                    user.PhoneNumber = data.Phone;
+                }
+
+                if (data.Language != string.Empty) {
+                    user.LanguagePreference = data.Language;
+                }
+
+                await context.SaveChangesAsync();
+                var token = _authenticator.CreateToken(user);
+                return Ok(token);
             }
-            return BadRequest();
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -77,7 +80,6 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         public async Task<IActionResult> Login(LoginDto data) {
             try {
                 _logger.LogInformation(data.Email + " is trying to log in.");
-
                 await using var context = _services.GetService<ApplicationDbContext>();
                 var user = await context.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
                 if (user == null) {
@@ -86,11 +88,12 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 }
 
                 if (!_authenticator.VerifyPassword(
-                    data.Password, user.Password, user.PasswSalt
-                )) {
+                        data.Password, user.Password, user.PasswSalt
+                    )) {
                     _logger.LogError("Wrong Password");
                     return BadRequest("Wrong password");
                 }
+
                 _logger.LogInformation("User and Passw correct", data.Password);
 
                 _logger.LogInformation("Creating user token");
@@ -103,6 +106,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             }
         }
 
+        [Authorize(Policy = "key_user")]
         [HttpPost]
         [Route("Add")]
         public async Task<IActionResult> Add(AddDto data) {
@@ -127,7 +131,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                     Email = data.Email,
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
-                    Role = (RoleTypes)data.Role,
+                    Role = (RoleTypes) data.Role,
                     PhoneNumber = data.Phone,
                     LanguagePreference = data.Language,
                     DepartmentId = department.Id,
@@ -136,7 +140,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 try {
                     context.Users.Add(user);
                     await context.SaveChangesAsync();
-                    _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " + user.Email + ")");
+                    _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " +
+                                           user.Email + ")");
                 }
                 catch (DbUpdateException e) {
                     _logger.LogError(e.ToString());
@@ -150,5 +155,4 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             }
         }
     }
-
 }

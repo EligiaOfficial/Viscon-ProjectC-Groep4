@@ -6,7 +6,6 @@ type LoginDto = {
 }
 
 type SignUpDto = {
-    jtw: string,
     email: string,
     firstName: string,
     lastName: string,
@@ -19,7 +18,6 @@ type SignUpDto = {
 }
 
 type EditUserDto = {
-    jtw: string,
     email: string,
     password: string,
     phone: number,
@@ -27,7 +25,7 @@ type EditUserDto = {
 }
 
 export function EditUserAxios(data: EditUserDto) {
-    return axios.post('api/Auth/Edit', data)
+    return axiosInstance.post('api/Auth/Edit', data)
         .then(res => {
             return res;
     })
