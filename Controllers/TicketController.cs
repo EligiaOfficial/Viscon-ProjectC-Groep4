@@ -122,7 +122,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     .ThenInclude(u => u.Company)
                     .Include(t => t.Helper)
                     .FirstOrDefault(x => x.Id == id);
-                if (ticket == null) return Ok("No Ticket Found");
+                if (ticket == null) return NotFound("No Ticket Found");
                 var messages = context.Messages
                     .Where(m => m.TicketId == ticket.Id)
                     .Join(context.Users,
