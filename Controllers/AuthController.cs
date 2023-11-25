@@ -32,6 +32,47 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         }
 
         [HttpPost]
+        [Route("Edit")]
+        public async Task<IActionResult> Edit(EditDto data) {
+            if (VerifyToken(data.Jtw, out int Id)) {
+                try {
+                    await using var context = _services.GetService<ApplicationDbContext>();
+                    var user = await context!.Users
+                        .Where(u => u.Usr_Id == Id)
+                        .FirstOrDefaultAsync();
+
+                    if (user == null) return BadRequest();
+                    
+                    if (data.Password != string.Empty) {
+                        CreatePassHash(data.Password, out byte[] passwordHash, out byte[] passwordSalt);
+                        user.Usr_Password = passwordHash;
+                        user.Usr_PasswSalt = passwordSalt;
+                    }
+
+                    if (data.Email != string.Empty) {
+                        user.Usr_Email = data.Email;
+                    }
+
+                    if (data.Phone != 0) {
+                        user.Usr_PhoneNumber = data.Phone;
+                    }
+
+                    if (data.Language != string.Empty) {
+                        user.Usr_LanguagePreference = data.Language;
+                    }
+
+                    await context.SaveChangesAsync();
+                    var token = CreateToken(user);
+                    return Ok(token);
+                }
+                catch (Exception ex) {
+                    return BadRequest(ex.Message);
+                }
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(LoginDto data) {
             try {
@@ -102,11 +143,12 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                     return BadRequest(e.Message);
                 }
 
-                return Ok(user);
+                return Ok("Success");
             }
             catch (Exception ex) {
                 return BadRequest(ex.Message);
             }
         }
     }
+
 }
