@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Viscon_ProjectC_Groep4;
@@ -11,9 +12,11 @@ using Viscon_ProjectC_Groep4;
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231125194722_VisualFileByteArray")]
+    partial class VisualFileByteArray
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,7 +246,7 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("VisualFiles", "public");
+                    b.ToTable("Files", "public");
                 });
 
             modelBuilder.Entity("Entities.Message", b =>

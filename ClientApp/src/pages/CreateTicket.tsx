@@ -34,61 +34,61 @@ const CreateTicket: React.FC = () => {
     // Function to handle form submission
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (usr_role == 4) {
-            return;
-        }
-
+        
+    
         // Create an array to store validation errors
         const errors: string[] = [];
-
+    
         if (selectedMachine === '') {
             errors.push('Machine is required.');
         }
-
+    
         if (description.trim() === '') {
             errors.push('Description is required.');
         }
-
+    
         if (expectedAction.trim() === '') {
             errors.push('Expected Action is required.');
         }
-
+    
         if (selfTinkering.trim() === '') {
             errors.push('Self Tinkering information is required.');
         }
-
+    
         // If there are no validation errors, proceed with form submission
         if (errors.length === 0) {
             try {
-                const data = {
-                    machine: selectedMachine,
-                    description: description,
-                    priority: priority,
-                    expectedAction: expectedAction,
-                    selfTinkering: selfTinkering,
-                    departmentId: 1, // TODO: Make field for DepartmentId
-
-                    // Add other fields here
-                };
-
-
-                const response = await axiosInstance.post('api/ticket/createticket', data);
-
+                const formData = new FormData();
+                formData.append('machine', selectedMachine);
+                formData.append('description', description);
+                formData.append('priority', priority);
+                formData.append('expectedAction', expectedAction);
+                formData.append('selfTinkering', selfTinkering);
+                formData.append('departmentId', '1'); // TODO: Make field for DepartmentId
+                if (image) {
+                    formData.append('image', image); // Append the image file to the formData
+                }
+    
+                const response = await axiosInstance.post('api/ticket/createticket', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', // Set the content type for FormData
+                    },
+                });
+    
                 if (response.status === 200) {
                     // Handle the success response, e.g., show a success message
                     console.log('Ticket created successfully:', response.data);
                     nav('/success');
-
+                    
                 } else {
                     // Handle other status codes or error responses
                     console.error('Ticket creation failed:', response.data);
                 }
             } catch (error) {
                 // Handle network or other errors
-                console.error('Error creating ticket:');
+                console.error('Error creating ticket:', error);
             }
-        }
-        else {
+        } else {
             // Update the validation errors state
             setValidationErrors(errors);
         }

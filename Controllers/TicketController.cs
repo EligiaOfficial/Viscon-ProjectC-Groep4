@@ -18,37 +18,44 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public TicketController(
             ILogger<TicketController> logger, Authenticator authenticator,
             IServiceProvider services
-        ) {
+        )
+        {
             _logger = logger;
             _authenticator = authenticator;
-           _services = services;
+            _services = services;
         }
 
         [Authorize(Policy = "user")]
         [HttpPost]
         [Route("AddMessage")]
-        public async Task<IActionResult> AddMessage(MessageDto data) {
+        public async Task<IActionResult> AddMessage(MessageDto data)
+        {
             _logger.LogInformation("API Fetched");
             _logger.LogInformation("\n\n\n");
             await using var context = _services.GetService<ApplicationDbContext>();
-            try {
-                var message = new Message{
+            try
+            {
+                var message = new Message
+                {
                     TimeSent = DateTime.UtcNow,
                     TicketId = context!.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
                     Content = data.content,
                     Sender = data.sender
                 };
-                try {
+                try
+                {
                     context!.Messages.Add(message);
                     await context.SaveChangesAsync();
                     _logger.LogInformation("Added message to tickId " + message.TicketId);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     _logger.LogError(ex.ToString());
                     return Ok("Error");
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.LogError(ex.ToString());
                 return Ok("Error");
             }
@@ -57,27 +64,40 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
         [Authorize(Policy = "user")]
         [HttpPost("createticket")]
-        public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data) {
+        public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data)
+        {
             _logger.LogInformation("API Fetched");
             int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             await using var context = _services.GetService<ApplicationDbContext>();
-            try {
-                    var ticket = new Ticket();
-                    ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
-                    ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
-                    ticket.Description = data.description;
-                    ticket.DateCreated = DateTime.UtcNow;
-                    ticket.Priority = 1; //int.Parse(data.priority);
-                    ticket.ExpectedToBeDone = data.expectedAction;
-                    ticket.MadeAnyChanges = data.selfTinkering;
-                    ticket.DepartmentId = data.departmentId;
-                    ticket.CreatorUserId = id;
-                    // ticket.Helper_UserId = null;
-                    // ticket.Media = null;
-                    ticket.Resolved = false;
-                    context.Tickets.Add(ticket);
-                    context.SaveChanges();
-                    return Ok(ticket);
+            try
+            {
+                var ticket = new Ticket();
+                ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
+                ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
+                ticket.Description = data.description;
+                ticket.DateCreated = DateTime.UtcNow;
+                ticket.Priority = 1; //int.Parse(data.priority);
+                ticket.ExpectedToBeDone = data.expectedAction;
+                ticket.MadeAnyChanges = data.selfTinkering;
+                ticket.DepartmentId = data.departmentId;
+                ticket.CreatorUserId = id;
+                // ticket.Helper_UserId = null;
+                var VisualFile = new VisualFile();
+                VisualFile.Name = ticket.Title;
+                VisualFile.TicketId = id;
+                if (data.image != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await data.image.CopyToAsync(memoryStream);
+                        VisualFile.Image = memoryStream.ToArray();
+                    }
+                }
+                context.VisualFiles.Add(VisualFile);
+                ticket.Resolved = false;
+                context.Tickets.Add(ticket);
+                context.SaveChanges();
+                return Ok(ticket);
             }
             catch (Exception ex)
             {
