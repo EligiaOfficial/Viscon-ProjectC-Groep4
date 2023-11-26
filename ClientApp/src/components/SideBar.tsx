@@ -1,95 +1,99 @@
 import { useState } from "react";
+import { getRole } from "../Endpoints/Jwt";
+import { useNavigate } from "react-router-dom";
+import SideBarItem from "./SideBarItem";
+import HamburgerButton from "./HamburgerButton";
+import { UserRoles } from "../UserRoles";
+import UserSettings from "../pages/UserSettings";
+import dashboardIcon from "../assets/home.svg";
+import ticketIcon from "../assets/ticket.svg";
+import archiveIcon from "../assets/archive.svg";
+import newIcon from "../assets/new.svg";
+import criticalIcon from "../assets/critical.svg";
+import normalIcon from "../assets/normal.svg";
+import userIcon from "../assets/user.svg";
+import settingsIcon from "../assets/settings.svg";
+import logoutIcon from "../assets/logout.svg";
 
 function SideBar() {
+  const [menu, setMenu] = useState<boolean>(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const nav = useNavigate();
+  const token = localStorage.getItem("token");
+  const Role = getRole(token);
 
-    const [menu, setMenu] = useState<bool>(false);
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
 
-    return (
-        <div className={`${menu ? "w-[200px]" : "w-[50px]"} relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}>
-            <div className="flex flex-row justify-end py-2">
-                <div onClick={() => setMenu(!menu)} className={`fill-black translate flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                    <svg width="24" height="24">
-                        <rect className={`${menu ? "translate-x-[10px]" : ""} translate duration-300`} y="2" width="24" height="3"></rect>
-                        <rect y="11" width="24" height="3"></rect>
-                        <rect className={`${menu ? "translate-x-[-10px]" : ""} translate duration-300`} y="20" width="24" height="3"></rect>
-                    </svg>
-                </div>
-                <span></span>
-            </div>
-            <div className="flex flex-col">
-                <div className="group flex flex-row justify-start py-2 cursor-pointer">
-                    <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                        <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">
-                            <circle cx="12" cy="12" r="12" stroke-width="4" />
-                        </svg>
-                    </div>
-                    <span className="group-hover:text-white translate duration-300">Dashboard</span>
-                </div>
-                <div className="group flex flex-row justify-start py-2 cursor-pointer">
-                    <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                        <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">
-                            <circle cx="12" cy="12" r="12" stroke-width="4"/>
-                        </svg>
-                    </div>
-                    <span className="group-hover:text-white translate duration-300">Archive</span>
-                </div>
-                <div className="group flex flex-row justify-start py-2 cursor-pointer">
-                    <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                        <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">
-                            <circle cx="12" cy="12" r="12" stroke-width="4" />
-                        </svg>
-                    </div>
-                    <span className="group-hover:text-white translate duration-300">New</span>
-                </div>
-                <div className="group flex flex-row justify-start py-2 cursor-pointer">
-                    <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                        <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">
-                            <circle cx="12" cy="12" r="12" stroke-width="4" />
-                        </svg>
-                    </div>
-                    <span className="group-hover:text-white translate duration-300">Critical</span>
-                </div>
-                <div className="group flex flex-row justify-start py-2 cursor-pointer">
-                    <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                        <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">
-                            <circle cx="12" cy="12" r="12" stroke-width="4" />
-                        </svg>
-                    </div>
-                    <span className="group-hover:text-white translate duration-300">Normal</span>
-                </div>
-            </div>
-            <div className="mt-auto">
-                {/*{usr_role == 1 ? (*/}
-                {/*    <div className="group flex flex-row justify-start py-2 cursor-pointer">*/}
-                {/*        <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>*/}
-                {/*            <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">*/}
-                {/*                <circle cx="12" cy="12" r="12" stroke-width="4" />*/}
-                {/*            </svg>*/}
-                {/*        </div>*/}
-                {/*        <span className="group-hover:text-white translate duration-300">Add User</span>*/}
-                {/*    </div>*/}
-                {/*) : (*/}
-                {/*    <div/>*/}
-                {/*)}*/}
-                <div className="group flex flex-row justify-start py-2 cursor-pointer">
-                    <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                        <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">
-                            <circle cx="12" cy="12" r="12" stroke-width="4" />
-                        </svg>
-                    </div>
-                    <span className="group-hover:text-white translate duration-300">Settings</span>
-                </div>
-                <div className="group flex flex-row justify-start py-2 cursor-pointer">
-                    <div className={`flex items-center justify-center min-w-[50px] cursor-pointer`}>
-                        <svg className="group-hover:fill-white fill-black translate duration-300" width="24" height="24">
-                            <circle cx="12" cy="12" r="12" stroke-width="4" />
-                        </svg>
-                    </div>
-                    <span className="group-hover:text-white translate duration-300">Logout</span>
-                </div>
-            </div>
-        </div>
-    )
+  return (
+    <div
+      className={`${
+        menu
+          ? showSettings
+            ? "w-[600px] bg-gray-800"
+            : "w-[250px] bg-blue-500"
+          : showSettings
+          ? "w-[600px] bg-gray-800"
+          : "w-[50px] bg-blue-500"
+      } min-w-[50px] relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}
+    >
+      <HamburgerButton onclick={() => setMenu(!menu)} state={menu} />
+      <div className="flex flex-col">
+        <SideBarItem
+          title={"Dashboard"}
+          icon={dashboardIcon}
+          onclick={() => nav("/dashboard")}
+          animation={"scale-x-[-1]"}
+        />
+        <SideBarItem
+          title={"Create Ticket"}
+          icon={ticketIcon}
+          onclick={() => nav("/create")}
+          animation={"scale-x-[-1]"}
+        />
+        <SideBarItem
+          title={"Archive"}
+          icon={archiveIcon}
+          animation={"scale-x-[-1]"}
+        />
+        <SideBarItem title={"New"} icon={newIcon} animation={"scale-x-[-1]"} />
+        <SideBarItem
+          title={"Critical"}
+          icon={criticalIcon}
+          animation={"scale-x-[-1]"}
+        />
+        <SideBarItem
+          title={"Normal"}
+          icon={normalIcon}
+          animation={"scale-x-[-1]"}
+        />
+        {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER ? (
+          <SideBarItem
+            title={"Add User"}
+            icon={userIcon}
+            onclick={() => nav("/add")}
+            animation={"scale-x-[-1]"}
+          />
+        ) : (
+          <div />
+        )}
+      </div>
+      <div className="mt-auto">
+        <SideBarItem
+          title={"Settings"}
+          icon={settingsIcon}
+          animation={"rotate-45"}
+        />
+        <SideBarItem
+          title={"Logout"}
+          icon={logoutIcon}
+          onclick={() => nav("/logout")}
+          animation={"scale-x-[-1]"}
+        />
+      </div>
+    </div>
+  );
 }
 
-export default SideBar
+export default SideBar;

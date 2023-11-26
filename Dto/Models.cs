@@ -1,9 +1,12 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 using System.Reflection.Metadata;
 
 namespace Viscon_ProjectC_Groep4.Dto;
 
-public class AddDto
-{
+public class AddDto {
     public string Email { get; set; } = string.Empty;
 
     public string FirstName { get; set; } = string.Empty;
@@ -40,7 +43,7 @@ public class MessageDto
     public int sender { get; set; }
 }
 
-public class MachineDataDto
+public class TicketDto
 {
     public string machine { get; set; }
     public string description { get; set; }
@@ -55,4 +58,28 @@ public class MachineDataDto
 public class getUserDto
 {
     public int Id { get; set; }
+}
+
+public class EditDto {
+    public string Email { get; set; } = string.Empty;
+    
+    public string Password { get; set; } = string.Empty;
+    
+    public int Phone { get; set; } = 0;
+    
+    public string Language { get; set; } = string.Empty;
+}
+
+public class GetTicketsDto
+{
+    public int TicketID { get; set; }
+    public string Status { get; set; }
+    public int Priority { get; set; }
+    public string Description { get; set; }
+    public string Machine { get; set; }
+    public DateTime Created { get; set; }
+    public string ETC { get; set; } //Expected time of completion
+    public string Department { get; set; }
+    public string Issuer { get; set; }
+    public string? Supporter { get; set; }
 }
