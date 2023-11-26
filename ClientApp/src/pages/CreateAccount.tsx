@@ -33,7 +33,6 @@ function AddAccount() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Email:", email);
-    console.log("Passw:", password);
 
     if (email !== "" && password !== "") {
       SignupAxios({
@@ -100,7 +99,6 @@ function AddAccount() {
                       required
                       className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                     />
-
                     <input
                       id="last_name"
                       value={lastName}
@@ -156,7 +154,6 @@ function AddAccount() {
                     />
                   </div>
                 </div>
-
                 <div>
                   <div className="flex items-center justify-between">
                     <label
@@ -179,7 +176,6 @@ function AddAccount() {
                     />
                   </div>
                 </div>
-
                 {usr_role == 1 ? (
                   <div>
                     <label
@@ -204,7 +200,6 @@ function AddAccount() {
                 ) : (
                   <div />
                 )}
-
                 {usr_role == 1 ? (
                   <div>
                     <label
@@ -231,7 +226,6 @@ function AddAccount() {
                 ) : (
                   <div />
                 )}
-
                 {usr_role == 1 ? (
                   <div>
                     <label
@@ -258,7 +252,6 @@ function AddAccount() {
                 ) : (
                   <div />
                 )}
-
                 <div className={"flex justify-start"}>
                   <button
                     type="submit"

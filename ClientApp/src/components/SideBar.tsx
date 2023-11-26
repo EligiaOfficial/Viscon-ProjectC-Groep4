@@ -2,10 +2,10 @@ import { useState } from "react";
 import { getRole } from "../Endpoints/Jwt";
 import { useNavigate } from "react-router-dom";
 import SideBarItem from "./SideBarItem";
-import defaultIcon from "../assets/default-dashboard-icon.svg";
 import HamburgerButton from "./HamburgerButton";
 import { UserRoles } from "../UserRoles";
-import homeIcon from "../assets/home.svg";
+import UserSettings from "../pages/UserSettings";
+import dashboardIcon from "../assets/home.svg";
 import ticketIcon from "../assets/ticket.svg";
 import archiveIcon from "../assets/archive.svg";
 import newIcon from "../assets/new.svg";
@@ -17,21 +17,32 @@ import logoutIcon from "../assets/logout.svg";
 
 function SideBar() {
   const [menu, setMenu] = useState<boolean>(false);
+  const [showSettings, setShowSettings] = useState(false);
   const nav = useNavigate();
   const token = localStorage.getItem("token");
   const Role = getRole(token);
 
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
   return (
     <div
       className={`${
-        menu ? "w-[250px]" : "w-[50px]"
+        menu
+          ? showSettings
+            ? "w-[600px] bg-gray-800"
+            : "w-[250px] bg-blue-500"
+          : showSettings
+          ? "w-[600px] bg-gray-800"
+          : "w-[50px] bg-blue-500"
       } min-w-[50px] relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}
     >
       <HamburgerButton onclick={() => setMenu(!menu)} state={menu} />
       <div className="flex flex-col">
         <SideBarItem
           title={"Dashboard"}
-          icon={homeIcon}
+          icon={dashboardIcon}
           onclick={() => nav("/dashboard")}
           animation={"scale-x-[-1]"}
         />

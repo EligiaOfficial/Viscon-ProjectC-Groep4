@@ -27,7 +27,7 @@ function HamburgerButton(props: any) {
             y="20"
             width="24"
             height="3"
-          ></rect>
+          />
         </svg>
       </div>
     </div>

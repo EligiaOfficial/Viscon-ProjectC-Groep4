@@ -1,9 +1,12 @@
+/*
+ *   Copyright (c) 2023 
+ *   All rights reserved.
+ */
 using System.Reflection.Metadata;
 
 namespace Viscon_ProjectC_Groep4.Dto;
 
-public class AddDto
-{
+public class AddDto {
     public string Email { get; set; } = string.Empty;
 
     public string FirstName { get; set; } = string.Empty;
@@ -50,6 +53,16 @@ public class TicketDto
 
 public class getUserDto {
     public int Id { get; set; }
+}
+
+public class EditDto {
+    public string Email { get; set; } = string.Empty;
+    
+    public string Password { get; set; } = string.Empty;
+    
+    public int Phone { get; set; } = 0;
+    
+    public string Language { get; set; } = string.Empty;
 }
 
 public class GetTicketsDto
