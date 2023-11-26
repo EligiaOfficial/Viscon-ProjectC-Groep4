@@ -6,7 +6,8 @@ using System.Reflection.Metadata;
 
 namespace Viscon_ProjectC_Groep4.Dto;
 
-public class AddDto {
+public class AddDto
+{
     public string Email { get; set; } = string.Empty;
 
     public string FirstName { get; set; } = string.Empty;
@@ -51,6 +52,7 @@ public class TicketDto
     public string expectedAction { get; set; }
     public string selfTinkering { get; set; }
     public int departmentId { get; set; }
+    public string? userEmail { get; set; }
 
     public IFormFile? image { get; set; }
 }
@@ -60,13 +62,14 @@ public class getUserDto
     public int Id { get; set; }
 }
 
-public class EditDto {
+public class EditDto
+{
     public string Email { get; set; } = string.Empty;
-    
+
     public string Password { get; set; } = string.Empty;
-    
+
     public int Phone { get; set; } = 0;
-    
+
     public string Language { get; set; } = string.Empty;
 }
 

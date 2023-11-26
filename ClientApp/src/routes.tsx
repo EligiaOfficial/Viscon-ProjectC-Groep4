@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import SuccessCreating from "./pages/SuccessCreating";
 import Ticket from "./pages/Ticket";
 import UserSettings from "./pages/UserSettings";
+import CreateTicketForSomeone from "./pages/CreateTicketForSomeone";
 
 
 export const routes = [
@@ -23,4 +24,5 @@ export const routes = [
     { path: '/success', name: 'success', component: <SuccessCreating /> },
     { path: '/ticket', name: 'ticket', component: <Ticket /> },
     { path: '/edit', name: 'edit', component: <UserSettings /> },
+    {path: '/createforsomeone' , name : 'createforsomeone' , component : <CreateTicketForSomeone />},
 ]
