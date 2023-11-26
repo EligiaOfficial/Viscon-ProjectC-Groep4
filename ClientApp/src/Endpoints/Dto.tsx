@@ -1,4 +1,5 @@
 import {axiosInstance} from '../axiosInstance';
+import axios from "axios/index";
 
 type LoginDto = {
     email: string,
@@ -78,4 +79,8 @@ export function FetchTicketAxios(id: number) {
 
 export function FetchUserCreationData() {
     return axiosInstance.get('api/Fetch/AccountData')
+}
+
+export function getTickets() {
+   return axiosInstance.get("http://localhost:5173/api/ticket/tickets")
 }
