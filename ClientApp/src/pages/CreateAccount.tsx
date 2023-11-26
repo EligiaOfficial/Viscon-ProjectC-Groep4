@@ -181,8 +181,8 @@ function AddAccount() {
                                         <option value="">Select a Department</option>
                                         <option value="0">Inapplicable</option>
                                         {departments.map((dep) => (
-                                            <option key={dep["dep_Id"]} value={dep["dep_Id"]}>
-                                                {dep["dep_Speciality"]}
+                                            <option key={dep["id"]} value={dep["id"]}>
+                                                {dep["speciality"]}
                                             </option>
                                         ))}
                                     </select>
@@ -204,8 +204,8 @@ function AddAccount() {
                                         <option value="">Select a Company</option>
                                         <option value="">Inapplicable</option>
                                         {companies.map((comp) => (
-                                            <option key={comp["com_Id"]} value={comp["com_Id"]}>
-                                                {comp["com_Name"]}
+                                            <option key={comp["id"]} value={comp["id"]}>
+                                                {comp["name"]}
                                             </option>
                                         ))}
                                     </select>

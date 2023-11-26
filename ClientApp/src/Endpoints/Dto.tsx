@@ -25,8 +25,14 @@ type EditUserDto = {
     language: string
 }
 
+type MessageDto = {
+    content: string,
+    ticketId: number,
+    sender: number
+}
+
 export function EditUserAxios(data: EditUserDto) {
-    return axiosInstance.post('api/Auth/Edit', data)
+    return axiosInstance.put('api/Auth/Edit', data)
         .then(res => {
             return res;
     })
@@ -57,16 +63,6 @@ export function SignupAxios(data: SignUpDto) {
         .catch(error => {
             console.error('Axios request failed:', error);
         });
-}
-
-type MessageDto = {
-    content: string,
-    ticketId: number,
-    sender: number
-}
-
-type UserIdDto = {
-    id: number
 }
 
 export function createMessageAxios(data: MessageDto) {

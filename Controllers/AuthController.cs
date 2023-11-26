@@ -34,7 +34,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         }
 
         [Authorize(Policy = "user")]
-        [HttpPost]
+        [HttpPut]
         [Route("Edit")]
         public async Task<IActionResult> Edit(EditDto data) {
             int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
