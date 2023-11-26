@@ -1,18 +1,16 @@
-import { useState } from "react";
-import { getRole } from "../Endpoints/Jwt";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {getRole} from "../Endpoints/Jwt";
+import {useNavigate} from "react-router-dom";
 import SideBarItem from "./SideBarItem";
 import defaultIcon from "../assets/default-dashboard-icon.svg";
 import HamburgerButton from "./HamburgerButton";
+import {UserRoles} from "../UserRoles";
 
 function SideBar() {
   const [menu, setMenu] = useState<boolean>(false);
   const nav = useNavigate();
   const token = localStorage.getItem("token");
-  const UserRoles = getRole(token);
-  function navToAddAccount() {
-    nav("/add");
-  }
+  const Role = getRole(token);
 
   return (
     <div
@@ -32,25 +30,19 @@ function SideBar() {
           icon={defaultIcon}
           onclick={() => nav("/create")}
         />
-        <SideBarItem
-          title={"Add User"}
-          icon={defaultIcon}
-          onclick={() => nav("/add")}
-        />
         <SideBarItem title={"Archive"} icon={defaultIcon} />
         <SideBarItem title={"New"} icon={defaultIcon} />
         <SideBarItem title={"Critical"} icon={defaultIcon} />
         <SideBarItem title={"Normal"} icon={defaultIcon} />
       </div>
       <div className="mt-auto">
-        {getRole(token) == UserRoles.ADMIN ||
-        getRole(token) == UserRoles.KEYUSER ? (
-          <div
-            className="group flex flex-row justify-start py-2 cursor-pointer"
-            onClick={navToAddAccount}
-          >
-            <SideBarItem title={"Add User"} icon={defaultIcon} />
-          </div>
+        {Role == UserRoles.ADMIN ||
+         Role == UserRoles.KEYUSER ? (
+            <SideBarItem 
+                title={"Add User"} 
+                icon={defaultIcon} 
+                onclick={() => nav('/add')}
+            />
         ) : (
           <div />
         )}
