@@ -19,14 +19,18 @@ namespace Viscon_ProjectC_Groep4.Controllers
         private readonly ILogger<TicketController> _logger;
         private readonly Authenticator _authenticator;
         private readonly IServiceProvider _services;
+        private readonly ApplicationDbContext _context;
+        private readonly DbSet<Ticket> _tickets;
 
         public TicketController(
             ILogger<TicketController> logger, Authenticator authenticator,
-            IServiceProvider services
+            IServiceProvider services, ApplicationDbContext context
         ) {
             _logger = logger;
             _authenticator = authenticator;
            _services = services;
+            _context = context;
+            _tickets = context.Set<Ticket>();
         }
 
         [Authorize(Policy = "user")]
@@ -156,6 +160,37 @@ namespace Viscon_ProjectC_Groep4.Controllers
             catch (Exception ex) {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [HttpGet("tickets")]
+        public async Task<IActionResult> GetTickets()
+        {
+            List<GetTicketsDto> tickets = await (from ticket in _tickets
+                                join machine in _context.Machines
+                                    on ticket.MachineId equals machine.Id
+                                join department in _context.Departments
+                                    on ticket.DepartmentId equals department.Id
+                                join user in _context.Users
+                                    on ticket.HelperUserId equals user.Id into grouping
+                                from result in grouping.DefaultIfEmpty()
+                                select new GetTicketsDto
+                                {
+                                    TicketID = ticket.Id,
+                                    Status = ticket.Resolved ? "closed" : "open",
+                                    Priority = ticket.Priority,
+                                    Description = ticket.Description,
+                                    Machine = machine.Name,
+                                    ETC = ticket.ExpectedToBeDone,
+                                    Department = department.Speciality,
+                                    Supporter = (result.LastName + " " + result.FirstName) ?? "-",
+                                    Created = ticket.DateCreated,
+                                    Issuer = _context.Users.Where(user => user.Id == ticket.CreatorUserId)
+                                        .Select(result => result.LastName + ", " + result.FirstName)
+                                        .FirstOrDefault()!
+                                })
+                                .ToListAsync();
+            
+            return Ok(tickets);
         }
     }
 }
