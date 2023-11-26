@@ -66,7 +66,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
         [Authorize(Policy = "user")]
         [HttpPost("CreateTicket")]
-        public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data) {
+        public async Task<ActionResult<Ticket>> CreateTicket([FromBody] TicketDto data) {
             _logger.LogInformation("API Fetched");
             int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             await using var context = _services.GetService<ApplicationDbContext>();

@@ -38,7 +38,7 @@ public class MessageDto {
     public int sender { get; set; }
 }
 
-public class MachineDataDto
+public class TicketDto
 {
     public string machine { get; set; }
     public string description { get; set; }
