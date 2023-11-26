@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Viscon_ProjectC_Groep4;
@@ -11,9 +12,11 @@ using Viscon_ProjectC_Groep4;
 namespace Viscon_ProjectC_Groep4.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231125194507_VisualFile")]
+    partial class VisualFile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,6 +144,9 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Media")
+                        .HasColumnType("text");
+
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
@@ -225,10 +231,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<byte[]>("Image")
-                        .IsRequired()
-                        .HasColumnType("bytea");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -238,7 +240,9 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("VisualFiles", "public");
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("Files", "public");
                 });
 
             modelBuilder.Entity("Entities.Message", b =>
@@ -298,6 +302,17 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Entities.VisualFile", b =>
+                {
+                    b.HasOne("Entities.Ticket", "RelatedTicket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RelatedTicket");
                 });
 #pragma warning restore 612, 618
         }

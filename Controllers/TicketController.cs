@@ -24,6 +24,14 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
         public TicketController(
             ILogger<TicketController> logger, Authenticator authenticator,
+
+            IServiceProvider services
+        )
+        {
+            _logger = logger;
+            _authenticator = authenticator;
+            _services = services;
+
             IServiceProvider services, ApplicationDbContext context
         ) {
             _logger = logger;
@@ -31,46 +39,85 @@ namespace Viscon_ProjectC_Groep4.Controllers
            _services = services;
             _context = context;
             _tickets = context.Set<Ticket>();
+
         }
 
         [Authorize(Policy = "user")]
         [HttpPost]
         [Route("AddMessage")]
-        public async Task<IActionResult> AddMessage(MessageDto data) {
+        public async Task<IActionResult> AddMessage(MessageDto data)
+        {
             _logger.LogInformation("API Fetched");
             _logger.LogInformation("\n\n\n");
             await using var context = _services.GetService<ApplicationDbContext>();
-            try {
-                var message = new Message{
+            try
+            {
+                var message = new Message
+                {
                     TimeSent = DateTime.UtcNow,
                     TicketId = context!.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
                     Content = data.content,
                     Sender = data.sender
                 };
-                try {
+                try
+                {
                     context!.Messages.Add(message);
                     await context.SaveChangesAsync();
                     _logger.LogInformation("Added message to tickId " + message.TicketId);
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     _logger.LogError(ex.ToString());
                     return Ok("Error");
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.LogError(ex.ToString());
                 return Ok("Error");
             }
             return Ok("Message Added");
         }
 
+        [HttpGet("getimage/{ticketId}")]
+        public IActionResult GetImage(int ticketId)
+        {
+            using (var scope = _services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+                var visualFile = context.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
+
+                if (visualFile == null)
+                {
+                    return NotFound(); // Of een andere foutafhandeling
+                }
+
+                // Retourneer de afbeeldingsbytes als een File-resultaat met het juiste MIME-type
+                return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
+            }
+        }
+
         [Authorize(Policy = "user")]
+
+        [HttpPost("createticket")]
+        public async Task<ActionResult<Ticket>> CreateTicket([FromForm] MachineDataDto data)
+        {
+            {
+                _logger.LogInformation("API Fetched");
+                int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                await using var context = _services.GetService<ApplicationDbContext>();
+                try
+                {
+
         [HttpPost("CreateTicket")]
         public async Task<ActionResult<Ticket>> CreateTicket([FromBody] TicketDto data) {
             _logger.LogInformation("API Fetched");
             int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             await using var context = _services.GetService<ApplicationDbContext>();
             try {
+
                     var ticket = new Ticket();
                     ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
                     ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
@@ -81,23 +128,44 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     ticket.MadeAnyChanges = data.selfTinkering;
                     ticket.DepartmentId = data.departmentId;
                     ticket.CreatorUserId = id;
-                    // ticket.Helper_UserId = null;
-                    // ticket.Media = null;
                     ticket.Resolved = false;
                     context.Tickets.Add(ticket);
+
+                    // ticket.Helper_UserId = null;
+                    if (data.image != null)
+                    {
+                        var VisualFile = new VisualFile();
+                        VisualFile.Name = ticket.Title;
+                        VisualFile.TicketId = ticket.Id;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await data.image.CopyToAsync(memoryStream);
+                            VisualFile.Image = memoryStream.ToArray();
+                        }
+
+
+                        context.VisualFiles.Add(VisualFile);
+
+
+                    }
+
+
+
+
                     context.SaveChanges();
                     return Ok(ticket);
-            }
-            catch (Exception ex)
-            {
-                System.Console.WriteLine("Catch Run");
-                if (ex.InnerException != null)
-                {
-                    // Log or print the inner exception message
-                    _logger.LogError("Inner Exception: " + ex.InnerException.Message);
                 }
-                _logger.LogError(ex.Message);
-                return StatusCode(500, ex.Message);
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine("Catch Run");
+                    if (ex.InnerException != null)
+                    {
+                        // Log or print the inner exception message
+                        _logger.LogError("Inner Exception: " + ex.InnerException.Message);
+                    }
+                    _logger.LogError(ex.Message);
+                    return StatusCode(500, ex.Message);
+                }
             }
         }
 

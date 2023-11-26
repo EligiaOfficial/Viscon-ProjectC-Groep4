@@ -38,7 +38,6 @@ public class Ticket
     public int? HelperUserId { get; set; }
     public User Helper { get; set; }
 
-    public string? Media { get; set; }
 
-    public bool Resolved {get; set;}
+    public bool Resolved { get; set; }
 }
