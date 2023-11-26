@@ -5,17 +5,24 @@ import SideBarItem from "./SideBarItem";
 import defaultIcon from "../assets/default-dashboard-icon.svg";
 import HamburgerButton from "./HamburgerButton";
 import {UserRoles} from "../UserRoles";
+import UserSettings from "../pages/UserSettings";
 
 function SideBar() {
   const [menu, setMenu] = useState<boolean>(false);
+  const [showSettings, setShowSettings] = useState(false);
   const nav = useNavigate();
   const token = localStorage.getItem("token");
   const Role = getRole(token);
 
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
+
   return (
     <div
       className={`${
-        menu ? "w-[200px]" : "w-[50px]"
+        menu ? showSettings ? "w-[600px]" : "w-[200px]" : showSettings ? "w-[600px]" : "w-[50px]"
       } relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}
     >
       <HamburgerButton onclick={() => setMenu(!menu)} state={menu} />
@@ -46,7 +53,8 @@ function SideBar() {
         ) : (
           <div />
         )}
-        <SideBarItem title={"Settings"} icon={defaultIcon} />
+        <SideBarItem title={'Settings'} icon={defaultIcon} onclick={() => setShowSettings(!showSettings)} />
+        {showSettings && <UserSettings toggleSettings={toggleSettings} />}
         <SideBarItem
           title={"Logout"}
           icon={defaultIcon}

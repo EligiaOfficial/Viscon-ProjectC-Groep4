@@ -5,25 +5,23 @@
 import {useState} from "react";
 import {EditUserAxios} from "../Endpoints/Dto";
 import {useNavigate} from "react-router-dom";
-import {getEmail, getName, getPhone, getRole} from "../Endpoints/Jwt";
+import {getEmail, getLang, getName, getPhone, getRole} from "../Endpoints/Jwt";
 import {UserRoles} from "../UserRoles";
+import HamburgerButton from "../components/HamburgerButton";
 
-function AddAccount() {
+const EditAccount = ({ toggleSettings }) => {
     const [password, setPassword] = useState('');
     const [confirmPassowrd, setConfirmPassword] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [language, setLanguage] = useState('');
+    const [menu, setMenu] = useState<boolean>(false);
 
     const token = localStorage.getItem("token");
-    const usr_role = getRole(token);
     const usr_name = getName(token);
     const usr_email = getEmail(token);
     const usr_phone = getPhone(token);
-    
-    if (![UserRoles.ADMIN, UserRoles.VISCON, UserRoles.KEYUSER, UserRoles.USER].includes(usr_role)) {
-        nav('/login');
-    }
+    const usr_lang = getLang(token);
 
     const nav = useNavigate();
 
@@ -38,7 +36,8 @@ function AddAccount() {
                 language: language,
             }).then(res => {
                 localStorage.setItem("token", res["data"]);
-                nav('/')
+                toggleSettings();
+                // nav('/');
             }).catch(error => {
                 console.error("Error:", error);
             });
@@ -46,10 +45,15 @@ function AddAccount() {
     };
 
     return (
-        <>
-            <div className="flex flex-row h-screen ml-20">
-                <div className="basis-full md:basis-1/3 bg-gray-150 mt-20">
+        <div className={"absolute top-0 left-0 h-screen bg-gray-800 text-white p-4"}>
+            <div className={"flex justify-end"}>
+                <div className={"flex justify-center rounded-md bg-gray-600 py-1 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"}>
+                    <HamburgerButton onclick={toggleSettings} state={true} />
+                </div>
+            </div>
 
+            <div className="flex flex-row h-screen mx-10">
+                <div className="w-full bg-gray-150 mt-20">
                     <div className="mt-50 sm:mx-auto sm:max-w-sm">
                         <h1>Your Account:</h1>
                         <form className="space-y-6" onSubmit={handleSubmit}>
@@ -167,7 +171,7 @@ function AddAccount() {
                                     Prefered Language
                                 </label>
                                 <div className={"mt-2"}>
-                                    <select id="language" value={language} onChange={(e) => setLanguage(e.target.value)}
+                                    <select id="language" value={usr_lang} onChange={(e) => setLanguage(e.target.value)}
                                             className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6">
                                         <option value="EN">English</option>
                                         <option value="NL">Nederlands</option>
@@ -177,17 +181,16 @@ function AddAccount() {
                             </div>
 
                             <button type="submit"
-                                    className="flex w-1/4 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+                                    className="flex w-2/4 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
                                 Edit Data
                             </button>
-                            
                         </form>
                     </div>
 
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
-export default AddAccount
+export default EditAccount
