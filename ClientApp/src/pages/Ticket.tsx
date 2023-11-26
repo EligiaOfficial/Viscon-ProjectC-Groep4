@@ -10,6 +10,7 @@ import SideBar from "../components/SideBar";
 import RoundButton from "../components/RoundButton";
 import { createMessageAxios, FetchTicketAxios } from "../Endpoints/Dto";
 import { useEffect, useState } from "react";
+import Layout from "../components/Layout";
 
 const Ticket = () => {
   const [searchParams] = useSearchParams();
@@ -56,24 +57,20 @@ const Ticket = () => {
 
   return (
     <>
-      <div className="h-screen flex flex-col">
-        <Nav />
-        <div className="relative flex flex-row h-full w-full overflow-y-hidden">
-          <SideBar />
-          <TicketInfo
-            assignee={helper}
-            company={company}
-            department={department}
-            machine={machine}
-            requester={creator}
-          />
-          <div className="bg-stone-200 h-full w-full">
-            <section className="flex h-full overflow-y-auto">
-              <TicketChat ticket={ticket} messages={messages || []} />
-            </section>
-          </div>
+      <Layout>
+        <TicketInfo
+          assignee={helper}
+          company={company}
+          department={department}
+          machine={machine}
+          requester={creator}
+        />
+        <div className="bg-stone-200 h-full w-full">
+          <section className="flex h-full overflow-y-auto">
+            <TicketChat ticket={ticket} messages={messages || []} />
+          </section>
         </div>
-      </div>
+      </Layout>
     </>
   );
 };
