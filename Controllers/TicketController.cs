@@ -62,13 +62,34 @@ namespace Viscon_ProjectC_Groep4.Controllers
             return Ok("Message Added");
         }
 
+        [HttpGet("getimage/{ticketId}")]
+        public IActionResult GetImage(int ticketId)
+        {
+            using (var scope = _services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+                var visualFile = context.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
+
+                if (visualFile == null)
+                {
+                    return NotFound(); // Of een andere foutafhandeling
+                }
+
+                // Retourneer de afbeeldingsbytes als een File-resultaat met het juiste MIME-type
+                return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
+            }
+        }
+
         [Authorize(Policy = "user")]
         [HttpPost("createticket")]
-        public async Task<ActionResult<Ticket>> CreateTicket([FromBody] MachineDataDto data)
+        public async Task<ActionResult<Ticket>> CreateTicket([FromForm] MachineDataDto data)
         {
             _logger.LogInformation("API Fetched");
             int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
             await using var context = _services.GetService<ApplicationDbContext>();
+
             try
             {
                 var ticket = new Ticket();
@@ -81,22 +102,25 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 ticket.MadeAnyChanges = data.selfTinkering;
                 ticket.DepartmentId = data.departmentId;
                 ticket.CreatorUserId = id;
-                // ticket.Helper_UserId = null;
-                var VisualFile = new VisualFile();
-                VisualFile.Name = ticket.Title;
-                VisualFile.TicketId = id;
+                ticket.Resolved = false;
+                context.Tickets.Add(ticket);
+                context.SaveChanges();
+
                 if (data.image != null)
                 {
+                    var VisualFile = new VisualFile();
+                    VisualFile.Name = ticket.Title;
+                    VisualFile.TicketId = ticket.Id;
                     using (var memoryStream = new MemoryStream())
                     {
                         await data.image.CopyToAsync(memoryStream);
                         VisualFile.Image = memoryStream.ToArray();
                     }
+                    context.VisualFiles.Add(VisualFile);
                 }
-                context.VisualFiles.Add(VisualFile);
-                ticket.Resolved = false;
-                context.Tickets.Add(ticket);
-                context.SaveChanges();
+
+                context.SaveChanges(); // Verplaats deze lijn naar buiten van de "if (data.image != null)"-blok
+
                 return Ok(ticket);
             }
             catch (Exception ex)
@@ -104,7 +128,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 System.Console.WriteLine("Catch Run");
                 if (ex.InnerException != null)
                 {
-                    // Log or print the inner exception message
+                    // Log of toon de innerlijke uitzondering
                     _logger.LogError("Inner Exception: " + ex.InnerException.Message);
                 }
                 _logger.LogError(ex.Message);
