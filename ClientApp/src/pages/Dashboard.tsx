@@ -3,13 +3,13 @@ import Nav from "../components/Nav";
 import SideBar from "../components/SideBar";
 import Table from "../components/Table";
 import axios from "axios";
+import {getTickets} from "../Endpoints/Dto";
 
 function Dashboard() {
   const [tickets, setTickets] = useState<[]>([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5173/api/ticket/tickets")
+    getTickets()
       .then((response) => {
         if (response.data.length > 0) {
           setTickets(response.data);
