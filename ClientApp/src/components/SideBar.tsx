@@ -4,13 +4,20 @@ import { useNavigate } from "react-router-dom";
 import SideBarItem from "./SideBarItem";
 import defaultIcon from "../assets/default-dashboard-icon.svg";
 import HamburgerButton from "./HamburgerButton";
+import UserSettings from "../pages/UserSettings";
 import { UserRoles } from "../UserRoles";
 
 function SideBar() {
   const [menu, setMenu] = useState<boolean>(false);
+  const [showSettings, setShowSettings] = useState(false);
   const nav = useNavigate();
   const token = localStorage.getItem("token");
   const Role = getRole(token);
+
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
 
   return (
     <div
@@ -34,18 +41,19 @@ function SideBar() {
         <SideBarItem title={"New"} icon={defaultIcon} />
         <SideBarItem title={"Critical"} icon={defaultIcon} />
         <SideBarItem title={"Normal"} icon={defaultIcon} />
-        {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER ? (
-          <SideBarItem
-            title={"Add User"}
-            icon={defaultIcon}
-            onclick={() => nav("/add")}
-          />
+              <div className="mt-auto">
+        {Role == UserRoles.ADMIN ||
+         Role == UserRoles.KEYUSER ? (
+            <SideBarItem 
+                title={"Add User"} 
+                icon={defaultIcon} 
+                onclick={() => nav('/add')}
+            />
         ) : (
           <div />
         )}
-      </div>
-      <div className="mt-auto">
-        <SideBarItem title={"Settings"} icon={defaultIcon} />
+        <SideBarItem title={'Settings'} icon={defaultIcon} onclick={() => setShowSettings(!showSettings)} />
+        {showSettings && <UserSettings toggleSettings={toggleSettings} />}
         <SideBarItem
           title={"Logout"}
           icon={defaultIcon}

@@ -13,8 +13,8 @@ function HamburgerButton(props: any) {
             y="2"
             width="24"
             height="3"
-          ></rect>
-          <rect y="11" width="24" height="3"></rect>
+          />
+          <rect y="11" width="24" height="3"/>
           <rect
             className={`${
               props.state ? "translate-x-[-10px]" : ""
@@ -22,7 +22,7 @@ function HamburgerButton(props: any) {
             y="20"
             width="24"
             height="3"
-          ></rect>
+          />
         </svg>
       </div>
     </div>

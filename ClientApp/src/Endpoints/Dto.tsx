@@ -18,6 +18,23 @@ type SignUpDto = {
     language: string
 }
 
+type EditUserDto = {
+    email: string,
+    password: string,
+    phone: number,
+    language: string
+}
+
+export function EditUserAxios(data: EditUserDto) {
+    return axiosInstance.post('api/Auth/Edit', data)
+        .then(res => {
+            return res;
+    })
+        .catch(err => {
+            throw err;
+        })
+}
+
 export function LoginAxios(data: LoginDto) {
     console.log('Before Axios request');
     return axiosInstance.post('/api/Auth/Login', data)

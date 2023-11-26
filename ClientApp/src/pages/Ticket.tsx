@@ -96,7 +96,7 @@ const TicketChat = ({
   const token = localStorage.getItem("token");
 
   const submitMessage = (e) => {
-    // e.preventDefault(); // TODO: Reload Chat ipv Page
+    e.preventDefault(); // TODO: Reload Chat ipv Page
     console.log("msg: " + content);
 
     if (content !== "") {
