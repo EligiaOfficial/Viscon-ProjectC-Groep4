@@ -11,7 +11,7 @@ function SideBarItem(props: Props) {
       className="group flex flex-row justify-start py-2 cursor-pointer"
     >
       <div
-        className={`flex items-center justify-center min-w-[50px] max-w-[50px] cursor-pointer group-hover:fill-white fill-black translate duration-300`}
+        className={`flex items-center justify-center min-w-[50px] max-w-[50px]`}
       >
         <img
           className="min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px]"
