@@ -1,10 +1,10 @@
-import {useState} from "react";
-import {getRole} from "../Endpoints/Jwt";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { getRole } from "../Endpoints/Jwt";
+import { useNavigate } from "react-router-dom";
 import SideBarItem from "./SideBarItem";
 import defaultIcon from "../assets/default-dashboard-icon.svg";
 import HamburgerButton from "./HamburgerButton";
-import {UserRoles} from "../UserRoles";
+import { UserRoles } from "../UserRoles";
 
 function SideBar() {
   const [menu, setMenu] = useState<boolean>(false);
@@ -16,7 +16,7 @@ function SideBar() {
     <div
       className={`${
         menu ? "w-[200px]" : "w-[50px]"
-      } relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}
+      } min-w-[50px] relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}
     >
       <HamburgerButton onclick={() => setMenu(!menu)} state={menu} />
       <div className="flex flex-col">
@@ -34,18 +34,17 @@ function SideBar() {
         <SideBarItem title={"New"} icon={defaultIcon} />
         <SideBarItem title={"Critical"} icon={defaultIcon} />
         <SideBarItem title={"Normal"} icon={defaultIcon} />
-      </div>
-      <div className="mt-auto">
-        {Role == UserRoles.ADMIN ||
-         Role == UserRoles.KEYUSER ? (
-            <SideBarItem 
-                title={"Add User"} 
-                icon={defaultIcon} 
-                onclick={() => nav('/add')}
-            />
+        {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER ? (
+          <SideBarItem
+            title={"Add User"}
+            icon={defaultIcon}
+            onclick={() => nav("/add")}
+          />
         ) : (
           <div />
         )}
+      </div>
+      <div className="mt-auto">
         <SideBarItem title={"Settings"} icon={defaultIcon} />
         <SideBarItem
           title={"Logout"}
