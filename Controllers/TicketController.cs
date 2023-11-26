@@ -86,53 +86,60 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [HttpPost("createticket")]
         public async Task<ActionResult<Ticket>> CreateTicket([FromForm] MachineDataDto data)
         {
-            _logger.LogInformation("API Fetched");
-            int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            await using var context = _services.GetService<ApplicationDbContext>();
-
-            try
             {
-                var ticket = new Ticket();
-                ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
-                ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
-                ticket.Description = data.description;
-                ticket.DateCreated = DateTime.UtcNow;
-                ticket.Priority = 1; //int.Parse(data.priority);
-                ticket.ExpectedToBeDone = data.expectedAction;
-                ticket.MadeAnyChanges = data.selfTinkering;
-                ticket.DepartmentId = data.departmentId;
-                ticket.CreatorUserId = id;
-                ticket.Resolved = false;
-                context.Tickets.Add(ticket);
-                context.SaveChanges();
-
-                if (data.image != null)
+                _logger.LogInformation("API Fetched");
+                int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+                await using var context = _services.GetService<ApplicationDbContext>();
+                try
                 {
-                    var VisualFile = new VisualFile();
-                    VisualFile.Name = ticket.Title;
-                    VisualFile.TicketId = ticket.Id;
-                    using (var memoryStream = new MemoryStream())
+                    var ticket = new Ticket();
+                    ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
+                    ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
+                    ticket.Description = data.description;
+                    ticket.DateCreated = DateTime.UtcNow;
+                    ticket.Priority = 1; //int.Parse(data.priority);
+                    ticket.ExpectedToBeDone = data.expectedAction;
+                    ticket.MadeAnyChanges = data.selfTinkering;
+                    ticket.DepartmentId = data.departmentId;
+                    ticket.CreatorUserId = id;
+                    ticket.Resolved = false;
+                    context.Tickets.Add(ticket);
+
+                    // ticket.Helper_UserId = null;
+                    if (data.image != null)
                     {
-                        await data.image.CopyToAsync(memoryStream);
-                        VisualFile.Image = memoryStream.ToArray();
+                        var VisualFile = new VisualFile();
+                        VisualFile.Name = ticket.Title;
+                        VisualFile.TicketId = ticket.Id;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await data.image.CopyToAsync(memoryStream);
+                            VisualFile.Image = memoryStream.ToArray();
+                        }
+
+
+                        context.VisualFiles.Add(VisualFile);
+
+
                     }
-                    context.VisualFiles.Add(VisualFile);
+
+
+
+
+                    context.SaveChanges();
+                    return Ok(ticket);
                 }
-
-                context.SaveChanges(); // Verplaats deze lijn naar buiten van de "if (data.image != null)"-blok
-
-                return Ok(ticket);
-            }
-            catch (Exception ex)
-            {
-                System.Console.WriteLine("Catch Run");
-                if (ex.InnerException != null)
+                catch (Exception ex)
                 {
-                    // Log of toon de innerlijke uitzondering
-                    _logger.LogError("Inner Exception: " + ex.InnerException.Message);
+                    System.Console.WriteLine("Catch Run");
+                    if (ex.InnerException != null)
+                    {
+                        // Log or print the inner exception message
+                        _logger.LogError("Inner Exception: " + ex.InnerException.Message);
+                    }
+                    _logger.LogError(ex.Message);
+                    return StatusCode(500, ex.Message);
                 }
-                _logger.LogError(ex.Message);
-                return StatusCode(500, ex.Message);
             }
         }
     }

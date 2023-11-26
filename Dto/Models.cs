@@ -49,7 +49,7 @@ public class MachineDataDto
     public string selfTinkering { get; set; }
     public int departmentId { get; set; }
 
-    public IFormFile image { get; set; }
+    public IFormFile? image { get; set; }
 }
 
 public class getUserDto
