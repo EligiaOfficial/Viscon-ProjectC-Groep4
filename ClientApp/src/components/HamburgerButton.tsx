@@ -3,7 +3,7 @@ function HamburgerButton(props: any) {
     <div className="flex flex-row justify-end py-2">
       <div
         onClick={props.onclick}
-        className={`fill-black translate flex items-center justify-center min-w-[50px] cursor-pointer`}
+        className={`hover:fill-white fill-black translate flex items-center justify-center min-w-[50px] cursor-pointer`}
       >
         <svg width="24" height="24">
           <rect
@@ -13,12 +13,17 @@ function HamburgerButton(props: any) {
             y="2"
             width="24"
             height="3"
-          />
-          <rect y="11" width="24" height="3"/>
+          ></rect>
+          <rect
+            className="translate duration-300 delay-50"
+            y="11"
+            width="24"
+            height="3"
+          ></rect>
           <rect
             className={`${
               props.state ? "translate-x-[-10px]" : ""
-            } translate duration-300`}
+            } translate duration-300 delay-100`}
             y="20"
             width="24"
             height="3"
