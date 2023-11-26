@@ -58,17 +58,17 @@ const Ticket = () => {
     <>
       <div className="h-screen flex flex-col">
         <Nav />
-        <div className="flex flex-row relative h-full w-full">
+        <div className="relative flex flex-row h-full w-full overflow-y-hidden">
           <SideBar />
+          <TicketInfo
+            assignee={helper}
+            company={company}
+            department={department}
+            machine={machine}
+            requester={creator}
+          />
           <div className="bg-stone-200 h-full w-full">
-            <section className="flex h-full">
-              <TicketInfo
-                assignee={helper}
-                company={company}
-                department={department}
-                machine={machine}
-                requester={creator}
-              />
+            <section className="flex h-full overflow-y-auto">
               <TicketChat ticket={ticket} messages={messages || []} />
             </section>
           </div>
