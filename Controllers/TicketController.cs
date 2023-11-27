@@ -81,7 +81,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
             }
         }
 
-        [Authorize(Policy = "user")]
+        [Authorize(Policy = "key_user")]
         [HttpPost("createticket")]
         public async Task<ActionResult<Ticket>> CreateTicket([FromForm] TicketDto data)
         {
@@ -119,7 +119,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                         context.VisualFiles.Add(VisualFile);
                     }
                     context.SaveChanges();
-                    return Ok(ticket);
+                    return Ok(ticket.Id);
                 }
                 catch (Exception ex)
                 {
@@ -134,6 +134,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 }
             }
         }
+        
+        [Authorize(Policy = "key_user")]
         [HttpPost("createticketforsomeone")]
         public async Task<ActionResult<Ticket>> CreateTicketForSomeone([FromForm] TicketDto data)
         {
@@ -170,7 +172,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     context.VisualFiles.Add(VisualFile);
                 }
                 context.SaveChanges();
-                return Ok(ticket);
+                return Ok(ticket.Id);
             }
             catch (Exception ex)
             {

@@ -92,7 +92,7 @@ const CreateTicketForSomeone: React.FC = () => {
         if (response.status === 200) {
           // Handle the success response, e.g., show a success message
           console.log('Ticket created successfully:', response.data);
-          nav('/success');
+          nav(`/ticket?id=${response.data}`);
 
         } else {
           // Handle other status codes or error responses

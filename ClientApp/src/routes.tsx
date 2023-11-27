@@ -4,13 +4,11 @@
  */
 import AddAccount from "./pages/CreateAccount";
 import CreateTicket from "./pages/CreateTicket";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Dashboard from "./pages/Dashboard";
 import SuccessCreating from "./pages/SuccessCreating";
 import Ticket from "./pages/Ticket";
-import UserSettings from "./pages/UserSettings";
 import CreateTicketForSomeone from "./pages/CreateTicketForSomeone";
 
 
@@ -23,6 +21,6 @@ export const routes = [
     { path: '/create', name: 'create', component: <CreateTicket /> },
     { path: '/success', name: 'success', component: <SuccessCreating /> },
     { path: '/ticket', name: 'ticket', component: <Ticket /> },
-    { path: '/edit', name: 'edit', component: <UserSettings /> },
+    // { path: '/edit', name: 'edit', component: <UserSettings /> },
     {path: '/createforsomeone' , name : 'createforsomeone' , component : <CreateTicketForSomeone />},
 ]

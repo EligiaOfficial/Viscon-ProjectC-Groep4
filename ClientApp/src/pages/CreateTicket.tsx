@@ -73,7 +73,7 @@ const CreateTicket: React.FC = () => {
 
         if (response.status === 200) {
           console.log("Ticket created successfully:", response.data);
-          nav("/success");
+          nav(`/ticket?id=${response.data}`);
         } else {
           console.error("Ticket creation failed:", response.data);
         }

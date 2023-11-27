@@ -2,12 +2,12 @@
  *   Copyright (c) 2023
  *   All rights reserved.
  */
-import { useEffect, useState } from "react";
-import { FetchUserCreationData, SignupAxios } from "../Endpoints/Dto";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { getCompany, getDepartment, getRole } from "../Endpoints/Jwt";
+import {useEffect, useState} from "react";
+import {FetchUserCreationData, SignupAxios} from "../Endpoints/Dto";
+import {useNavigate} from "react-router-dom";
+import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import Layout from "../components/Layout";
+import {UserRoles} from "../UserRoles";
 
 function AddAccount() {
   const [password, setPassword] = useState("");
@@ -29,6 +29,10 @@ function AddAccount() {
   const usr_depId = getDepartment(token);
 
   const nav = useNavigate();
+  
+  if (usr_role >= UserRoles.KEYUSER) return <div>Error 404</div>
+  
+  // if (usr_role != UserRoles.ADMIN && usr_role != UserRoles.KEYUSER && usr_role != UserRoles.VISCON) return <div>404</div>
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,9 +45,9 @@ function AddAccount() {
         lastName: lastName,
         password: password,
         phone: +phone,
-        company: usr_role == 1 ? +company : +usr_compId,
-        role: usr_role == 1 ? +role : 4,
-        department: usr_role == 1 ? +department : +usr_depId,
+        company: usr_role == UserRoles.ADMIN ? +company : +usr_compId,
+        role: usr_role == UserRoles.ADMIN ? +role : 4,
+        department: usr_role == UserRoles.ADMIN ? +department : +usr_depId,
         language: "EN",
       })
         .then(() => {

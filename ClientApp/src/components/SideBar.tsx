@@ -46,12 +46,16 @@ function SideBar() {
           onclick={() => nav("/dashboard")}
           animation={"scale-x-[-1]"}
         />
-        <SideBarItem
-          title={"Create Ticket"}
-          icon={ticketIcon}
-          onclick={() => nav("/create")}
-          animation={"scale-x-[-1]"}
-        />
+        {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER  || Role == UserRoles.VISCON ? (
+            <SideBarItem
+                title={"Create Ticket"}
+                icon={ticketIcon}
+                onclick={() => nav("/create")}
+                animation={"scale-x-[-1]"}
+            />
+        ) : (
+            <div />
+        )}
         <SideBarItem
           title={"Archive"}
           icon={archiveIcon}
