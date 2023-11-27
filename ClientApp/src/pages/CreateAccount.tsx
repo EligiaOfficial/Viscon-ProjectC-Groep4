@@ -30,10 +30,8 @@ function AddAccount() {
 
   const nav = useNavigate();
   
-  if (usr_role >= UserRoles.KEYUSER) return <div>Error 404</div>
+  if (usr_role >= UserRoles.USER) return <div>Error 404</div>
   
-  // if (usr_role != UserRoles.ADMIN && usr_role != UserRoles.KEYUSER && usr_role != UserRoles.VISCON) return <div>404</div>
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Email:", email);

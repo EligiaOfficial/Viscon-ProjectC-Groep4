@@ -225,6 +225,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                         })
                     .ToList();
                 var result = new {
+                    CompId = ticket.Creator.Company.Id,
                     Helper = ticket.HelperUserId != null
                         ? $"{ticket.Helper.FirstName} {ticket.Helper.LastName}"
                         : "Unassigned",

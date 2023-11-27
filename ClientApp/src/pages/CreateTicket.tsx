@@ -9,6 +9,7 @@ const CreateTicket: React.FC = () => {
   const nav = useNavigate();
   const token = localStorage.getItem("token");
   const usr_role = getRole(token);
+  if (usr_role >= UserRoles.USER) return <div>Error 404</div>
 
   useEffect(() => {
     // Check user role and redirect if necessary

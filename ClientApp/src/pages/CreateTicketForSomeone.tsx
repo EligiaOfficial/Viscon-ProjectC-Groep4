@@ -13,9 +13,7 @@ const CreateTicketForSomeone: React.FC = () => {
   // if not loggedIn redirect to Login
   const token = localStorage.getItem("token");
   const usr_role = getRole(token);
-  if (usr_role == 0) {
-    nav('/login')
-  }
+  if (usr_role >= UserRoles.VISCON) return <div>Error 404</div>
 
   // State for form fields
   const [selectedMachine, setSelectedMachine] = useState('');
