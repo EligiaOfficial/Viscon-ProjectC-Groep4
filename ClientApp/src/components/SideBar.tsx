@@ -84,7 +84,9 @@ function SideBar() {
           title={"Settings"}
           icon={settingsIcon}
           animation={"rotate-45"}
+          onclick={() => setShowSettings(!showSettings)}
         />
+        {showSettings && <UserSettings toggleSettings={toggleSettings} />}
         <SideBarItem
           title={"Logout"}
           icon={logoutIcon}
