@@ -78,5 +78,31 @@ export function FetchUserCreationData() {
 }
 
 export function getTickets() {
-   return axiosInstance.get("http://localhost:5173/api/ticket/tickets")
+   return axiosInstance.get("/api/ticket/tickets")
+}
+
+export function getDepartments() {
+    return axiosInstance.get('api/department/All')
+}
+
+type changeTicketDto = {
+    id: number,
+    department: number,
+    critical: number,
+    resolved: boolean,
+    publish: boolean
+}
+
+export function claimTicker(id: number) {
+    return axiosInstance.post(`api/ticket/claim?id=${id}`)
+}
+
+export function changeTicket(data: changeTicketDto) {
+    return axiosInstance.put(`api/ticket/changeticket`, data)
+        .then(res => {
+            return res;
+        })
+        .catch(err => {
+            throw err;
+        })
 }

@@ -236,7 +236,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
                         title = ticket.Title,
                         description = ticket.Description,
                         madeAnyChanges = ticket.MadeAnyChanges,
-                        expectedToBeDone = ticket.ExpectedToBeDone
+                        expectedToBeDone = ticket.ExpectedToBeDone,
+                        priority = ticket.Priority
                     },
                     Messages = messages
                 };
@@ -277,6 +278,26 @@ namespace Viscon_ProjectC_Groep4.Controllers
                                 .ToListAsync();
             
             return Ok(tickets);
+        }
+        
+        [HttpPut("changeticket")]
+        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
+        {
+            await using var context = _services.GetService<ApplicationDbContext>();
+            int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            User user = context.Users.FirstOrDefault(_ => _.Id == id)!;
+            if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
+            try {
+                var ticket = context.Tickets.FirstOrDefault(_ => _.Id == data.id)!;
+                if (data.department != 0) ticket.Department.Id = data.department;
+                if (data.publish == true) _logger.LogInformation("Publish is True"); // Add field published in Tickets
+                if (data.revolved == true) ticket.Resolved = true;
+                context.SaveChanges();
+                return Ok("Success");
+            }
+            catch {
+                return StatusCode(500);
+            }
         }
     }
 }

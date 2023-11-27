@@ -43,13 +43,15 @@ namespace Viscon_ProjectC_Groep4
                 this.Add(new Department { Id = 2, Speciality = "Viscon Fresh Produce" });
                 this.Add(new Department { Id = 3, Speciality = "Viscon Logistics" });
                 this.Add(new Department { Id = 4, Speciality = "Viscon Hatchery Automation" });
+                this.SaveChanges();
             }
 
             if (!this.Machines.Any())
             {
                 this.Add(new Machine { Id = 1, Name = "T-800", Type = "Schwarzenegger" });
                 this.Add(new Machine { Id = 2, Name = "Rev-9", Type = "Liquid Nano-particles" });
-                this.Add(new Machine { Id = 3, Name = "Model X", Type = "Car" });
+                this.Add(new Machine {Id = 3, Name = "Model X", Type = "Car"});
+                this.SaveChanges();
             }
 
             if (!this.Companies.Any())
@@ -59,9 +61,9 @@ namespace Viscon_ProjectC_Groep4
                 this.Add(new Company { Id = 3, Name = "Neste" });
                 this.Add(new Company { Id = 4, Name = "Green Farmers" });
                 this.Add(new Company { Id = 5, Name = "Vinovo" });
+                this.SaveChanges();
             }
 
-            this.SaveChanges();
 
             if (!this.Users.Any())
             {
@@ -119,9 +121,39 @@ namespace Viscon_ProjectC_Groep4
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // User Login: user@viscon.com Viscon
+                this.SaveChanges();
             }
 
-            this.SaveChanges();
+
+            if (!this.Tickets.Any()) {
+                this.Add(new Ticket{
+                    MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
+                    Title = $"{DateTime.UtcNow} Prio: 1, {Machines.Select(m => m.Name).FirstOrDefault()}",
+                    Description = "Dummy Description",
+                    DateCreated = DateTime.UtcNow,
+                    Priority = 1,
+                    ExpectedToBeDone = "Dummy Expected",
+                    MadeAnyChanges = "Dummy Changes",
+                    DepartmentId = 1,
+                    CreatorUserId = 3,
+                    Resolved = false
+                });
+                
+                this.Add(new Ticket{
+                    MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
+                    Title = $"{DateTime.UtcNow} Prio: 1, {Machines.Select(m => m.Name).FirstOrDefault()}",
+                    Description = "Dummy Description",
+                    DateCreated = DateTime.UtcNow,
+                    Priority = 0,
+                    ExpectedToBeDone = "Dummy Expected",
+                    MadeAnyChanges = "Dummy Changes",
+                    DepartmentId = 3,
+                    CreatorUserId = 4,
+                    Resolved = false
+                });
+                this.SaveChanges();
+            }
+            
         }
 
         private static void CreatePassHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

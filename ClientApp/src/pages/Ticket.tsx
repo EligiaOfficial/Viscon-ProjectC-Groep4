@@ -2,15 +2,19 @@
  *   Copyright (c) 2023
  *   All rights reserved.
  */
-import { useSearchParams } from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 
-import { getId } from "../Endpoints/Jwt";
-import Nav from "../components/Nav";
-import SideBar from "../components/SideBar";
+import {getId, getRole} from "../Endpoints/Jwt";
 import RoundButton from "../components/RoundButton";
-import { createMessageAxios, FetchTicketAxios } from "../Endpoints/Dto";
-import { useEffect, useState } from "react";
+import {
+  changeTicket,
+  createMessageAxios,
+  FetchTicketAxios,
+  getDepartments
+} from "../Endpoints/Dto";
+import {useEffect, useState} from "react";
 import Layout from "../components/Layout";
+import {UserRoles} from "../UserRoles";
 
 const Ticket = () => {
   const [searchParams] = useSearchParams();
@@ -64,6 +68,7 @@ const Ticket = () => {
           department={department}
           machine={machine}
           requester={creator}
+          priority={ticket["priority"]}
         />
         <div className="bg-stone-200 h-full w-full">
           <section className="flex h-full overflow-y-auto">
@@ -365,23 +370,54 @@ export function Carousel() {
   );
 }
 
-const TicketInfo = ({
-  requester,
-  company,
-  machine,
-  department,
-  assignee,
+const TicketInfo = ({requester, company, machine, department, assignee, priority
 }: {
   requester: string;
   company: string;
   machine: string;
   department: string;
   assignee: string;
+  priority: number;
 }) => {
+
+  const [departments, setDepartments] = useState<string[]>([]);
+  const [newDepartment, setNewDepartment] = useState<string>("");
+
+  const [searchParams] = useSearchParams();
+  const Id = searchParams.get("id") || " ";
+  const TicketId = parseInt(Id, 10);
+  if (isNaN(TicketId)) {
+    return <div>Invalid Ticket</div>;
+  }
+  
+  useEffect(() => {
+    if (role >= UserRoles.USER) return;
+    getDepartments()
+        .then(res=>{
+          setDepartments(res.data);
+        });
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    changeTicket({
+      id: +TicketId,
+      department: +newDepartment,
+      critical: priority,
+      resolved: false,
+      publish: false
+    }).then(res=>{
+          console.log(res)
+        }
+    );
+  }
+  
+  const role = getRole(localStorage.getItem("token"));
   return (
-    <div
+    <form onSubmit={handleSubmit}
       className={
-        "w-1/6 h-[calc(100vh-50px)] bg-stone-300 flex flex-col items-center"
+        "w-2/12 h-[calc(100vh-50px)] bg-stone-300 flex flex-col items-center"
       }
     >
       <div className="flex flex-col">
@@ -414,11 +450,19 @@ const TicketInfo = ({
             className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
           >
             <h1 className="flex text-xl">Department</h1>
-            {2 == 1 ? (
+            {role >= UserRoles.KEYUSER ? (
               <input type="text" disabled value={department} />
             ) : (
-              <select id="role" className="w-full">
-                <option value="0">{department}</option>
+              <select id="role" className="w-[197px] mx-auto"
+                      onChange={(e) => setNewDepartment(e.target.value)}>
+                <option value="">{department}</option>
+                {departments.map((dep) => (
+                    department !== dep["speciality"] && (
+                        <option key={dep["id"]} value={dep["id"]}>
+                          {dep["speciality"]}
+                        </option>
+                    )
+                ))}
               </select>
             )}
           </div>
@@ -446,7 +490,16 @@ const TicketInfo = ({
             <RoundButton />
           </div>
         </div>
+        {role == UserRoles.ADMIN ||
+        role == UserRoles.VISCON ? (
+            <button type="submit"
+                    className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+              Update Ticket
+            </button>
+        ) : (
+            <></>
+        )}
       </div>
-    </div>
+    </form>
   );
 };

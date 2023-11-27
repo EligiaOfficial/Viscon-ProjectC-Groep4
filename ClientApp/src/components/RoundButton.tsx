@@ -15,7 +15,6 @@ const RoundButton = () => {
                 className={`w-4 h-4 rounded-full text-white focus:outline-none ${buttonColorClass}`}
                 onClick={toggleColor}
             >
-                {/* You can add an icon or leave it empty */}
             </button>
         </div>
     );

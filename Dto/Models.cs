@@ -57,6 +57,16 @@ public class TicketDto
     public IFormFile? image { get; set; }
 }
 
+public class ChangeTicketDto
+{
+    public int id { get; set; }
+    public int department { get; set; }
+    public string critical { get; set; }
+    public bool revolved { get; set; }
+    public bool publish { get; set; }
+}
+
+
 public class getUserDto
 {
     public int Id { get; set; }
