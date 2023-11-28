@@ -44,40 +44,46 @@ function SideBar() {
           title={"Dashboard"}
           icon={dashboardIcon}
           onclick={() => nav("/dashboard")}
-          animation={"scale-x-[-1]"}
+          transformAnimation={"rotate3d(0,1,0,180deg)"}
         />
-        {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER  || Role == UserRoles.VISCON ? (
-            <SideBarItem
-                title={"Create Ticket"}
-                icon={ticketIcon}
-                onclick={() => nav("/create")}
-                animation={"scale-x-[-1]"}
-            />
+        {Role == UserRoles.ADMIN ||
+        Role == UserRoles.KEYUSER ||
+        Role == UserRoles.VISCON ? (
+          <SideBarItem
+            title={"Create Ticket"}
+            icon={ticketIcon}
+            onclick={() => nav("/create")}
+            transformAnimation={"rotate(90deg)"}
+          />
         ) : (
-            <div />
+          <div />
         )}
         <SideBarItem
           title={"Archive"}
           icon={archiveIcon}
-          animation={"scale-x-[-1]"}
+          transformAnimation={"rotate3d(0,1,0,180deg"}
         />
-        <SideBarItem title={"New"} icon={newIcon} animation={"scale-x-[-1]"} />
+        <SideBarItem
+          title={"New"}
+          icon={newIcon}
+          transformAnimation={"rotate3d(0,1,0,180deg"}
+        />
         <SideBarItem
           title={"Critical"}
           icon={criticalIcon}
-          animation={"scale-x-[-1]"}
+          transformAnimation={"rotate(360deg)"}
         />
         <SideBarItem
           title={"Normal"}
           icon={normalIcon}
-          animation={"scale-x-[-1]"}
+          transformAnimation={"rotate3d(0,1,0,180deg"}
         />
         {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER ? (
           <SideBarItem
             title={"Add User"}
             icon={userIcon}
             onclick={() => nav("/add")}
-            animation={"scale-x-[-1]"}
+            transformAnimation={"rotate3d(0,1,0,180deg"}
           />
         ) : (
           <div />
@@ -87,7 +93,7 @@ function SideBar() {
         <SideBarItem
           title={"Settings"}
           icon={settingsIcon}
-          animation={"rotate-45"}
+          transformAnimation={"rotate(360deg)"}
           onclick={() => setShowSettings(!showSettings)}
         />
         {showSettings && <UserSettings toggleSettings={toggleSettings} />}
@@ -95,7 +101,7 @@ function SideBar() {
           title={"Logout"}
           icon={logoutIcon}
           onclick={() => nav("/logout")}
-          animation={"scale-x-[-1]"}
+          transformAnimation={"rotate3d(0,1,0,180deg"}
         />
       </div>
     </div>
