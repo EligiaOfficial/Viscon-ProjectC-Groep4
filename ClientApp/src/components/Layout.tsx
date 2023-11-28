@@ -7,7 +7,9 @@ function Layout({ children }: React.PropsWithChildren<{}>) {
       <Nav />
       <div className="relative flex flex-row h-full w-full overflow-y-hidden bg-stone-200">
         <SideBar />
-        {children}
+        <div className="h-full w-full overflow-y-auto">
+          <div className="p-4 flex flex-col gap-4 w-full">{children}</div>
+        </div>
       </div>
     </div>
   );
