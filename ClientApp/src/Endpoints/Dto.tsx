@@ -88,21 +88,26 @@ export function getDepartments() {
 type changeTicketDto = {
     id: number,
     department: number,
-    critical: number,
+    urgent: boolean,
     resolved: boolean,
     publish: boolean
 }
 
-export function claimTicker(id: number) {
+export function claimTicket(id: number) {
     return axiosInstance.post(`api/ticket/claim?id=${id}`)
 }
 
 export function changeTicket(data: changeTicketDto) {
-    return axiosInstance.put(`api/ticket/changeticket`, data)
-        .then(res => {
-            return res;
+    console.log("Start Axios Instance");
+    return axiosInstance.post('api/ticket/changeticket', data)
+        .then(response => {
+            // Handle successful response
+            console.log("Success:", response.data);
+            return response.data; // You can return or process the data here
         })
-        .catch(err => {
-            throw err;
-        })
+        .catch(error => {
+            // Handle error
+            console.error("Error:", error);
+            throw error; // You can throw the error or handle it in a way that makes sense for your application
+        });
 }

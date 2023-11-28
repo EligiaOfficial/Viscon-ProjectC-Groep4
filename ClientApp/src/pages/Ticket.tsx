@@ -68,7 +68,7 @@ const Ticket = () => {
           department={department}
           machine={machine}
           requester={creator}
-          priority={ticket["priority"]}
+          priority={ticket["urgent"]}
         />
         <div className="bg-stone-200 h-full w-full">
           <section className="flex h-full overflow-y-auto">
@@ -423,26 +423,26 @@ const TicketInfo = ({requester, company, machine, department, assignee, priority
       <div className="flex flex-col">
         <div className="group flex flex-row justify-start py-2">
           <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
+            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
           >
             <h1 className="flex text-xl">Requestor</h1>
-            <input type="text" disabled value={requester} />
+            <input type="text" className={"w-full"} disabled value={requester} />
           </div>
         </div>
         <div className="group flex flex-row justify-start py-2">
           <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
+            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
           >
             <h1 className="flex text-xl">Company</h1>
-            <input type="text" disabled value={company} />
+            <input type="text" className={"w-full "} disabled value={company} />
           </div>
         </div>
         <div className="group flex flex-row justify-start py-2">
           <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
+            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
           >
             <h1 className="flex text-xl">Machine</h1>
-            <input type="text" disabled value={machine} />
+            <input type="text" className={"w-full"} disabled value={machine} />
           </div>
         </div>
         <div className="group flex flex-row justify-start py-2">
@@ -453,7 +453,7 @@ const TicketInfo = ({requester, company, machine, department, assignee, priority
             {role >= UserRoles.KEYUSER ? (
               <input type="text" disabled value={department} />
             ) : (
-              <select id="role" className="w-[197px] mx-auto"
+              <select id="role" className="w-[197px] mx-auto hover:bg-white"
                       onChange={(e) => setNewDepartment(e.target.value)}>
                 <option value="">{department}</option>
                 {departments.map((dep) => (
@@ -469,10 +469,10 @@ const TicketInfo = ({requester, company, machine, department, assignee, priority
         </div>
         <div className="group flex flex-row justify-start py-2">
           <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
+            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
           >
             <h1 className="flex text-xl">Assignee</h1>
-            <input type="text" disabled value={assignee} />
+            <input type="text" className={"w-full"} disabled value={assignee} />
           </div>
         </div>
       </div>
@@ -481,13 +481,20 @@ const TicketInfo = ({requester, company, machine, department, assignee, priority
         <div className="group flex flex-row justify-start">
           <div className={`w-[200px] flex items-center justify-between`}>
             <span className="text-xl">Publish Ticket</span>
-            <RoundButton />
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" value="" className="sr-only peer"/>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
           </div>
         </div>
         <div className="group flex flex-row justify-start">
           <div className={`w-[200px] flex items-center justify-between`}>
             <span className="text-xl">Resolved</span>
-            <RoundButton />
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input 
+                  type="checkbox" value="" className="sr-only peer"/>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
           </div>
         </div>
         {role == UserRoles.ADMIN ||
