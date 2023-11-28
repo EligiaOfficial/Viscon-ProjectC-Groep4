@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import {UserRoles} from "../UserRoles";
+import {DivNode} from "tailwindcss/src/value-parser";
 
 
 const CreateTicketForSomeone: React.FC = () => {
@@ -23,7 +24,7 @@ const CreateTicketForSomeone: React.FC = () => {
   const [expectedAction, setExpectedAction] = useState('');
   const [selfTinkering, setSelfTinkering] = useState('');
   const [image, setImage] = useState<File | null>(null);
-  const [priority, setPriority] = useState('Normal'); // Added state for priority
+  const [urgent, setUrgent] = useState('Normal'); // Added state for priority
   const [userEmail, setUserEmail] = useState('');
 
   // State for machines fetched from the API
@@ -68,7 +69,7 @@ const CreateTicketForSomeone: React.FC = () => {
         const formData = new FormData();
         formData.append("machine", selectedMachine);
         formData.append("description", description);
-        formData.append("priority", priority);
+        formData.append("urgent", urgent);
         formData.append("expectedAction", expectedAction);
         formData.append("selfTinkering", selfTinkering);
         formData.append("departmentId", "1");
@@ -174,12 +175,17 @@ return (
           </div>
 
           <div>
-            <label htmlFor="priority" className="block text-gray-700 mb-1 font-medium">Priority Level:</label>
-            <select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}
+            <label htmlFor="urgent" className="block text-gray-700 mb-1 font-medium">Is is urgent?</label>
+            <select id="priority" value={urgent} onChange={(e) => setUrgent(e.target.value)}
                     className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-              <option value="1">Normal</option>
-              <option value="2">High</option>
+              <option value="false">No</option>
+              <option value="true">Yes</option>
             </select>
+            { urgent == "true" ? (
+                <span>Are you 100% sure?</span>
+            ):(
+                <div/>
+            )}
           </div>
 
 

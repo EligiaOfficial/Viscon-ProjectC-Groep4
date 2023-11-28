@@ -22,7 +22,7 @@ const CreateTicket: React.FC = () => {
   const [expectedAction, setExpectedAction] = useState("");
   const [selfTinkering, setSelfTinkering] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [priority, setPriority] = useState("Normal");
+  const [urgent, setUrgent] = useState("Normal");
   const [machines, setMachines] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
@@ -52,7 +52,7 @@ const CreateTicket: React.FC = () => {
         const formData = new FormData();
         formData.append("machine", selectedMachine);
         formData.append("description", description);
-        formData.append("priority", priority);
+        formData.append("urgent", urgent);
         formData.append("expectedAction", expectedAction);
         formData.append("selfTinkering", selfTinkering);
         formData.append("departmentId", "1");
@@ -141,17 +141,17 @@ const CreateTicket: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label htmlFor="priority" className="block text-gray-700 mb-1 font-medium">
-                  Priority Level:
+                <label htmlFor="urgent" className="block text-gray-700 mb-1 font-medium">
+                  Is it urgent?
                 </label>
                 <select
-                  id="priority"
-                  value={priority}
-                  onChange={(e) => setPriority(e.target.value)}
+                  id="urgent"
+                  value={urgent}
+                  onChange={(e) => setUrgent(e.target.value)}
                   className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 >
-                  <option value="Normal">Normal</option>
-                  <option value="High">High</option>
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
                 </select>
               </div>
               <div className="col-span-2">

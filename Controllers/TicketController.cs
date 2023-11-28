@@ -96,7 +96,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                     ticket.Description = data.description;
                     ticket.DateCreated = DateTime.UtcNow;
-                    ticket.Priority = 1; //int.Parse(data.priority);
+                    // ticket.Urgent = data.priority;
                     ticket.ExpectedToBeDone = data.expectedAction;
                     ticket.MadeAnyChanges = data.selfTinkering;
                     ticket.DepartmentId = data.departmentId;
@@ -150,7 +150,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                 ticket.Description = data.description;
                 ticket.DateCreated = DateTime.UtcNow;
-                ticket.Priority = 1; //int.Parse(data.priority);
+                // ticket.Urgent = data.priority;
                 ticket.ExpectedToBeDone = data.expectedAction;
                 ticket.MadeAnyChanges = data.selfTinkering;
                 ticket.DepartmentId = data.departmentId;
@@ -263,7 +263,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                                 {
                                     TicketID = ticket.Id,
                                     Status = ticket.Resolved ? "closed" : "open",
-                                    Priority = ticket.Priority,
+                                    // Priority = ticket.Urgent,
                                     Description = ticket.Description,
                                     Machine = machine.Name,
                                     ETC = ticket.ExpectedToBeDone,

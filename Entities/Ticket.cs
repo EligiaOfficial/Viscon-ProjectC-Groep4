@@ -20,7 +20,7 @@ public class Ticket
 
     public DateTime DateCreated { get; set; }
 
-    public int Priority { get; set; }
+    public bool Urgent { get; set; }
 
     public string ExpectedToBeDone { get; set; }
 
@@ -38,6 +38,6 @@ public class Ticket
     public int? HelperUserId { get; set; }
     public User Helper { get; set; }
 
-
+    public bool Public { get; set; }
     public bool Resolved { get; set; }
 }
