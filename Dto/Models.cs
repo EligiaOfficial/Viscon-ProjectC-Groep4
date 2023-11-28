@@ -77,7 +77,7 @@ public class GetTicketsDto
 {
     public int TicketID { get; set; }
     public string Status { get; set; }
-    public int Priority { get; set; }
+    public bool Urgent { get; set; }
     public string Description { get; set; }
     public string Machine { get; set; }
     public DateTime Created { get; set; }
