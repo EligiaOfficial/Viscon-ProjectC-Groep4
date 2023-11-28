@@ -67,9 +67,9 @@ function Table(props: TableProps) {
                   <th
                     className={`${
                       key == sort
-                        ? "bg-blue-400 hover:bg-blue-300"
-                        : "hover:bg-stone-200"
-                    } duration-300 p-1 cursor-pointer border-x border-stone-200`}
+                        ? "bg-stone-400 hover:bg-stone-300"
+                        : "hover:bg-stone-300"
+                    } active:bg-white duration-300 p-1 cursor-pointer border-x border-stone-300`}
                     onClick={() => handleSort(key)}
                     key={key}
                   >
@@ -90,7 +90,7 @@ function Table(props: TableProps) {
               {props.data.map((item: any) => (
                 <tr
                   key={item[props.uid]}
-                  className="hover:bg-stone-200 cursor-pointer translate duration-100 border-y border-stone-200"
+                  className="hover:bg-stone-300 cursor-pointer translate duration-100 border-y border-stone-200 active:bg-stone-100"
                   onClick={() => nav(`/ticket?id=${item[props.uid]}`)}
                 >
                   {keys.map((key) => (

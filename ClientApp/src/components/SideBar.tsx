@@ -32,32 +32,28 @@ function SideBar() {
         menu
           ? showSettings
             ? "w-[600px] bg-gray-800"
-            : "w-[250px] bg-blue-500"
+            : "w-[250px] bg-blue-600"
           : showSettings
           ? "w-[600px] bg-gray-800"
-          : "w-[50px] bg-blue-500"
+          : "w-[50px] bg-blue-600"
       } min-w-[50px] relative z-10 translate duration-300 flex flex-col gap-10 h-full bg-blue-500 overflow-hidden`}
     >
       <HamburgerButton onclick={() => setMenu(!menu)} state={menu} />
-      <div className="flex flex-col">
+      <div className="flex flex-col mt-24">
         <SideBarItem
           title={"Dashboard"}
           icon={dashboardIcon}
           onclick={() => nav("/dashboard")}
           transformAnimation={"rotate3d(0,1,0,180deg)"}
         />
-        {Role == UserRoles.ADMIN ||
-        Role == UserRoles.KEYUSER ||
-        Role == UserRoles.VISCON ? (
-          <SideBarItem
-            title={"Create Ticket"}
-            icon={ticketIcon}
-            onclick={() => nav("/create")}
-            transformAnimation={"rotate(90deg)"}
-          />
-        ) : (
-          <div />
-        )}
+        <SideBarItem
+          title={"Tickets"}
+          icon={normalIcon}
+          onclick={() => nav("/tickets")}
+          transformAnimation={"rotate3d(0,1,0,180deg"}
+        />
+      </div>
+      <div className="flex flex-col">
         <SideBarItem
           title={"Archive"}
           icon={archiveIcon}
@@ -73,11 +69,20 @@ function SideBar() {
           icon={criticalIcon}
           transformAnimation={"rotate(360deg)"}
         />
-        <SideBarItem
-          title={"Normal"}
-          icon={normalIcon}
-          transformAnimation={"rotate3d(0,1,0,180deg"}
-        />
+      </div>
+      <div className="flex flex-col">
+        {Role == UserRoles.ADMIN ||
+        Role == UserRoles.KEYUSER ||
+        Role == UserRoles.VISCON ? (
+          <SideBarItem
+            title={"Add Ticket"}
+            icon={ticketIcon}
+            onclick={() => nav("/create")}
+            transformAnimation={"rotate(90deg)"}
+          />
+        ) : (
+          <div />
+        )}
         {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER ? (
           <SideBarItem
             title={"Add User"}
