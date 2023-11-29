@@ -237,7 +237,9 @@ namespace Viscon_ProjectC_Groep4.Controllers
                         description = ticket.Description,
                         madeAnyChanges = ticket.MadeAnyChanges,
                         expectedToBeDone = ticket.ExpectedToBeDone,
-                        Urgent = ticket.Urgent
+                        urgent = ticket.Urgent,
+                        resolved = ticket.Resolved,
+                        published = ticket.Public
                     },
                     Messages = messages
                 };
@@ -291,11 +293,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
             if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
             try {
                 var ticket = context.Tickets.FirstOrDefault(_ => _.Id == data.id);
-                ticket.DepartmentId = data.department;
-                ticket.Urgent = data.urgent;
+                if (data.department != 0) ticket!.DepartmentId = data.department;
+                ticket!.Urgent = data.urgent;
                 ticket.Public = data.publish;
                 ticket.Resolved = data.resolved;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
                 return Ok("Success");
             }
             catch (Exception ex){
