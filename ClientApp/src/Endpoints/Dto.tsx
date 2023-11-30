@@ -78,5 +78,36 @@ export function FetchUserCreationData() {
 }
 
 export function getTickets() {
-   return axiosInstance.get("http://localhost:5173/api/ticket/tickets")
+   return axiosInstance.get("/api/ticket/tickets")
+}
+
+export function getDepartments() {
+    return axiosInstance.get('api/department/All')
+}
+
+type changeTicketDto = {
+    id: number,
+    department: number,
+    urgent: boolean,
+    resolved: boolean,
+    publish: boolean
+}
+
+export function claimTicket(id: number) {
+    return axiosInstance.post(`api/ticket/claim?id=${id}`)
+}
+
+export function changeTicket(data: changeTicketDto) {
+    console.log("Start Axios Instance");
+    return axiosInstance.post('api/ticket/changeticket', data)
+        .then(response => {
+            // Handle successful response
+            console.log("Success:", response.data);
+            return response.data; // You can return or process the data here
+        })
+        .catch(error => {
+            // Handle error
+            console.error("Error:", error);
+            throw error; // You can throw the error or handle it in a way that makes sense for your application
+        });
 }

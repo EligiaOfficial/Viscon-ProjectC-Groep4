@@ -2,15 +2,19 @@
  *   Copyright (c) 2023
  *   All rights reserved.
  */
-import { useSearchParams } from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 
-import { getId } from "../Endpoints/Jwt";
-import Nav from "../components/Nav";
-import SideBar from "../components/SideBar";
+import {getId, getRole} from "../Endpoints/Jwt";
 import RoundButton from "../components/RoundButton";
-import { createMessageAxios, FetchTicketAxios } from "../Endpoints/Dto";
-import { useEffect, useState } from "react";
+import {
+  changeTicket,
+  createMessageAxios,
+  FetchTicketAxios,
+  getDepartments
+} from "../Endpoints/Dto";
+import {useEffect, useState} from "react";
 import Layout from "../components/Layout";
+import {UserRoles} from "../UserRoles";
 
 const Ticket = () => {
   const [searchParams] = useSearchParams();
@@ -28,8 +32,8 @@ const Ticket = () => {
   const [machine, setMachine] = useState<string>("");
   const [messages, setMessages] = useState<object[]>([]);
 
-  const fetchTicket = () => {
-    FetchTicketAxios(TicketId)
+  const fetchTicket = async () => {
+    await FetchTicketAxios(TicketId)
       .then((res) => {
         const {
           company,
@@ -58,13 +62,18 @@ const Ticket = () => {
   return (
     <>
       <Layout>
-        <TicketInfo
-          assignee={helper}
-          company={company}
-          department={department}
-          machine={machine}
-          requester={creator}
-        />
+        {ticket["urgent"] !== undefined ? (
+            <TicketInfo
+                assignee={helper}
+                company={company}
+                department={department}
+                machine={machine}
+                requester={creator}
+                urgent={ticket["urgent"]}
+                published={ticket["published"]}
+                resolved={ticket["resolved"]}
+            />
+        ) : null}
         <div className="bg-stone-200 h-full w-full">
           <section className="flex h-full overflow-y-auto">
             <TicketChat ticket={ticket} messages={messages || []} />
@@ -220,233 +229,204 @@ let ChatField = ({
   );
 };
 
-let ChatFieldImg = ({
-  user,
-  message,
-  timestamp,
-}: {
-  user: string;
-  message: string;
-  timestamp: string;
-}) => {
-  const date = new Date(timestamp);
-  const formattedDate = new Intl.DateTimeFormat("en-GB", {
-    year: "2-digit",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  }).format(date);
-
-  return (
-    <div className={"w-full"}>
-      <div className={"flex md:flex-row flex-col pt-5"}>
-        <div className={"md:w-2/5 w-full"}>
-          <div className={"flex flex-row items-center justify-between"}>
-            <h1 className={"text-2xl font-bold"}>{user}</h1>
-            <p className={"text-sm mr-2.5"}>{formattedDate}</p>
-          </div>
-          <p className={"text-md"}>{message}</p>
-        </div>
-        <div className={"md:w-3/5 w-full"}>
-          <Carousel />
-        </div>
-      </div>
-      <hr className="h-[2px] mt-5 bg-gray-200 border-0 dark:bg-gray-700" />
-    </div>
-  );
-};
-
-export function Carousel() {
-  return (
-    <div className={"w-full"}>
-      <div className="max-w-2xl mx-auto">
-        <div id="default-carousel" className="relative" data-carousel="static">
-          <div className="overflow-hidden relative h-56 rounded-lg sm:h-64 xl:h-80 2xl:h-96">
-            <div className="duration-700 ease-in-out" data-carousel-item>
-              <span className="absolute top-1/2 left-1/2 text-2xl font-semibold text-white -translate-x-1/2 -translate-y-1/2 sm:text-3xl dark:text-gray-800">
-                First Slide
-              </span>
-              <img
-                src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-                className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2"
-                alt="..."
-              />
-            </div>
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-              <img
-                src="https://flowbite.com/docs/images/carousel/carousel-2.svg"
-                className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2"
-                alt="..."
-              />
-            </div>
-            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-              <img
-                src="https://flowbite.com/docs/images/carousel/carousel-3.svg"
-                className="block absolute top-1/2 left-1/2 w-full -translate-x-1/2 -translate-y-1/2"
-                alt="..."
-              />
-            </div>
-          </div>
-          <div className="flex absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="false"
-              aria-label="Slide 1"
-              data-carousel-slide-to="0"
-            ></button>
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="false"
-              aria-label="Slide 2"
-              data-carousel-slide-to="1"
-            ></button>
-            <button
-              type="button"
-              className="w-3 h-3 rounded-full"
-              aria-current="false"
-              aria-label="Slide 3"
-              data-carousel-slide-to="2"
-            ></button>
-          </div>
-          <button
-            type="button"
-            className="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
-            data-carousel-prev
-          >
-            <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-              <svg
-                className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  strokeWidth="2"
-                  d="M15 19l-7-7 7-7"
-                ></path>
-              </svg>
-              <span className="hidden">Previous</span>
-            </span>
-          </button>
-          <button
-            type="button"
-            className="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none"
-            data-carousel-next
-          >
-            <span className="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-              <svg
-                className="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  strokeWidth="2"
-                  d="M9 5l7 7-7 7"
-                ></path>
-              </svg>
-              <span className="hidden">Next</span>
-            </span>
-          </button>
-        </div>
-        <script src="https://unpkg.com/flowbite@1.4.0/dist/flowbite.js"></script>
-      </div>
-    </div>
-  );
-}
-
 const TicketInfo = ({
-  requester,
-  company,
-  machine,
-  department,
-  assignee,
-}: {
+                            requester, company, machine, department, assignee, urgent, published, resolved
+                          }: {
   requester: string;
   company: string;
   machine: string;
   department: string;
   assignee: string;
+  urgent: boolean;
+  published: boolean;
+  resolved: boolean;
 }) => {
-  return (
-    <div
-      className={
-        "w-1/6 h-[calc(100vh-50px)] bg-stone-300 flex flex-col items-center"
-      }
-    >
-      <div className="flex flex-col">
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Requestor</h1>
-            <input type="text" disabled value={requester} />
-          </div>
-        </div>
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Company</h1>
-            <input type="text" disabled value={company} />
-          </div>
-        </div>
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Machine</h1>
-            <input type="text" disabled value={machine} />
-          </div>
-        </div>
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Department</h1>
-            {2 == 1 ? (
-              <input type="text" disabled value={department} />
-            ) : (
-              <select id="role" className="w-full">
-                <option value="0">{department}</option>
-              </select>
-            )}
-          </div>
-        </div>
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Assignee</h1>
-            <input type="text" disabled value={assignee} />
-          </div>
-        </div>
-      </div>
 
-      <div className="w-[200px] flex flex-col mt-auto">
-        <div className="group flex flex-row justify-start">
-          <div className={`w-[200px] flex items-center justify-between`}>
-            <span className="text-xl">Publish Ticket</span>
-            <RoundButton />
+  const [departments, setDepartments] = useState<string[]>([]);
+  const [newDepartment, setNewDepartment] = useState<string>("");
+
+  const [urgency, setUrgency] = useState<boolean>(Boolean(urgent));
+  const [publishedState, setPublished] = useState<boolean>(Boolean(published));
+  const [resolvedState, setResolved] = useState<boolean>(Boolean(resolved));
+
+
+  const [searchParams] = useSearchParams();
+  const Id = searchParams.get("id") || " ";
+  const TicketId = parseInt(Id, 10);
+  if (isNaN(TicketId)) {
+    return <div>Invalid Ticket</div>;
+  }
+  
+  useEffect(() => {
+    if (role >= UserRoles.USER) return;
+    
+    getDepartments()
+        .then(res => {
+          setDepartments(res.data);
+        });
+    console.log(urgent, published, resolved)
+    console.log(urgency, publishedState, resolvedState)
+  }, [urgent, published, resolved]);
+
+  const stringToBoolean = (stringValue) => {
+    switch(stringValue?.toLowerCase()?.trim()){
+      case "true":
+        return true;
+
+      case "false":
+        return false;
+
+      default:
+        throw Error;
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    changeTicket({
+      id: +TicketId,
+      department: +newDepartment,
+      urgent: urgency,
+      resolved: resolvedState,
+      publish: publishedState,
+    }).then(res => {
+          console.log(res)
+        }
+    );
+  }
+
+  const role = getRole(localStorage.getItem("token"));
+  return (
+      <form onSubmit={handleSubmit}
+            className={
+              "w-2/12 h-[calc(100vh-50px)] bg-stone-300 flex flex-col items-center"
+            }
+      >
+        <div className="flex flex-col">
+          <div className="group flex flex-row justify-start py-2">
+            <div
+                className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
+            >
+              <h1 className="flex text-xl">Requestor</h1>
+              <input type="text" className={"w-full"} disabled value={requester}/>
+            </div>
+          </div>
+          <div className="group flex flex-row justify-start py-2">
+            <div
+                className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
+            >
+              <h1 className="flex text-xl">Company</h1>
+              <input type="text" className={"w-full "} disabled value={company}/>
+            </div>
+          </div>
+          <div className="group flex flex-row justify-start py-2">
+            <div
+                className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
+            >
+              <h1 className="flex text-xl">Machine</h1>
+              <input type="text" className={"w-full"} disabled value={machine}/>
+            </div>
+          </div>
+
+
+          <div className="group flex flex-row justify-start py-2">
+            <div
+                className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
+            >
+              <h1 className="flex text-xl">Urgancy</h1>
+              {role >= UserRoles.KEYUSER ? (
+                  <input type="text" className={"w-full"} disabled value={!urgent ? "No" : "Yes"}/>
+              ) : (
+                  <select
+                      id="role"
+                      className="w-[197px] mx-auto hover:bg-white"
+                      onChange={(e) => setUrgency(stringToBoolean(e.target.value))}
+                  >
+                    <option
+                        value={urgent.toString() === 'true' ? "true" : "false"}>{urgent.toString() === 'true' ? "True" : "False"}</option>
+                    <option
+                        value={urgent.toString() !== 'true' ? "true" : "false"}>{urgent.toString() !== 'true' ? "True" : "False"}</option>
+                  </select>
+              )}
+            </div>
+          </div>
+
+
+          <div className="group flex flex-row justify-start py-2">
+            <div
+                className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
+            >
+              <h1 className="flex text-xl">Department</h1>
+              {role >= UserRoles.KEYUSER ? (
+                  <input type="text" disabled value={department}/>
+              ) : (
+                  <select id="role" className="w-[197px] mx-auto hover:bg-white"
+                          onChange={(e) => setNewDepartment(e.target.value)}>
+                    <option value="">{department}</option>
+                    {departments.map((dep) => (
+                        department !== dep["speciality"] && (
+                            <option key={dep["id"]} value={dep["id"]}>
+                              {dep["speciality"]}
+                            </option>
+                        )
+                    ))}
+                  </select>
+              )}
+            </div>
+          </div>
+          <div className="group flex flex-row justify-start py-2">
+            <div
+                className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
+            >
+              <h1 className="flex text-xl">Assignee</h1>
+              <input type="text" className={"w-full"} disabled value={assignee}/>
+            </div>
           </div>
         </div>
-        <div className="group flex flex-row justify-start">
-          <div className={`w-[200px] flex items-center justify-between`}>
-            <span className="text-xl">Resolved</span>
-            <RoundButton />
+
+        <div className="w-[200px] flex flex-col mt-auto">
+          <div className="group flex flex-row justify-start">
+            <div className={`w-[200px] flex items-center justify-between`}>
+              <span className="text-xl">Publish Ticket</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox"
+                       value=""
+                       className="sr-only peer"
+                       onChange={(e) => setPublished(!publishedState)}
+                       checked={publishedState}
+                />
+                <div
+                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+              </label>
+            </div>
           </div>
+          <div className="group flex flex-row justify-start">
+            <div className={`w-[200px] flex items-center justify-between`}>
+              <span className="text-xl">Resolved</span>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                    type="checkbox"
+                    value=""
+                    className="sr-only peer"
+                    onChange={(e) => setResolved(!resolvedState)}
+                    checked={resolvedState}
+                />
+                <div
+                    className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"/>
+              </label>
+            </div>
+          </div>
+          {role == UserRoles.ADMIN ||
+          role == UserRoles.VISCON ? (
+              <button type="submit"
+                      className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">
+                Update Ticket
+              </button>
+          ) : (
+              <></>
+          )}
         </div>
-      </div>
-    </div>
+      </form>
   );
 };

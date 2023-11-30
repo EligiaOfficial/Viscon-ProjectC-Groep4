@@ -57,6 +57,16 @@ public class TicketDto
     public IFormFile? image { get; set; }
 }
 
+public class ChangeTicketDto
+{
+    public int id { get; set; }
+    public int department { get; set; }
+    public bool urgent { get; set; }
+    public bool resolved { get; set; }
+    public bool publish { get; set; }
+}
+
+
 public class getUserDto
 {
     public int Id { get; set; }
@@ -77,7 +87,7 @@ public class GetTicketsDto
 {
     public int TicketID { get; set; }
     public string Status { get; set; }
-    public int Priority { get; set; }
+    public bool Urgent { get; set; }
     public string Description { get; set; }
     public string Machine { get; set; }
     public DateTime Created { get; set; }

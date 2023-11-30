@@ -96,7 +96,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                     ticket.Description = data.description;
                     ticket.DateCreated = DateTime.UtcNow;
-                    ticket.Priority = 1; //int.Parse(data.priority);
+                    ticket.Urgent = false; //int.Parse(data.priority);
                     ticket.ExpectedToBeDone = data.expectedAction;
                     ticket.MadeAnyChanges = data.selfTinkering;
                     ticket.DepartmentId = data.departmentId;
@@ -150,7 +150,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
                 ticket.Description = data.description;
                 ticket.DateCreated = DateTime.UtcNow;
-                ticket.Priority = 1; //int.Parse(data.priority);
+                ticket.Urgent = false; //int.Parse(data.priority);
                 ticket.ExpectedToBeDone = data.expectedAction;
                 ticket.MadeAnyChanges = data.selfTinkering;
                 ticket.DepartmentId = data.departmentId;
@@ -236,7 +236,10 @@ namespace Viscon_ProjectC_Groep4.Controllers
                         title = ticket.Title,
                         description = ticket.Description,
                         madeAnyChanges = ticket.MadeAnyChanges,
-                        expectedToBeDone = ticket.ExpectedToBeDone
+                        expectedToBeDone = ticket.ExpectedToBeDone,
+                        urgent = ticket.Urgent,
+                        resolved = ticket.Resolved,
+                        published = ticket.Public
                     },
                     Messages = messages
                 };
@@ -263,7 +266,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                                 {
                                     TicketID = ticket.Id,
                                     Status = ticket.Resolved ? "closed" : "open",
-                                    Priority = ticket.Priority,
+                                    Urgent = ticket.Urgent,
                                     Description = ticket.Description,
                                     Machine = machine.Name,
                                     ETC = ticket.ExpectedToBeDone,
@@ -277,6 +280,30 @@ namespace Viscon_ProjectC_Groep4.Controllers
                                 .ToListAsync();
             
             return Ok(tickets);
+        }
+        
+        [Authorize(Policy = "viscon")]
+        [HttpPost]
+        [Route("changeticket")]
+        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
+        {
+            await using var context = _services.GetService<ApplicationDbContext>();
+            int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var user = context.Users.FirstOrDefault(_ => _.Id == id)!;
+            if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
+            try {
+                var ticket = context.Tickets.FirstOrDefault(_ => _.Id == data.id);
+                if (data.department != 0) ticket!.DepartmentId = data.department;
+                ticket!.Urgent = data.urgent;
+                ticket.Public = data.publish;
+                ticket.Resolved = data.resolved;
+                await context.SaveChangesAsync();
+                return Ok("Success");
+            }
+            catch (Exception ex){
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }
