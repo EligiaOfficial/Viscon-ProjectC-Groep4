@@ -21,7 +21,7 @@ function SideBarItem(props: Props) {
         className={`flex items-center justify-center min-w-[50px] max-w-[50px]`}
       >
         <img
-          className={`translate alternate duration-300 min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px]`}
+          className={`translate duration-300 min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px]`}
           style={{
             transform: animate ? props.transformAnimation : "",
           }}

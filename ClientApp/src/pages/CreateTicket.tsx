@@ -156,236 +156,240 @@ const CreateTicket: React.FC = () => {
 
   return (
     <Layout>
-      <span className="text-2xl">Add Ticket</span>
-      <div className="mx-auto h-full bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6">
-        <h1 className="text-3xl mb-2 text-center">Ticket Form</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {validationErrors.length > 0 && (
-            <div
-              className="bg-red-200 border border-red-500 text-red-800 px-5 py-3 rounded relative"
-              role="alert"
-            >
-              {validationErrors.map((error, index) => (
-                <p key={index} className="mb-1">
-                  {error}
-                </p>
-              ))}
-              <button
-                className="absolute top-2 right-2 text-red-600 hover:text-red-800"
-                onClick={() => setValidationErrors([])}
-              >
-                <span className="sr-only">Close alert</span>✕
-              </button>
-            </div>
-          )}
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label
-                htmlFor="title"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                Title:
-              </label>
-              <input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
-              />
-            </div>
-            <div className="relative row-span-3 flex flex-col">
-              <label
-                htmlFor="image"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                Add picture(s):
-              </label>
+      <div className="flex flex-col">
+        <span className="text-2xl py-4">Add Ticket</span>
+        <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6">
+          <h1 className="text-3xl mb-2 text-center text-blue-600">
+            Ticket Form
+          </h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {validationErrors.length > 0 && (
               <div
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  handleImage(e.dataTransfer.files);
-                }}
-                className={`${
-                  supportedFile && !duplicateFile
-                    ? "border-stone-600"
-                    : "border-red-600"
-                } relative select-none h-full w-full cursor-pointer border rounded-md p-2 shadow-sm active:border-blue-500 border-dashed bg-stone-100`}
+                className="bg-red-200 border border-red-500 text-red-800 px-5 py-3 rounded relative"
+                role="alert"
               >
-                <input
-                  type="file"
-                  id="image"
-                  accept="image/*"
-                  multiple
-                  key={images.length}
-                  onChange={(e) => {
-                    handleImage(e.target.files);
-                  }}
-                  className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                />
-                <div className="flex flex-row h-full w-full p-4 justify-between gap-4">
-                  <div className="flex flex-1 flex-col items-center justify-center">
-                    <img className="max-w-[60px]" src={uploadIcon} />
-                    <span className="text-stone-600 font-bold">
-                      Drag & drop
-                    </span>
-                  </div>
-                  <div className="relative h-full border border-stone-400">
-                    <span className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 bg-stone-100 py-2 font-bold text-stone-600">
-                      or
-                    </span>
-                  </div>
-                  <div className="flex-1 flex justify-center items-center">
-                    <span className="border border-stone-200 px-2 py-1 font-bold bg-stone-200 text-stone-600">
-                      Browse Files
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <span
-                className={`${
-                  supportedFile ? "hidden" : ""
-                } absolute top-full left-0 translate-y-1/2 text-red-600`}
-              >
-                File type not supported.
-              </span>
-              <span
-                className={`${
-                  !duplicateFile ? "hidden" : ""
-                } absolute top-full left-0 translate-y-1/2 text-red-600`}
-              >
-                Duplicate files are not allowed.
-              </span>
-            </div>
-            <div className="col-start-1">
-              <label
-                htmlFor="machine"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                Select a machine:
-              </label>
-              <select
-                id="machine"
-                value={selectedMachine}
-                onChange={(e) => setSelectedMachine(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
-              >
-                <option value="">Select a machine</option>
-                {machines.map((machine) => (
-                  <option key={machine} value={machine}>
-                    {machine}
-                  </option>
+                {validationErrors.map((error, index) => (
+                  <p key={index} className="mb-1">
+                    {error}
+                  </p>
                 ))}
-              </select>
-            </div>
-            <div className="col-start-1">
-              <label
-                htmlFor="priority"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                Priority level:
-              </label>
-              <select
-                id="priority"
-                value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
-              >
-                <option value="Normal">Normal</option>
-                <option value="High">High</option>
-              </select>
-            </div>
-            <div
-              className={`${
-                images.length > 0 ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-              } grid col-span-2 duration-300`}
-            >
-              <div className="overflow-hidden flex flex-col">
-                <label className="block text-gray-700 mb-1 font-medium">
-                  Your uploaded files:
+                <button
+                  className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                  onClick={() => setValidationErrors([])}
+                >
+                  <span className="sr-only">Close alert</span>✕
+                </button>
+              </div>
+            )}
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label
+                  htmlFor="title"
+                  className="block text-gray-700 mb-1 font-medium"
+                >
+                  Title:
                 </label>
-                <div className="flex flex-row overflow-auto">
-                  {images.map((image) => (
-                    <div key={image?.name} className="flex flex-col">
-                      <div className="group relative h-[200px] w-[200px]">
-                        <img
-                          onClick={() => handleRemoveImage(image!.name)}
-                          className="hover:scale-110 scale-90 translate-y-1/4 -translate-x-1/4 active:scale-90 w-[30px] h-[30px] z-50 cursor-pointer absolute opacity-0 group-hover:opacity-100 duration-100 top-0 right-0"
-                          src={whiteCrossIcon}
-                        />
-                        <div className="opacity-0 group-hover:opacity-100 duration-200 w-full h-full absolute top-0 left-0 z-20 bg-gradient-to-t from-black/40 via-black/20 to-black/40" />
-                        <img
-                          className={`${
-                            previewImage ? "border" : ""
-                          } border-blue-500 object-cover h-[200px] w-[200px] cursor-pointer`}
-                          src={URL.createObjectURL(image!)}
-                          onClick={() => window.open(previewImage, "_blank")}
-                        />
-                      </div>
-                      <span className="italic text-sm max-w-[200px]">
-                        {image?.name}
+                <input
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                />
+              </div>
+              <div className="relative row-span-3 flex flex-col">
+                <label
+                  htmlFor="image"
+                  className="block text-gray-700 mb-1 font-medium"
+                >
+                  Add picture(s):
+                </label>
+                <div
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    handleImage(e.dataTransfer.files);
+                  }}
+                  className={`${
+                    supportedFile && !duplicateFile
+                      ? "border-stone-600"
+                      : "border-red-600"
+                  } relative select-none h-full w-full cursor-pointer border rounded-md p-2 shadow-sm active:border-blue-500 border-dashed bg-stone-100`}
+                >
+                  <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    multiple
+                    key={images.length}
+                    onChange={(e) => {
+                      handleImage(e.target.files);
+                    }}
+                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="flex flex-row h-full w-full p-4 justify-between gap-4">
+                    <div className="flex flex-1 flex-col items-center justify-center">
+                      <img className="max-w-[60px]" src={uploadIcon} />
+                      <span className="text-stone-600 font-bold">
+                        Drag & drop
                       </span>
                     </div>
+                    <div className="relative h-full border border-stone-400">
+                      <span className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 bg-stone-100 py-2 font-bold text-stone-600">
+                        or
+                      </span>
+                    </div>
+                    <div className="flex-1 flex justify-center items-center">
+                      <span className="border border-stone-200 px-2 py-1 font-bold bg-stone-200 text-stone-600">
+                        Browse Files
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span
+                  className={`${
+                    supportedFile ? "hidden" : ""
+                  } absolute top-full left-0 translate-y-1/2 text-red-600`}
+                >
+                  File type not supported.
+                </span>
+                <span
+                  className={`${
+                    !duplicateFile ? "hidden" : ""
+                  } absolute top-full left-0 translate-y-1/2 text-red-600`}
+                >
+                  Duplicate files are not allowed.
+                </span>
+              </div>
+              <div className="col-start-1">
+                <label
+                  htmlFor="machine"
+                  className="block text-gray-700 mb-1 font-medium"
+                >
+                  Select a machine:
+                </label>
+                <select
+                  id="machine"
+                  value={selectedMachine}
+                  onChange={(e) => setSelectedMachine(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                >
+                  <option value="">Select a machine</option>
+                  {machines.map((machine) => (
+                    <option key={machine} value={machine}>
+                      {machine}
+                    </option>
                   ))}
+                </select>
+              </div>
+              <div className="col-start-1">
+                <label
+                  htmlFor="priority"
+                  className="block text-gray-700 mb-1 font-medium"
+                >
+                  Priority level:
+                </label>
+                <select
+                  id="priority"
+                  value={priority}
+                  onChange={(e) => setPriority(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
+                >
+                  <option value="Normal">Normal</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+              <div
+                className={`${
+                  images.length > 0 ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                } grid col-span-2 duration-300`}
+              >
+                <div className="overflow-hidden flex flex-col">
+                  <label className="block text-gray-700 mb-1 font-medium">
+                    Your uploaded files:
+                  </label>
+                  <div className="flex flex-row overflow-auto gap-1">
+                    {images.map((image) => (
+                      <div key={image?.name} className="flex flex-col">
+                        <div className="group relative h-[200px] w-[200px]">
+                          <img
+                            onClick={() => handleRemoveImage(image!.name)}
+                            className="hover:scale-110 scale-90 translate-y-1/4 -translate-x-1/4 active:scale-90 w-[30px] h-[30px] z-50 cursor-pointer absolute opacity-0 group-hover:opacity-100 duration-100 top-0 right-0"
+                            src={whiteCrossIcon}
+                          />
+                          <div className="opacity-0 group-hover:opacity-100 duration-200 w-full h-full absolute top-0 left-0 z-20 bg-gradient-to-t from-black/40 via-black/20 to-black/40" />
+                          <img
+                            className={`${
+                              previewImage ? "border" : ""
+                            } border-blue-500 object-cover h-[200px] w-[200px] cursor-pointer`}
+                            src={URL.createObjectURL(image!)}
+                            onClick={() => window.open(previewImage, "_blank")}
+                          />
+                        </div>
+                        <span className="italic text-sm max-w-[200px]">
+                          {image?.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-span-2">
-              <label
-                htmlFor="description"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                What do you see happening?
-              </label>
-              <textarea
-                id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
-                rows={2}
-              ></textarea>
-            </div>
-            <div className="col-span-2">
-              <label
-                htmlFor="expectedAction"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                What do you expect to be done?
-              </label>
-              <textarea
-                id="expectedAction"
-                value={expectedAction}
-                onChange={(e) => setExpectedAction(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
-                rows={2}
-              ></textarea>
-            </div>
-            <div className="col-span-2">
-              <label
-                htmlFor="selfTinkering"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                Have you made any changes to the machine?
-              </label>
-              <textarea
-                id="selfTinkering"
-                value={selfTinkering}
-                onChange={(e) => setSelfTinkering(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
-                rows={2}
-              ></textarea>
-            </div>
+              <div className="col-span-2">
+                <label
+                  htmlFor="description"
+                  className="block text-gray-700 mb-1 font-medium"
+                >
+                  What do you see happening?
+                </label>
+                <textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
+                  rows={2}
+                ></textarea>
+              </div>
+              <div className="col-span-2">
+                <label
+                  htmlFor="expectedAction"
+                  className="block text-gray-700 mb-1 font-medium"
+                >
+                  What do you expect to be done?
+                </label>
+                <textarea
+                  id="expectedAction"
+                  value={expectedAction}
+                  onChange={(e) => setExpectedAction(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
+                  rows={2}
+                ></textarea>
+              </div>
+              <div className="col-span-2">
+                <label
+                  htmlFor="selfTinkering"
+                  className="block text-gray-700 mb-1 font-medium"
+                >
+                  Have you made any changes to the machine?
+                </label>
+                <textarea
+                  id="selfTinkering"
+                  value={selfTinkering}
+                  onChange={(e) => setSelfTinkering(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
+                  rows={2}
+                ></textarea>
+              </div>
 
-            <div className="col-span-2">
-              <button
-                type="submit"
-                className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2  transition-all ease-in-out duration-300"
-              >
-                Create Ticket
-              </button>
+              <div className="col-span-2">
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2  transition-all ease-in-out duration-300"
+                >
+                  Create Ticket
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </Layout>
   );

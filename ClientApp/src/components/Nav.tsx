@@ -32,7 +32,7 @@ function Nav() {
   };
 
   return (
-    <div className="h-[50px] p-1 shadow-md shadow-stone-200 flex flex-row justify-between">
+    <div className="z-40 h-[50px] p-1 shadow-b shadow-md shadow-stone-200 flex flex-row justify-between">
       <img
         className="object-contain h-full cursor-pointer"
         src={visconLogo}

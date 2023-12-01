@@ -4,7 +4,9 @@ function Dashboard() {
   return (
     <>
       <Layout>
-        <span className="text-2xl">Dashboard</span>
+        <div className="flex flex-col">
+          <span className="text-2xl py-4">Dashboard</span>
+        </div>
       </Layout>
     </>
   );

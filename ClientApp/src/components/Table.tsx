@@ -59,65 +59,68 @@ function Table(props: TableProps) {
       {!dataRendered || props.data == undefined ? (
         <>No data to show.</>
       ) : (
-        <div className="bg-white w-full">
-          <table className="w-full select-none">
-            <tbody>
-              <tr className="text-left">
-                {keys.map((key) => (
-                  <th
-                    className={`${
-                      key == sort
-                        ? "bg-stone-400 hover:bg-stone-300"
-                        : "hover:bg-stone-300"
-                    } active:bg-white duration-300 p-1 cursor-pointer border-x border-stone-300`}
-                    onClick={() => handleSort(key)}
-                    key={key}
-                  >
-                    <div className="flex flex-row justify-between">
-                      <span className="">
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                      </span>
-                      <img
-                        className={`${
-                          ascending ? "" : "scale-y-[-1]"
-                        } translate duration-200 min-w-[24px] max-w-[24px]`}
-                        src={key == sort ? arrowIcon : ""}
-                      />
-                    </div>
-                  </th>
-                ))}
-              </tr>
-              {props.data.map((item: any) => (
-                <tr
-                  key={item[props.uid]}
-                  className="hover:bg-stone-300 cursor-pointer translate duration-100 border-y border-stone-200 active:bg-stone-100"
-                  onClick={() => nav(`/ticket?id=${item[props.uid]}`)}
-                >
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-row">
+            <div className="active:scale-95 select-none border border-black rounded-md p-1 bg-white cursor-pointer hover:bg-stone-600 hover:text-white hover:border-white">
+              +Add filter
+            </div>
+          </div>
+          <div className="bg-white w-full">
+            <table className="w-full select-none">
+              <tbody>
+                <tr className="text-left">
                   {keys.map((key) => (
-                    <td
-                      className="p-1 border-x border-stone-200"
-                      key={item[props.uid] + key}
+                    <th
+                      className={`${
+                        key == sort
+                          ? "bg-stone-400 hover:bg-stone-300"
+                          : "hover:bg-stone-300"
+                      } active:bg-white duration-300 p-1 cursor-pointer border-x border-stone-300`}
+                      onClick={() => handleSort(key)}
+                      key={key}
                     >
-                      {key === "created"
-                        ? // Format the date if the key is 'date'
-                          (() => {
-                            const date = new Date(item[key]);
-                            return new Intl.DateTimeFormat("en-GB", {
-                              day: "2-digit",
-                              month: "short",
-                              year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }).format(date);
-                          })()
-                        : // Display the value as is for other keys
-                          item[key]}
-                    </td>
+                      <div className="flex flex-row justify-between">
+                        <span className="">
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
+                        </span>
+                        <img
+                          className={`translate duration-200 min-w-[24px] max-w-[24px]`}
+                          src={key == sort ? arrowIcon : ""}
+                          style={{ transform: ascending ? "" : "scaleY(-1)" }}
+                        />
+                      </div>
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+                {props.data.map((item: any) => (
+                  <tr
+                    key={item[props.uid]}
+                    className="hover:bg-stone-300 cursor-pointer translate duration-100 border-y border-stone-200 active:bg-stone-100"
+                    onClick={() => nav(`/ticket?id=${item[props.uid]}`)}
+                  >
+                    {keys.map((key) => (
+                      <td className="p-1 " key={item[props.uid] + key}>
+                        {key === "created"
+                          ? // Format the date if the key is 'date'
+                            (() => {
+                              const date = new Date(item[key]);
+                              return new Intl.DateTimeFormat("en-GB", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }).format(date);
+                            })()
+                          : // Display the value as is for other keys
+                            item[key]}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </>
