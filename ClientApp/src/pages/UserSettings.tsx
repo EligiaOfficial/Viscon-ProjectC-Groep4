@@ -53,9 +53,7 @@ const EditAccount = ({ toggleSettings }) => {
   };
 
   return (
-    <div
-      className={"h-screen mt-[50px] z-50 w-[650px] bg-gray-800 text-white p-4"}
-    >
+    <div className={"h-screen mt-[50px] z-50 w-fit bg-gray-800 text-white p-4"}>
       <div className={"flex justify-end"}>
         <div
           className={
