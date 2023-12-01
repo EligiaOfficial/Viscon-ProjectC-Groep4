@@ -2,12 +2,12 @@
  *   Copyright (c) 2023
  *   All rights reserved.
  */
-import {useEffect, useState} from "react";
-import {FetchUserCreationData, SignupAxios} from "../Endpoints/Dto";
-import {useNavigate} from "react-router-dom";
-import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
+import { useEffect, useState } from "react";
+import { FetchUserCreationData, SignupAxios } from "../Endpoints/Dto";
+import { useNavigate } from "react-router-dom";
+import { getCompany, getDepartment, getRole } from "../Endpoints/Jwt";
 import Layout from "../components/Layout";
-import {UserRoles} from "../UserRoles";
+import { UserRoles } from "../UserRoles";
 
 function AddAccount() {
   const [password, setPassword] = useState("");
@@ -29,9 +29,9 @@ function AddAccount() {
   const usr_depId = getDepartment(token);
 
   const nav = useNavigate();
-  
-  if (usr_role >= UserRoles.KEYUSER) return <div>Error 404</div>
-  
+
+  if (usr_role >= UserRoles.KEYUSER) return <div>Error 404</div>;
+
   // if (usr_role != UserRoles.ADMIN && usr_role != UserRoles.KEYUSER && usr_role != UserRoles.VISCON) return <div>404</div>
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -81,7 +81,7 @@ function AddAccount() {
   return (
     <>
       <Layout>
-        <div className="flex flex-row h-screen ml-20 w-full">
+        <div className="flex flex-row w-full">
           <div className="basis-full md:basis-1/3 bg-gray-150 mt-20">
             <div className="mt-50 sm:mx-auto sm:max-w-sm">
               <form className="space-y-6" onSubmit={handleSubmit}>
