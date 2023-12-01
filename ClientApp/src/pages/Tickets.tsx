@@ -8,20 +8,22 @@ function Tickets() {
 
   useEffect(() => {
     getTickets()
-      .then((response) => {
+      .then((response: any) => {
         if (response.data.length > 0) {
           setTickets(response.data);
         }
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   }, []);
 
   return (
     <Layout>
-      <span className="text-2xl">Tickets</span>
-      <Table data={tickets} uid={"ticketID"} />
+      <div className="flex flex-col">
+        <span className="text-2xl py-4">Tickets</span>
+        <Table data={tickets} uid={"ticketID"} />
+      </div>
     </Layout>
   );
 }
