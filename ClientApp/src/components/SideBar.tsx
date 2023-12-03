@@ -64,7 +64,9 @@ function SideBar() {
         onMouseOver={() => setMenu(true)}
         onMouseLeave={() => setMenu(false)}
         className={`${
-          menu ? "w-[250px] bg-sky-700/50" : "w-[50px] bg-sky-600"
+          menu
+            ? "w-[250px] bg-sky-700/50 dark:bg-stone-900/50"
+            : "w-[50px] bg-sky-600 dark:bg-stone-800"
         } min-w-[50px] translate duration-300 flex flex-col overflow-hidden h-full backdrop-blur-sm`}
       >
         {/* <HamburgerButton onclick={() => setMenu(!menu)} state={menu} /> */}

@@ -23,18 +23,14 @@ function Nav() {
     }
   };
 
-  const languageToggled = (toggle: boolean) => {
-    setChangeLanguage(toggle);
-  };
-
   const logo = () => {
     navigate("/");
   };
 
   return (
-    <div className="z-40 h-[50px] p-1 shadow-b shadow-md shadow-stone-200 flex flex-row justify-between">
+    <div className="z-40 h-[50px] p-1 shadow-b shadow-sm shadow-stone-400 dark:shadow-black flex flex-row justify-between dark:bg-stone-900">
       <img
-        className="object-contain h-full cursor-pointer"
+        className="object-contain h-full cursor-pointer dark:invert"
         src={visconLogo}
         onClick={logo}
       />
@@ -52,9 +48,13 @@ function Nav() {
                   search ? "translate-x-[200px]" : ""
                 } transition ease-in-out duration-300 `}
               >
-                <span className={`absolute -z-10 left-0`}>Search</span>
                 <span
-                  className={`transition ease-in-out duration-300 group-hover:bg-gradient-to-r from-[#2a3180] via-[#199bd8] to-[#07ab9a] group-hover:bg-clip-text group-hover:text-transparent`}
+                  className={`dark:relative absolute -z-10 left-0 dark:text-white`}
+                >
+                  Search
+                </span>
+                <span
+                  className={`dark:hidden transition ease-in-out duration-300 group-hover:bg-gradient-to-r from-[#2a3180] via-[#199bd8] to-[#07ab9a] group-hover:bg-clip-text group-hover:text-transparent`}
                 >
                   Search
                 </span>
@@ -66,7 +66,7 @@ function Nav() {
               } transition ease-in-out duration-300 delay-100 h-[26px] w-[26px] flex justify-center items-center`}
             >
               <svg
-                className={`object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a]`}
+                className={`object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert duration-200`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="32"
                 height="32"
@@ -79,20 +79,22 @@ function Nav() {
               onBlur={() => searchClicked(false)}
               placeholder="How can we help you?"
               ref={searchInputRef}
-              className={`w-[200px] transition ease-in-out duration-300 outline-none border-black group-hover:border-[#07ab9a] border-b`}
+              className={`w-[200px] transition ease-in-out duration-300 outline-none border-black group-hover:border-[#07ab9a] border-b p-1`}
             />
           </div>
         </div>
         <div
-          onClick={() => languageToggled(true)}
+          onClick={() => setChangeLanguage(!changeLanguage)}
           className="z-10 select-none relative group flex flex-row items-center gap-2 cursor-pointer"
         >
-          <span className="absolute z-10">Language</span>
-          <span className="z-10 transition ease-in-out duration-300 group-hover:bg-gradient-to-r from-[#2a3180] via-[#199bd8] to-[#07ab9a] group-hover:bg-clip-text group-hover:text-transparent">
+          <span className="absolute z-10 dark:relative dark:text-white">
+            Language
+          </span>
+          <span className="dark:hidden z-10 transition ease-in-out duration-300 group-hover:bg-gradient-to-r from-[#2a3180] via-[#199bd8] to-[#07ab9a] group-hover:bg-clip-text group-hover:text-transparent">
             Language
           </span>
           <svg
-            className="z-10 transition ease-in-out duration-300 delay-100 object-contain max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a]"
+            className="z-10 transition ease-in-out duration-300 delay-100 object-contain max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -113,18 +115,20 @@ function Nav() {
           </svg>
         </div>
         <div
-          onMouseLeave={() => languageToggled(false)}
+          onMouseLeave={() => setChangeLanguage(false)}
           className={`${
-            changeLanguage ? "grid-rows-[1fr] border-gray-200" : ""
-          } z-50 select-none w-[140px] border border-transparent absolute right-0 top-0 translate-y-[40px] translate-x-[-10px] grid grid-rows-[0fr] bg-white rounded-sm shadow-md transition-[grid] duration-300 ease-in-out`}
+            changeLanguage
+              ? "grid-rows-[1fr] border-gray-200"
+              : "grid-rows-[0fr]"
+          } z-50 select-none w-[140px] absolute right-0 top-0 translate-y-[40px] translate-x-[-10px] grid dark:bg-stone-400 bg-white rounded-sm shadow-md transition-[grid] duration-300 ease-in-out`}
         >
           <div className="overflow-hidden">
-            <div className="p-2 grid grid-cols-1">
-              <div className="flex flex-row items-center gap-1 cursor-pointer">
+            <div className="p-2 grid grid-cols-1 gap-1">
+              <div className="flex flex-row items-center gap-2 cursor-pointer hover:bg-stone-400 dark:text-white dark:hover:bg-white rounded-md p-1 dark:hover:text-black">
                 <img className="object-contain h-[12px]" src={flagGB} />
                 <span>English</span>
               </div>
-              <div className="flex flex-row items-center gap-1 cursor-pointer">
+              <div className="flex flex-row items-center gap-2 cursor-pointer hover:bg-stone-400 dark:text-white dark:hover:bg-white rounded-md p-1 dark:hover:text-black">
                 <img className="object-contain h-[12px]" src={flagNL} />
                 <span>Dutch</span>
               </div>

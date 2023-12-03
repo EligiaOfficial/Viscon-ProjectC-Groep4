@@ -19,13 +19,13 @@ function ProfileItem(props: Props) {
   };
 
   return (
-    <div className="flex flex-row cursor-pointer py-2 gap-2 bg-sky-600 select-none hover:bg-sky-100 duration-500 group ">
+    <div className="flex flex-row cursor-pointer py-2 gap-2 bg-sky-600 dark:bg-stone-800 select-none hover:bg-sky-100 dark:hover:bg-stone-400 duration-500 group ">
       <div
         className={`flex items-center justify-center min-w-[50px] max-w-[50px]`}
       >
         {props.icon ? (
           <img
-            className={`translate duration-300 min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] rounded-full border border-black group-hover:border-sky-600`}
+            className={`translate duration-300 min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] rounded-full border border-black dark:border-white group-hover:border-sky-600 dark:group-hover:border-stone-900`}
             src={props.icon}
             onError={(e) => setDefaultProfile(e)}
           />
@@ -35,7 +35,7 @@ function ProfileItem(props: Props) {
           </div>
         )}
       </div>
-      <div className="flex flex-col whitespace-nowrap min-h-[70px] justify-center">
+      <div className="flex flex-col whitespace-nowrap min-h-[70px] justify-center dark:text-white">
         <span className="font-semibold">
           {props.user == undefined
             ? ""
