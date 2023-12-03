@@ -42,11 +42,11 @@ function Nav() {
               search ? "" : "translate-x-[200px]"
             } transition ease-in-out duration-300 select-none relative group flex flex-row justify-between items-center gap-2 cursor-pointer`}
           >
-            <div className="w-[48px] overflow-hidden border-y border-transparent">
+            <div className="w-[48px] min-h-[33px] overflow-hidden border-y border-transparent flex items-center">
               <div
                 className={`${
                   search ? "translate-x-[200px]" : ""
-                } transition ease-in-out duration-300 `}
+                } transition ease-in-out duration-300 border-b border-transparent`}
               >
                 <span
                   className={`dark:relative absolute -z-10 left-0 dark:text-white`}
@@ -63,10 +63,10 @@ function Nav() {
             <div
               className={`${
                 search ? "rotate-90" : ""
-              } transition ease-in-out duration-300 delay-100 h-[26px] w-[26px] flex justify-center items-center`}
+              } transition ease-in-out duration-300 delay-100 h-[26px] w-[26px] flex justify-center items-center `}
             >
               <svg
-                className={`object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert duration-200`}
+                className={`object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert duration-200 `}
                 xmlns="http://www.w3.org/2000/svg"
                 width="32"
                 height="32"
@@ -117,10 +117,8 @@ function Nav() {
         <div
           onMouseLeave={() => setChangeLanguage(false)}
           className={`${
-            changeLanguage
-              ? "grid-rows-[1fr] border-gray-200"
-              : "grid-rows-[0fr]"
-          } z-50 select-none w-[140px] absolute right-0 top-0 translate-y-[40px] translate-x-[-10px] grid dark:bg-stone-400 bg-white rounded-sm shadow-md transition-[grid] duration-300 ease-in-out`}
+            changeLanguage ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          } rounded-md z-50 select-none w-[140px] absolute right-0 top-0 translate-y-[40px] translate-x-[-10px] grid dark:bg-stone-400 bg-white shadow-md transition-[grid] duration-300 ease-in-out`}
         >
           <div className="overflow-hidden">
             <div className="p-2 grid grid-cols-1 gap-1">
