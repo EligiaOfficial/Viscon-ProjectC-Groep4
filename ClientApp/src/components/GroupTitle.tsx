@@ -11,7 +11,9 @@ function GroupTitle(props: GroupType) {
       } grid pl-[16px] duration-300`}
     >
       <div className="overflow-hidden">
-        <span className="font-bold text-sm italic">{props.title}</span>
+        <span className="font-bold text-sm italic dark:text-white">
+          {props.title}
+        </span>
       </div>
     </div>
   );

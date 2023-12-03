@@ -61,7 +61,7 @@ function Table(props: TableProps) {
       ) : (
         <div className="flex flex-col gap-4">
           <div className="flex flex-row">
-            <div className="active:scale-95 select-none border border-black rounded-md p-1 bg-white cursor-pointer hover:bg-stone-600 hover:text-white hover:border-white">
+            <div className="active:scale-95 select-none border border-black rounded-md p-1 bg-white dark:bg-stone-400 cursor-pointer hover:bg-stone-600 hover:text-white hover:border-white dark:border-stone-600">
               +Add filter
             </div>
           </div>
@@ -75,7 +75,7 @@ function Table(props: TableProps) {
                         key == sort
                           ? "bg-stone-400 hover:bg-stone-300"
                           : "hover:bg-stone-300"
-                      } active:bg-white duration-300 p-1 cursor-pointer border-x border-stone-300`}
+                      } active:bg-white duration-300 p-1 cursor-pointer border-x border-stone-300 dark:bg-stone-400 dark:border-stone-600`}
                       onClick={() => handleSort(key)}
                       key={key}
                     >
@@ -99,7 +99,7 @@ function Table(props: TableProps) {
                 {props.data.map((item: any) => (
                   <tr
                     key={item[props.uid]}
-                    className="hover:bg-stone-300 cursor-pointer translate duration-100 border-y border-stone-200 active:bg-stone-100"
+                    className="hover:bg-stone-300 cursor-pointer translate duration-100 border border-stone-200 active:bg-stone-100 dark:bg-stone-400 dark:border-stone-600"
                     onClick={() => nav(`/ticket?id=${item[props.uid]}`)}
                   >
                     {keys.map((key) => (

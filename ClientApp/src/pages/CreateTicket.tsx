@@ -158,8 +158,8 @@ const CreateTicket: React.FC = () => {
     <Layout>
       <div className="flex flex-col">
         <span className="text-2xl py-4">Add Ticket</span>
-        <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6">
-          <h1 className="text-3xl mb-2 text-center text-blue-600">
+        <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400">
+          <h1 className="text-3xl mb-2 text-center text-blue-600 dark:text-stone-600">
             Ticket Form
           </h1>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -213,7 +213,7 @@ const CreateTicket: React.FC = () => {
                     supportedFile && !duplicateFile
                       ? "border-stone-600"
                       : "border-red-600"
-                  } relative select-none h-full w-full cursor-pointer border rounded-md p-2 shadow-sm active:border-blue-500 border-dashed bg-stone-100`}
+                  } relative select-none h-full w-full cursor-pointer border rounded-md p-2 shadow-sm active:border-blue-500 border-dashed bg-stone-100 dark:bg-stone-300`}
                 >
                   <input
                     type="file"
@@ -224,7 +224,7 @@ const CreateTicket: React.FC = () => {
                     onChange={(e) => {
                       handleImage(e.target.files);
                     }}
-                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                    className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer "
                   />
                   <div className="flex flex-row h-full w-full p-4 justify-between gap-4">
                     <div className="flex flex-1 flex-col items-center justify-center">
@@ -234,12 +234,12 @@ const CreateTicket: React.FC = () => {
                       </span>
                     </div>
                     <div className="relative h-full border border-stone-400">
-                      <span className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 bg-stone-100 py-2 font-bold text-stone-600">
+                      <span className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 bg-stone-100 dark:bg-stone-300 py-2 font-bold text-stone-600">
                         or
                       </span>
                     </div>
-                    <div className="flex-1 flex justify-center items-center">
-                      <span className="border border-stone-200 px-2 py-1 font-bold bg-stone-200 text-stone-600">
+                    <div className="flex-1 flex justify-center items-center ">
+                      <span className="border border-stone-200 px-2 py-1 font-bold bg-stone-200 text-stone-600 rounded-md">
                         Browse Files
                       </span>
                     </div>
@@ -382,7 +382,7 @@ const CreateTicket: React.FC = () => {
               <div className="col-span-2">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2  transition-all ease-in-out duration-300"
+                  className="bg-blue-600 dark:bg-stone-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2  transition-all ease-in-out duration-300"
                 >
                   Create Ticket
                 </button>
