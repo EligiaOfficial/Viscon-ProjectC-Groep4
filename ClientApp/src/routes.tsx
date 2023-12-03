@@ -11,7 +11,6 @@ import SuccessCreating from "./pages/SuccessCreating";
 import Ticket from "./pages/Ticket";
 import CreateTicketForSomeone from "./pages/CreateTicketForSomeone";
 import Tickets from "./pages/Tickets";
-import NewTickets from "./pages/NewTickets";
 
 export const routes = [
   { path: "/", name: "dashboard", component: <Dashboard /> },
