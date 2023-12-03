@@ -10,6 +10,7 @@ function Tickets() {
     getTickets()
       .then((response: any) => {
         if (response.data.length > 0) {
+          console.log(response.data);
           setTickets(response.data);
         }
       })

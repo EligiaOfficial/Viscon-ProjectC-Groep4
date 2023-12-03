@@ -65,7 +65,7 @@ function Table(props: TableProps) {
               +Add filter
             </div>
           </div>
-          <div className="bg-white w-full">
+          <div className="bg-white w-full overflow-auto">
             <table className="w-full select-none">
               <tbody>
                 <tr className="text-left">
@@ -83,11 +83,15 @@ function Table(props: TableProps) {
                         <span className="">
                           {key.charAt(0).toUpperCase() + key.slice(1)}
                         </span>
-                        <img
-                          className={`translate duration-200 min-w-[24px] max-w-[24px]`}
-                          src={key == sort ? arrowIcon : ""}
-                          style={{ transform: ascending ? "" : "scaleY(-1)" }}
-                        />
+                        {key == sort ? (
+                          <img
+                            className={`translate duration-200 min-w-[24px] max-w-[24px]`}
+                            src={arrowIcon}
+                            style={{ transform: ascending ? "" : "scaleY(-1)" }}
+                          />
+                        ) : (
+                          <div className="min-w-[24px] max-w-[24px]" />
+                        )}
                       </div>
                     </th>
                   ))}

@@ -266,7 +266,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                                 {
                                     TicketID = ticket.Id,
                                     Status = ticket.Resolved ? "closed" : "open",
-                                    Urgent = ticket.Urgent,
+                                    Urgent = ticket.Urgent ? "Yes" : "No",
                                     Description = ticket.Description,
                                     Machine = machine.Name,
                                     ETC = ticket.ExpectedToBeDone,

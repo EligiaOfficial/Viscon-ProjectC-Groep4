@@ -66,6 +66,13 @@ public class ChangeTicketDto
     public bool publish { get; set; }
 }
 
+public class UserDto
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Email { get; set; }
+    public string Role { get; set; }
+}
 
 public class getUserDto
 {
@@ -87,7 +94,7 @@ public class GetTicketsDto
 {
     public int TicketID { get; set; }
     public string Status { get; set; }
-    public bool Urgent { get; set; }
+    public string Urgent { get; set; }
     public string Description { get; set; }
     public string Machine { get; set; }
     public DateTime Created { get; set; }
