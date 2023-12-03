@@ -3,21 +3,53 @@ import Layout from "../components/Layout";
 import Table from "../components/Table";
 import { getTickets } from "../Endpoints/Dto";
 
-function Tickets() {
+function Tickets(props: any) {
   const [tickets, setTickets] = useState<[]>([]);
 
-  useEffect(() => {
+  const filterTickets = (data: any) => {
+    switch (props.filter) {
+      case "all":
+        setTickets(data);
+        break;
+      case "new":
+        setTickets(
+          data.filter((ticket: any) => {
+            return ticket["supporter"] == " ";
+          })
+        );
+        break;
+      case "critical":
+        setTickets(
+          data.filter((ticket: any) => {
+            return ticket["urgent"] == "Yes";
+          })
+        );
+        break;
+      case "archive":
+        setTickets(
+          data.filter((ticket: any) => {
+            return ticket["status"] == "closed";
+          })
+        );
+        break;
+    }
+  };
+
+  const getData = () => {
     getTickets()
       .then((response: any) => {
         if (response.data.length > 0) {
-          console.log(response.data);
-          setTickets(response.data);
+          filterTickets(response.data);
         }
       })
       .catch((error: any) => {
         console.log(error);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    getData();
+  }, [props]);
 
   return (
     <Layout>

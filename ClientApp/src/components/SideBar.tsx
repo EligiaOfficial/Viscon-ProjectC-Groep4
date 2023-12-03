@@ -87,7 +87,7 @@ function SideBar() {
           <SideBarItem
             title={"Tickets"}
             icon={normalIcon}
-            onclick={() => nav("/tickets")}
+            onclick={() => nav("/tickets/all")}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
           <Seperator color="white" marginX="4px" marginY="16px" />
@@ -96,16 +96,19 @@ function SideBar() {
             <SideBarItem
               title={"New"}
               icon={newIcon}
+              onclick={() => nav("/tickets/new")}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
             <SideBarItem
               title={"Critical"}
               icon={criticalIcon}
+              onclick={() => nav("/tickets/critical")}
               transformAnimation={"rotate(360deg)"}
             />
             <SideBarItem
               title={"Archive"}
               icon={archiveIcon}
+              onclick={() => nav("/tickets/archive")}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
           </div>
@@ -138,7 +141,7 @@ function SideBar() {
             <div />
           )}
         </div>
-        <div className="mt-auto"></div>
+        <div className=""></div>
         <Seperator color="white" marginX="4px" marginY="16px" />
         <div className="flex flex-col">
           <SideBarItem
