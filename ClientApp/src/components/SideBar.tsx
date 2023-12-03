@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getRole } from "../Endpoints/Jwt";
 import { useNavigate } from "react-router-dom";
 import SideBarItem from "./SideBarItem";
@@ -20,10 +20,20 @@ import GroupTitle from "./GroupTitle";
 import Seperator from "./Seperator";
 import mailIcon from "../assets/mail.svg";
 import profileAI from "../assets/ai-generated-7751688_1280.jpg";
+import { getUser } from "../Endpoints/Dto";
+
+type User = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+};
 
 function SideBar() {
   const [menu, setMenu] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [user, setUser] = useState<User | undefined>();
+
   const nav = useNavigate();
   const token = localStorage.getItem("token");
   const Role = getRole(token);
@@ -31,6 +41,22 @@ function SideBar() {
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
+  let rendered = false;
+
+  useEffect(() => {
+    if (!rendered) {
+      getUser()
+        .then((response: any) => {
+          if (response.data) {
+            setUser(response.data);
+          }
+        })
+        .catch((error: any) => {
+          console.log(error);
+        });
+      rendered = true;
+    }
+  }, []);
 
   return (
     <div className="flex items-center h-full absolute z-50 ">
@@ -43,7 +69,7 @@ function SideBar() {
       >
         {/* <HamburgerButton onclick={() => setMenu(!menu)} state={menu} /> */}
         <div className="">
-          <ProfileItem icon={profileAI} />
+          <ProfileItem icon={profileAI} user={user} />
         </div>
         <div className="flex flex-col pt-4">
           <GroupTitle title={"Views"} toggle={menu} />
