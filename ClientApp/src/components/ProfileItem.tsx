@@ -35,7 +35,7 @@ function ProfileItem(props: Props) {
           </div>
         )}
       </div>
-      <div className="flex flex-col whitespace-nowrap min-h-[70px]">
+      <div className="flex flex-col whitespace-nowrap min-h-[70px] justify-center">
         <span className="font-semibold">
           {props.user == undefined
             ? ""
