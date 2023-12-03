@@ -42,7 +42,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     FirstName = result.FirstName,
                     LastName = result.LastName,
                     Email = result.Email,
-                    Role = _user.Where(user => user.Id == (int)result.Role).Select(role => role.FirstName + " " + role.LastName).FirstOrDefault() ?? "N/A"
+                    Role = _user.Where(user => user.Id == (int)result.Role).Select(role => role.FirstName).FirstOrDefault() ?? "N/A"
                 })
                 .FirstOrDefaultAsync();
             return Ok(user);

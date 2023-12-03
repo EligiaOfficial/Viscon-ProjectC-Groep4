@@ -44,7 +44,7 @@ function ProfileItem(props: Props) {
         <span className="text-xs">
           {props.user == undefined ? "" : props.user.email}
         </span>
-        <span className="text-sm">
+        <span className="text-sm italic">
           {props.user == undefined ? "" : props.user.role}
         </span>
       </div>
