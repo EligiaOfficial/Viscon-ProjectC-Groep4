@@ -75,7 +75,7 @@ function Table(props: TableProps) {
                         key == sort
                           ? "hover:bg-stone-500 bg-stone-400 dark:hover:bg-stone-600 dark:bg-stone-700 dark:text-white active:bg-stone-500"
                           : "hover:bg-stone-300 dark:bg-stone-400 active:bg-white"
-                      }  duration-300 p-1 cursor-pointer border-x border-stone-300 dark:border-stone-600`}
+                      }  duration-300 p-1 cursor-pointer border-x border-t border-stone-300 dark:border-stone-600`}
                       onClick={() => handleSort(key)}
                       key={key}
                     >
@@ -103,7 +103,10 @@ function Table(props: TableProps) {
                     onClick={() => nav(`/ticket?id=${item[props.uid]}`)}
                   >
                     {keys.map((key) => (
-                      <td className="p-1 " key={item[props.uid] + key}>
+                      <td
+                        className="p-1 border border-stone-600"
+                        key={item[props.uid] + key}
+                      >
                         {key === "created"
                           ? // Format the date if the key is 'date'
                             (() => {
