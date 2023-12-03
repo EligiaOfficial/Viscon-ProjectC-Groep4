@@ -51,7 +51,7 @@ const Ticket = () => {
   return (
     <>
       <Layout>
-        <div className="flex flex-row h-full">
+        <div key="Ticket" className="flex flex-row h-full">
           {ticket["urgent"] !== undefined ? (
             <TicketInfo
               assignee={helper}
