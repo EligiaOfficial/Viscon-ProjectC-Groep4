@@ -73,9 +73,9 @@ function Table(props: TableProps) {
                     <th
                       className={`${
                         key == sort
-                          ? "bg-stone-400 hover:bg-stone-300"
-                          : "hover:bg-stone-300"
-                      } active:bg-white duration-300 p-1 cursor-pointer border-x border-stone-300 dark:bg-stone-400 dark:border-stone-600`}
+                          ? "hover:bg-stone-500 bg-stone-400 dark:hover:bg-stone-600 dark:bg-stone-700 dark:text-white active:bg-stone-500"
+                          : "hover:bg-stone-300 dark:bg-stone-400 active:bg-white"
+                      }  duration-300 p-1 cursor-pointer border-x border-stone-300 dark:border-stone-600`}
                       onClick={() => handleSort(key)}
                       key={key}
                     >
@@ -85,7 +85,7 @@ function Table(props: TableProps) {
                         </span>
                         {key == sort ? (
                           <img
-                            className={`translate duration-200 min-w-[24px] max-w-[24px]`}
+                            className={`translate duration-200 min-w-[24px] max-w-[24px] dark:invert`}
                             src={arrowIcon}
                             style={{ transform: ascending ? "" : "scaleY(-1)" }}
                           />

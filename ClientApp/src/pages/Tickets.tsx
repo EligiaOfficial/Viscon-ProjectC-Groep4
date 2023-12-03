@@ -54,7 +54,7 @@ function Tickets(props: any) {
   return (
     <Layout>
       <div className="flex flex-col">
-        <span className="text-2xl py-4">
+        <span className="text-2xl py-4 dark:text-white">
           {props.filter.charAt(0).toUpperCase() + props.filter.slice(1)} Tickets
         </span>
         <Table data={tickets} uid={"ticketID"} />
