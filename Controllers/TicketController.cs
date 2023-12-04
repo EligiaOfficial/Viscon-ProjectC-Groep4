@@ -305,5 +305,26 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+        
+        [Authorize(Policy = "viscon")]
+        [HttpPost]
+        [Route("claim")]
+        public async Task<IActionResult> Claim(int id)
+        {
+            await using var context = _services.GetService<ApplicationDbContext>();
+            int userId = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var user = context.Users.FirstOrDefault(_ => _.Id == userId)!;
+            if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
+            try {
+                var ticket = context.Tickets.FirstOrDefault(_ => _.Id == id)!;
+                ticket.HelperUserId = user.Id;
+                await context.SaveChangesAsync();
+                return Ok("Success");
+            }
+            catch (Exception ex){
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }
