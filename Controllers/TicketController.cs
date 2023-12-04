@@ -93,10 +93,10 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 {
                     var ticket = new Ticket();
                     ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
-                    ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
+                    ticket.Title = data.title;
                     ticket.Description = data.description;
                     ticket.DateCreated = DateTime.UtcNow;
-                    ticket.Urgent = false; //int.Parse(data.priority);
+                    ticket.Urgent = data.priority;
                     ticket.ExpectedToBeDone = data.expectedAction;
                     ticket.MadeAnyChanges = data.selfTinkering;
                     ticket.DepartmentId = data.departmentId;

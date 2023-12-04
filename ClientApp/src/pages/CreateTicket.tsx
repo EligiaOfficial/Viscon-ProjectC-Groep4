@@ -25,7 +25,7 @@ const CreateTicket: React.FC = () => {
   const [description, setDescription] = useState("");
   const [expectedAction, setExpectedAction] = useState("");
   const [selfTinkering, setSelfTinkering] = useState("");
-  const [priority, setPriority] = useState("No");
+  const [priority, setPriority] = useState("false");
   const [machines, setMachines] = useState<string[]>([]);
   const [departments, setDepartments] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
@@ -45,11 +45,28 @@ const CreateTicket: React.FC = () => {
     "image/png",
   ];
 
+  const stringToBoolean = (stringValue) => {
+    switch (stringValue?.toLowerCase()?.trim()) {
+      case "true":
+        return true;
+
+      case "false":
+        return false;
+
+      default:
+        throw Error;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const errors: string[] = [];
 
+    if (selectedDepartment === "") {
+      errors.push("Please select a department.");
+    }
+    
     if (selectedMachine === "") {
       errors.push("Please select a machine.");
     }
@@ -72,7 +89,7 @@ const CreateTicket: React.FC = () => {
         formData.append("title", title);
         formData.append("machine", selectedMachine);
         formData.append("description", description);
-        formData.append("priority", priority);
+        formData.append("priority", stringToBoolean(priority));
         formData.append("expectedAction", expectedAction);
         formData.append("selfTinkering", selfTinkering);
         formData.append("departmentId", selectedDepartment);
@@ -209,7 +226,7 @@ const CreateTicket: React.FC = () => {
                     htmlFor="machine"
                     className="block text-gray-700 mb-1 font-medium"
                 >
-                  Which department need to pick up this ticket?
+                  Which department should pick up this ticket?
                 </label>
                 <select
                     id="machine"
