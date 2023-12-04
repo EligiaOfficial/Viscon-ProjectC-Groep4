@@ -23,7 +23,7 @@ const CreateTicket: React.FC = () => {
   const [description, setDescription] = useState("");
   const [expectedAction, setExpectedAction] = useState("");
   const [selfTinkering, setSelfTinkering] = useState("");
-  const [priority, setPriority] = useState("Normal");
+  const [priority, setPriority] = useState("No");
   const [machines, setMachines] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [previewImage, setPreviewImage] = useState<any>();
@@ -48,19 +48,19 @@ const CreateTicket: React.FC = () => {
     const errors: string[] = [];
 
     if (selectedMachine === "") {
-      errors.push("Machine is required.");
+      errors.push("Please select a machine.");
     }
 
     if (description.trim() === "") {
-      errors.push("Description is required.");
+      errors.push("Please fill in a description of the problem.");
     }
 
     if (expectedAction.trim() === "") {
-      errors.push("Expected Action is required.");
+      errors.push("Please fill in what have you tried to fix it.");
     }
 
     if (selfTinkering.trim() === "") {
-      errors.push("Self Tinkering information is required.");
+      errors.push("Please fill in what changed you have made.");
     }
 
     if (errors.length === 0) {
@@ -157,10 +157,10 @@ const CreateTicket: React.FC = () => {
   return (
     <Layout>
       <div className="flex flex-col">
-        <span className="text-2xl py-4">Add Ticket</span>
-        <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400">
+        {/*<span className="text-2xl py-4">Add Ticket</span>*/}
+        <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400 h-full my-20">
           <h1 className="text-3xl mb-2 text-center text-blue-600 dark:text-stone-600">
-            Ticket Form
+            Create a new Ticket
           </h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             {validationErrors.length > 0 && (
@@ -265,7 +265,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="machine"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Select a machine:
+                  Which machine is in question?
                 </label>
                 <select
                   id="machine"
@@ -286,7 +286,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="priority"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Priority level:
+                  Has all work stopped?
                 </label>
                 <select
                   id="priority"
@@ -294,8 +294,8 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setPriority(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                 >
-                  <option value="Normal">Normal</option>
-                  <option value="High">High</option>
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
                 </select>
               </div>
               <div
@@ -353,7 +353,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="expectedAction"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  What do you expect to be done?
+                  What have you tried to fix it
                 </label>
                 <textarea
                   id="expectedAction"
