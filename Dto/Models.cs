@@ -46,9 +46,10 @@ public class MessageDto
 
 public class TicketDto
 {
+    public string title { get; set; }
     public string machine { get; set; }
     public string description { get; set; }
-    public string priority { get; set; }
+    public bool priority { get; set; }
     public string expectedAction { get; set; }
     public string selfTinkering { get; set; }
     public int departmentId { get; set; }

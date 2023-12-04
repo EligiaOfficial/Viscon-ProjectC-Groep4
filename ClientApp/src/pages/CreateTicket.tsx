@@ -6,6 +6,7 @@ import { UserRoles } from "../UserRoles";
 import Layout from "../components/Layout";
 import uploadIcon from "../assets/upload.svg";
 import whiteCrossIcon from "../assets/white-cross.svg";
+import {getDepartments} from "../Endpoints/Dto";
 
 const CreateTicket: React.FC = () => {
   const nav = useNavigate();
@@ -20,11 +21,13 @@ const CreateTicket: React.FC = () => {
   }, [usr_role, nav]);
 
   const [selectedMachine, setSelectedMachine] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [description, setDescription] = useState("");
   const [expectedAction, setExpectedAction] = useState("");
   const [selfTinkering, setSelfTinkering] = useState("");
-  const [priority, setPriority] = useState("Normal");
+  const [priority, setPriority] = useState("false");
   const [machines, setMachines] = useState<string[]>([]);
+  const [departments, setDepartments] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [previewImage, setPreviewImage] = useState<any>();
   const [supportedFile, setSupportedFile] = useState<boolean>(true);
@@ -42,25 +45,42 @@ const CreateTicket: React.FC = () => {
     "image/png",
   ];
 
+  const stringToBoolean = (stringValue) => {
+    switch (stringValue?.toLowerCase()?.trim()) {
+      case "true":
+        return true;
+
+      case "false":
+        return false;
+
+      default:
+        throw Error;
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const errors: string[] = [];
 
+    if (selectedDepartment === "") {
+      errors.push("Please select a department.");
+    }
+    
     if (selectedMachine === "") {
-      errors.push("Machine is required.");
+      errors.push("Please select a machine.");
     }
 
     if (description.trim() === "") {
-      errors.push("Description is required.");
+      errors.push("Please fill in a description of the problem.");
     }
 
     if (expectedAction.trim() === "") {
-      errors.push("Expected Action is required.");
+      errors.push("Please fill in what have you tried to fix it.");
     }
 
     if (selfTinkering.trim() === "") {
-      errors.push("Self Tinkering information is required.");
+      errors.push("Please fill in what changed you have made.");
     }
 
     if (errors.length === 0) {
@@ -69,10 +89,10 @@ const CreateTicket: React.FC = () => {
         formData.append("title", title);
         formData.append("machine", selectedMachine);
         formData.append("description", description);
-        formData.append("priority", priority);
+        formData.append("priority", stringToBoolean(priority));
         formData.append("expectedAction", expectedAction);
         formData.append("selfTinkering", selfTinkering);
-        formData.append("departmentId", "1");
+        formData.append("departmentId", selectedDepartment);
 
         if (images.length > 0) {
           images.forEach((image, i) => {
@@ -111,6 +131,11 @@ const CreateTicket: React.FC = () => {
     } catch (error) {
       console.error("Error fetching machines:", error);
     }
+
+    getDepartments().then((res) => {
+      console.log(res.data);
+      setDepartments(res.data);
+    });
   };
 
   const handleImage = (imageArray: any) => {
@@ -157,10 +182,10 @@ const CreateTicket: React.FC = () => {
   return (
     <Layout>
       <div className="flex flex-col">
-        <span className="text-2xl py-4">Add Ticket</span>
-        <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400">
+        {/*<span className="text-2xl py-4">Add Ticket</span>*/}
+        <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400 h-full my-20">
           <h1 className="text-3xl mb-2 text-center text-blue-600 dark:text-stone-600">
-            Ticket Form
+            Create a new Ticket
           </h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             {validationErrors.length > 0 && (
@@ -181,20 +206,41 @@ const CreateTicket: React.FC = () => {
                 </button>
               </div>
             )}
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label
+            <div>
+              <label
                   htmlFor="title"
                   className="block text-gray-700 mb-1 font-medium"
-                >
-                  Title:
-                </label>
-                <input
+              >
+                Title:
+              </label>
+              <input
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
-                />
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="col-start-1">
+                <label
+                    htmlFor="machine"
+                    className="block text-gray-700 mb-1 font-medium"
+                >
+                  Which department should pick up this ticket?
+                </label>
+                <select
+                    id="machine"
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                >
+                  <option value="">Select a department</option>
+                  {departments.map((department) => (
+                      <option key={department["id"]} value={department["id"]}>
+                        {department["speciality"]}
+                      </option>
+                  ))}
+                </select>
               </div>
               <div className="relative row-span-3 flex flex-col">
                 <label
@@ -265,7 +311,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="machine"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Select a machine:
+                  Which machine is in question?
                 </label>
                 <select
                   id="machine"
@@ -286,7 +332,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="priority"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Priority level:
+                  Has all work stopped?
                 </label>
                 <select
                   id="priority"
@@ -294,8 +340,8 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setPriority(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                 >
-                  <option value="Normal">Normal</option>
-                  <option value="High">High</option>
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
                 </select>
               </div>
               <div
@@ -353,7 +399,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="expectedAction"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  What do you expect to be done?
+                  What have you tried to fix it
                 </label>
                 <textarea
                   id="expectedAction"
