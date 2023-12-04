@@ -137,6 +137,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                     DepartmentId = department.Id,
                     CompanyId = company.Id,
                 };
+                Console.WriteLine(user.ToString());
+                Console.WriteLine(user.Role);
                 try {
                     context.Users.Add(user);
                     await context.SaveChangesAsync();

@@ -2,12 +2,12 @@
  *   Copyright (c) 2023
  *   All rights reserved.
  */
-import { useEffect, useState } from "react";
-import { FetchUserCreationData, SignupAxios } from "../Endpoints/Dto";
-import { useNavigate } from "react-router-dom";
-import { getCompany, getDepartment, getRole } from "../Endpoints/Jwt";
+import {useEffect, useState} from "react";
+import {FetchUserCreationData, SignupAxios} from "../Endpoints/Dto";
+import {useNavigate} from "react-router-dom";
+import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import Layout from "../components/Layout";
-import { UserRoles } from "../UserRoles";
+import {UserRoles} from "../UserRoles";
 
 function AddAccount() {
   const [password, setPassword] = useState("");
@@ -51,17 +51,6 @@ function AddAccount() {
         language: "EN",
       })
         .then(() => {
-          console.log(
-            "User created: ",
-            email,
-            firstName,
-            lastName,
-            password,
-            phone,
-            company,
-            role,
-            department
-          );
           nav("/");
         })
         .catch((error) => {
@@ -182,7 +171,7 @@ function AddAccount() {
                   </div>
                 </div>
 
-                {usr_role == 1 ? (
+                {usr_role == UserRoles.ADMIN ? (
                   <div>
                     <label
                       htmlFor="role"
@@ -207,7 +196,7 @@ function AddAccount() {
                   <div />
                 )}
 
-                {usr_role == 1 ? (
+                {usr_role == UserRoles.ADMIN ? (
                   <div>
                     <label
                       htmlFor="Department"
@@ -234,7 +223,7 @@ function AddAccount() {
                   <div />
                 )}
 
-                {usr_role == 1 ? (
+                {usr_role == UserRoles.ADMIN ? (
                   <div>
                     <label
                       htmlFor="machine"
