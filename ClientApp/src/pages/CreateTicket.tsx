@@ -6,6 +6,7 @@ import { UserRoles } from "../UserRoles";
 import Layout from "../components/Layout";
 import uploadIcon from "../assets/upload.svg";
 import whiteCrossIcon from "../assets/white-cross.svg";
+import {getDepartments} from "../Endpoints/Dto";
 
 const CreateTicket: React.FC = () => {
   const nav = useNavigate();
@@ -20,11 +21,13 @@ const CreateTicket: React.FC = () => {
   }, [usr_role, nav]);
 
   const [selectedMachine, setSelectedMachine] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState("");
   const [description, setDescription] = useState("");
   const [expectedAction, setExpectedAction] = useState("");
   const [selfTinkering, setSelfTinkering] = useState("");
   const [priority, setPriority] = useState("No");
   const [machines, setMachines] = useState<string[]>([]);
+  const [departments, setDepartments] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [previewImage, setPreviewImage] = useState<any>();
   const [supportedFile, setSupportedFile] = useState<boolean>(true);
@@ -72,7 +75,7 @@ const CreateTicket: React.FC = () => {
         formData.append("priority", priority);
         formData.append("expectedAction", expectedAction);
         formData.append("selfTinkering", selfTinkering);
-        formData.append("departmentId", "1");
+        formData.append("departmentId", selectedDepartment);
 
         if (images.length > 0) {
           images.forEach((image, i) => {
@@ -111,6 +114,11 @@ const CreateTicket: React.FC = () => {
     } catch (error) {
       console.error("Error fetching machines:", error);
     }
+
+    getDepartments().then((res) => {
+      console.log(res.data);
+      setDepartments(res.data);
+    });
   };
 
   const handleImage = (imageArray: any) => {
@@ -181,20 +189,41 @@ const CreateTicket: React.FC = () => {
                 </button>
               </div>
             )}
-            <div className="grid grid-cols-2 gap-6">
-              <div>
-                <label
+            <div>
+              <label
                   htmlFor="title"
                   className="block text-gray-700 mb-1 font-medium"
-                >
-                  Title:
-                </label>
-                <input
+              >
+                Title:
+              </label>
+              <input
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
-                />
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="col-start-1">
+                <label
+                    htmlFor="machine"
+                    className="block text-gray-700 mb-1 font-medium"
+                >
+                  Which department need to pick up this ticket?
+                </label>
+                <select
+                    id="machine"
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                >
+                  <option value="">Select a department</option>
+                  {departments.map((department) => (
+                      <option key={department["id"]} value={department["id"]}>
+                        {department["speciality"]}
+                      </option>
+                  ))}
+                </select>
               </div>
               <div className="relative row-span-3 flex flex-col">
                 <label
