@@ -37,7 +37,10 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [HttpPut]
         [Route("Edit")]
         public async Task<IActionResult> Edit(EditDto data) {
-            int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            string? _id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (_id is null) return BadRequest();
+            int id = Int32.Parse(_id);
+
             try {
                 await using var context = _services.GetService<ApplicationDbContext>();
                 var user = await context!.Users
