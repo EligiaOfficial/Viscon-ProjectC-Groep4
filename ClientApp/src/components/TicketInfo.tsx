@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { UserRoles } from "../UserRoles";
-import { changeTicket, getDepartments } from "../Endpoints/Dto";
-import { getRole } from "../Endpoints/Jwt";
+import {useEffect, useState} from "react";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {UserRoles} from "../UserRoles";
+import {changeTicket, claimTicket, getDepartments} from "../Endpoints/Dto";
+import {getName, getRole} from "../Endpoints/Jwt";
 
 function TicketInfo({
   requester,
@@ -29,7 +29,8 @@ function TicketInfo({
   const [urgency, setUrgency] = useState<boolean>(Boolean(urgent));
   const [publishedState, setPublished] = useState<boolean>(Boolean(published));
   const [resolvedState, setResolved] = useState<boolean>(Boolean(resolved));
-
+  const [assigneeState, setAssignee] = useState(assignee)
+  
   const [searchParams] = useSearchParams();
   const Id = searchParams.get("id") || " ";
   const TicketId = parseInt(Id, 10);
@@ -72,7 +73,10 @@ function TicketInfo({
     });
   };
 
-  const role = getRole(localStorage.getItem("token"));
+  const token = localStorage.getItem("token");
+  const role = getRole(token);
+  const name = getName(token);
+  
   return (
     <form
       onSubmit={handleSubmit}
@@ -162,12 +166,25 @@ function TicketInfo({
             )}
           </div>
         </div>
+        
+        
         <div className="group flex flex-row justify-start py-2">
           <div
             className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
           >
             <h1 className="flex text-xl">Assignee</h1>
-            <input type="text" className={"w-full"} disabled value={assignee} />
+            <input type="text" className={"w-full"} disabled value={assigneeState} />
+            { role <= UserRoles.VISCON ? (
+                <div
+                    onClick={async () => await claimTicket(TicketId).then(setAssignee(name))}
+                    type="submit"
+                    className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  Claim Ticket
+                </div>
+            ):(
+                <div/>
+            ) }
           </div>
         </div>
       </div>

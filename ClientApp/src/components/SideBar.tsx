@@ -37,7 +37,7 @@ function SideBar() {
   const nav = useNavigate();
   const token = localStorage.getItem("token");
   const Role = getRole(token);
-
+  
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };

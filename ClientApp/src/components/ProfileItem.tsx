@@ -17,7 +17,7 @@ function ProfileItem(props: Props) {
   const setDefaultProfile = (e: any) => {
     e.target.src = defaultIcon;
   };
-
+  
   return (
     <div className="flex flex-row cursor-pointer py-2 gap-2 bg-sky-600 dark:bg-stone-800 select-none hover:bg-sky-100 dark:hover:bg-stone-400 duration-500 group ">
       <div
