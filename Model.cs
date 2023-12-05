@@ -75,8 +75,8 @@ namespace Viscon_ProjectC_Groep4
                     LastName = "Account",
                     Email = "admin@viscon.com",
                     Role = RoleTypes.ADMIN,
-                    CompanyId = Companies.FirstOrDefault()!.Id,
                     DepartmentId = Departments.FirstOrDefault()!.Id,
+                    CompanyId = null,
                     LanguagePreference = "NL",
                     PhoneNumber = 0612345678,
                     Password = passwordHash,
@@ -88,8 +88,8 @@ namespace Viscon_ProjectC_Groep4
                     LastName = "Account",
                     Email = "viscon@viscon.com",
                     Role = RoleTypes.VISCON,
-                    CompanyId = Companies.FirstOrDefault()!.Id,
                     DepartmentId = Departments.FirstOrDefault()!.Id,
+                    CompanyId = null,
                     LanguagePreference = "NL",
                     PhoneNumber = 0612345678,
                     Password = passwordHash,
@@ -102,7 +102,7 @@ namespace Viscon_ProjectC_Groep4
                     Email = "key@viscon.com",
                     Role = RoleTypes.KEYUSER,
                     CompanyId = Companies.FirstOrDefault()!.Id,
-                    DepartmentId = Departments.FirstOrDefault()!.Id,
+                    DepartmentId = null,
                     LanguagePreference = "NL",
                     PhoneNumber = 0612345678,
                     Password = passwordHash,
@@ -115,12 +115,68 @@ namespace Viscon_ProjectC_Groep4
                     Email = "user@viscon.com",
                     Role = RoleTypes.USER,
                     CompanyId = Companies.FirstOrDefault()!.Id,
-                    DepartmentId = Departments.FirstOrDefault()!.Id,
+                    DepartmentId = null,
                     LanguagePreference = "NL",
                     PhoneNumber = 0612345678,
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // User Login: user@viscon.com Viscon
+                
+                this.Add(new User
+                {
+                    FirstName = "Kevin",
+                    LastName = "Jansen",
+                    Email = "k.jansen@viscon.com",
+                    Role = RoleTypes.KEYUSER,
+                    CompanyId = Companies.FirstOrDefault(_ => _.Id == 2)!.Id,
+                    DepartmentId = null,
+                    LanguagePreference = "NL",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
+                }); // KEY USER for second company
+                
+                this.Add(new User
+                {
+                    FirstName = "Tobias",
+                    LastName = "Klaas",
+                    Email = "t.klaas@viscon.com",
+                    Role = RoleTypes.USER,
+                    CompanyId = Companies.FirstOrDefault(_ => _.Id == 2)!.Id,
+                    DepartmentId = null,
+                    LanguagePreference = "NL",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
+                }); // USER for second company
+                
+                this.Add(new User
+                {
+                    FirstName = "Kees",
+                    LastName = "Klaas",
+                    Email = "k.klaas@viscon.com",
+                    Role = RoleTypes.VISCON,
+                    CompanyId = Companies.FirstOrDefault(_ => _.Id == 3)!.Id,
+                    DepartmentId = null,
+                    LanguagePreference = "EN",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
+                }); // USER for second company
+                
+                this.Add(new User
+                {
+                    FirstName = "Matt",
+                    LastName = "Smith",
+                    Email = "m.smith@viscon.com",
+                    Role = RoleTypes.KEYUSER,
+                    DepartmentId = Departments.FirstOrDefault(_ => _.Id == 2)!.Id,
+                    CompanyId = null,
+                    LanguagePreference = "EN",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
+                });
                 this.SaveChanges();
             }
 
@@ -128,27 +184,67 @@ namespace Viscon_ProjectC_Groep4
             if (!this.Tickets.Any()) {
                 this.Add(new Ticket{
                     MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
-                    Title = $"{DateTime.UtcNow} Prio: 1, {Machines.Select(m => m.Name).FirstOrDefault()}",
+                    Title = "My Machine is BROKEN HELP!",
                     Description = "Dummy Description",
                     DateCreated = DateTime.UtcNow,
                     Urgent = true,
                     ExpectedToBeDone = "Dummy Expected",
                     MadeAnyChanges = "Dummy Changes",
                     DepartmentId = 1,
-                    CreatorUserId = 3,
+                    CreatorUserId = 5,
+                    HelperUserId = 7,
                     Resolved = false
                 });
                 
                 this.Add(new Ticket{
                     MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
-                    Title = $"{DateTime.UtcNow} Prio: 1, {Machines.Select(m => m.Name).FirstOrDefault()}",
+                    Title = "Factoy to a hold!",
+                    Description = "Dummy Description",
+                    DateCreated = DateTime.UtcNow,
+                    Urgent = true,
+                    ExpectedToBeDone = "Dummy Expected",
+                    MadeAnyChanges = "Dummy Changes",
+                    DepartmentId = 3,
+                    CreatorUserId = 7,
+                    Resolved = false
+                });
+                
+                this.Add(new Ticket{
+                    MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
+                    Title = "Machine makes a weird noice",
                     Description = "Dummy Description",
                     DateCreated = DateTime.UtcNow,
                     Urgent = false,
                     ExpectedToBeDone = "Dummy Expected",
                     MadeAnyChanges = "Dummy Changes",
                     DepartmentId = 3,
-                    CreatorUserId = 4,
+                    CreatorUserId = 8,
+                    Resolved = false
+                });
+                
+                this.Add(new Ticket{
+                    MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
+                    Title = "We dont know.",
+                    Description = "Dummy Description",
+                    DateCreated = DateTime.UtcNow,
+                    Urgent = false,
+                    ExpectedToBeDone = "Dummy Expected",
+                    MadeAnyChanges = "Dummy Changes",
+                    DepartmentId = 4,
+                    CreatorUserId = 5,
+                    Resolved = false
+                });
+                
+                this.Add(new Ticket{
+                    MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
+                    Title = "Uuuuuuuuuh.",
+                    Description = "Dummy Description",
+                    DateCreated = DateTime.UtcNow,
+                    Urgent = false,
+                    ExpectedToBeDone = "Dummy Expected",
+                    MadeAnyChanges = "Dummy Changes",
+                    DepartmentId = 4,
+                    CreatorUserId = 5,
                     Resolved = false
                 });
                 this.SaveChanges();
