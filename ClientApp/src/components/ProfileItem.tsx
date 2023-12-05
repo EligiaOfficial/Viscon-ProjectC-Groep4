@@ -1,4 +1,6 @@
 import defaultIcon from "../assets/profile.svg";
+import {getEmail, getName, getRole} from "../Endpoints/Jwt";
+import {getRoleKey, UserRoles} from "../UserRoles";
 
 type User = {
   firstName: string;
@@ -17,6 +19,11 @@ function ProfileItem(props: Props) {
   const setDefaultProfile = (e: any) => {
     e.target.src = defaultIcon;
   };
+  
+  const token = localStorage.getItem("token");
+  const name = getName(token)[0] + " " + getName(token)[1];
+  const email = getEmail(token);
+  const role = getRoleKey(getRole(token));
   
   return (
     <div className="flex flex-row cursor-pointer py-2 gap-2 bg-sky-600 dark:bg-stone-800 select-none hover:bg-sky-100 dark:hover:bg-stone-400 duration-500 group ">
@@ -39,13 +46,13 @@ function ProfileItem(props: Props) {
         <span className="font-semibold">
           {props.user == undefined
             ? ""
-            : props.user.firstName + " " + props.user.lastName}
+            : name}
         </span>
         <span className="text-xs">
-          {props.user == undefined ? "" : props.user.email}
+          { email }
         </span>
         <span className="text-sm italic">
-          {props.user == undefined ? "" : props.user.role}
+          { role }
         </span>
       </div>
     </div>
