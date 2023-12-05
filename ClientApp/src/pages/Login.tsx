@@ -83,14 +83,6 @@ function Login() {
                   >
                     Password
                   </label>
-                  <div className="text-sm">
-                    <a
-                      href="#"
-                      className="text-xs text-gray-600 hover:text-indigo-500 dark:text-stone-400 dark:hover:text-stone-200"
-                    >
-                      Lost your password?
-                    </a>
-                  </div>
                 </div>
                 <div className="mt-2">
                   <input
@@ -105,7 +97,14 @@ function Login() {
                   />
                 </div>
               </div>
-
+              <div className="text-sm">
+                <a
+                  href="#"
+                  className="text-xs text-gray-600 hover:text-indigo-500 dark:text-stone-400 dark:hover:text-stone-200"
+                >
+                  Lost your password?
+                </a>
+              </div>
               <div className={"flex justify-end"}>
                 <button
                   type="submit"
