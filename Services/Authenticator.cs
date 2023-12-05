@@ -16,6 +16,7 @@ public class Authenticator {
             new Claim(ClaimTypes.Role, user.Role.ToString()),
             new Claim("DepartmentId", user.DepartmentId.ToString()),
             new Claim("CompanyId", user.CompanyId.ToString()),
+            new Claim("Lang", user.LanguagePreference),
         };
 
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8

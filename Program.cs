@@ -10,7 +10,7 @@ using Services;
 using Entities;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Logging.AddConsole();
 // Add services to the container.
 builder.Services
     .AddDbContext<ApplicationDbContext>(
@@ -18,9 +18,8 @@ builder.Services
             builder.Configuration["database:connection_string"]
         )
     )
-    .AddSingleton<Authenticator>();
-builder.Services.AddControllersWithViews();
-builder.Logging.AddConsole();
+    .AddSingleton<Authenticator>()
+    .AddControllersWithViews();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
         options.TokenValidationParameters = new TokenValidationParameters {
@@ -32,7 +31,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false
         };
     });
-
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("user", p => p.RequireClaim(
         ClaimTypes.Role, "ADMIN", "VISCON", "KEYUSER", "USER"

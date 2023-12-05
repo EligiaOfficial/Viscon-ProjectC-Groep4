@@ -1,7 +1,16 @@
 export enum UserRoles {
-    NONE = 0,
-    ADMIN = 1,
-    VISCON = 2,
-    KEYUSER = 3,
-    USER = 4
+    ADMIN = 0,
+    VISCON = 1,
+    KEYUSER = 2,
+    USER = 3,
+    NONE = 4
+}
+
+export function getRoleKey(roleNumber: number): string | undefined {
+    for (const key in UserRoles) {
+        if (typeof UserRoles[key] === 'number' && UserRoles[key] === roleNumber) {
+            return key;
+        }
+    }
+    return undefined;
 }

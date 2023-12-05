@@ -141,11 +141,8 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Media")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Public")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Resolved")
                         .HasColumnType("boolean");
@@ -153,6 +150,9 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("Urgent")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -218,6 +218,30 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Users", "public");
+                });
+
+            modelBuilder.Entity("Entities.VisualFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VisualFiles", "public");
                 });
 
             modelBuilder.Entity("Entities.Message", b =>

@@ -28,9 +28,9 @@ public class User
 
 public enum RoleTypes : int
 {
-    NONE = 0,
-    ADMIN = 1,
-    VISCON = 2,
-    KEYUSER = 3,
-    USER = 4,
+    ADMIN = 0,
+    VISCON = 1,
+    KEYUSER = 2,
+    USER = 3,
+    NONE = 4
 }
