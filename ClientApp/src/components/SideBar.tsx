@@ -69,9 +69,13 @@ function SideBar() {
             : "w-[50px] bg-sky-600 dark:bg-stone-800"
         } min-w-[50px] translate duration-300 flex flex-col overflow-hidden h-full backdrop-blur-sm`}
       >
-        {/* <HamburgerButton onclick={() => setMenu(!menu)} state={menu} /> */}
-        <div className="">
-          <ProfileItem icon={profileAI} user={user} />
+        <div className=""
+             onClick={() => setShowSettings(!showSettings)}
+        >
+          <ProfileItem 
+              icon={profileAI} 
+              user={user} 
+          />
         </div>
         <div className="flex flex-col pt-4">
           <GroupTitle title={"Views"} toggle={menu} />
@@ -146,12 +150,12 @@ function SideBar() {
         <div className=""></div>
         <Seperator color="white" marginX="4px" marginY="16px" />
         <div className="flex flex-col">
-          <SideBarItem
-            title={"Settings"}
-            icon={settingsIcon}
-            transformAnimation={"rotate(360deg)"}
-            onclick={() => setShowSettings(!showSettings)}
-          />
+          {/*<SideBarItem*/}
+          {/*  title={"Settings"}*/}
+          {/*  icon={settingsIcon}*/}
+          {/*  transformAnimation={"rotate(360deg)"}*/}
+          {/*  onclick={() => setShowSettings(!showSettings)}*/}
+          {/*/>*/}
           <SideBarItem
             title={"Logout"}
             icon={logoutIcon}
