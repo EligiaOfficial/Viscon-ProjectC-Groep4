@@ -125,9 +125,6 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 await using var context = _services.GetService<ApplicationDbContext>();
                 var department = await context.Departments.Where(p => p.Id == data.Department).FirstOrDefaultAsync();
                 var company = await context.Companies.Where(p => p.Id == data.Company).FirstOrDefaultAsync();
-
-                if (department == null) return BadRequest("No department found");
-                if (company == null) return BadRequest("No company found");
                 var user = new User {
                     FirstName = data.FirstName,
                     LastName = data.LastName,
@@ -137,8 +134,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                     Role = (RoleTypes) data.Role,
                     PhoneNumber = data.Phone,
                     LanguagePreference = data.Language,
-                    DepartmentId = department.Id,
-                    CompanyId = company.Id,
+                    DepartmentId = department?.Id,
+                    CompanyId = company?.Id,
                 };
                 Console.WriteLine(user.ToString());
                 Console.WriteLine(user.Role);
