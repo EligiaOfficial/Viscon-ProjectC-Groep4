@@ -177,6 +177,21 @@ namespace Viscon_ProjectC_Groep4
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 });
+                
+                this.Add(new User
+                {
+                    FirstName = "Levi",
+                    LastName = "Bobs",
+                    Email = "l.bobs@viscon.com",
+                    Role = RoleTypes.KEYUSER,
+                    DepartmentId = null,
+                    CompanyId = Companies.FirstOrDefault(_ => _.Id == 3)!.Id,
+                    LanguagePreference = "EN",
+                    PhoneNumber = 0612345678,
+                    Password = passwordHash,
+                    PasswSalt = passwordSalt,
+                });
+                
                 this.SaveChanges();
             }
 
@@ -192,7 +207,7 @@ namespace Viscon_ProjectC_Groep4
                     MadeAnyChanges = "Dummy Changes",
                     DepartmentId = 1,
                     CreatorUserId = 5,
-                    HelperUserId = 7,
+                    HelperUserId = 8,
                     Resolved = false
                 });
                 
@@ -232,7 +247,7 @@ namespace Viscon_ProjectC_Groep4
                     ExpectedToBeDone = "Dummy Expected",
                     MadeAnyChanges = "Dummy Changes",
                     DepartmentId = 4,
-                    CreatorUserId = 5,
+                    CreatorUserId = 9,
                     Resolved = false
                 });
                 this.SaveChanges();
