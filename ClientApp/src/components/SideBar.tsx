@@ -5,22 +5,22 @@ import SideBarItem from "./SideBarItem";
 import HamburgerButton from "./HamburgerButton";
 import { UserRoles } from "../UserRoles";
 import UserSettings from "../pages/UserSettings";
-import dashboardIcon from "../assets/home.svg";
-import ticketIcon from "../assets/ticket.svg";
-import archiveIcon from "../assets/archive.svg";
-import newIcon from "../assets/new.svg";
-import criticalIcon from "../assets/critical.svg";
-import normalIcon from "../assets/normal.svg";
-import userIcon from "../assets/user.svg";
-import settingsIcon from "../assets/settings.svg";
-import logoutIcon from "../assets/logout.svg";
-import profileIcon from "../assets/profile.svg";
+import dashboardIcon from "../assets/icons/home.svg";
+import ticketIcon from "../assets/icons/ticket.svg";
+import archiveIcon from "../assets/icons/archive.svg";
+import newIcon from "../assets/icons/new.svg";
+import criticalIcon from "../assets/icons/critical.svg";
+import normalIcon from "../assets/icons/normal.svg";
+import userIcon from "../assets/icons/user.svg";
+import settingsIcon from "../assets/icons/settings.svg";
+import logoutIcon from "../assets/icons/logout.svg";
 import ProfileItem from "./ProfileItem";
 import GroupTitle from "./GroupTitle";
 import Seperator from "./Seperator";
-import mailIcon from "../assets/mail.svg";
-import profileAI from "../assets/ai-generated-7751688_1280.jpg";
+import mailIcon from "../assets/icons/mail.svg";
+import profileAI from "../assets/images/ai-generated-7751688_1280.jpg";
 import { getUser } from "../Endpoints/Dto";
+import { useTranslation } from "react-i18next";
 
 type User = {
   firstName: string;
@@ -30,6 +30,8 @@ type User = {
 };
 
 function SideBar() {
+  const { t } = useTranslation();
+
   const [menu, setMenu] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState(false);
   const [user, setUser] = useState<User | undefined>();
@@ -37,7 +39,7 @@ function SideBar() {
   const nav = useNavigate();
   const token = localStorage.getItem("token");
   const Role = getRole(token);
-  
+
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
@@ -59,60 +61,52 @@ function SideBar() {
   }, []);
 
   return (
-    <div className="flex items-center h-full absolute z-50 ">
+    <div className="flex items-center h-full absolute z-50">
       <div
-        onMouseOver={() => setMenu(true)}
-        onMouseLeave={() => setMenu(false)}
         className={`${
           menu
             ? "w-[250px] bg-sky-700/50 dark:bg-stone-900/50"
             : "w-[50px] bg-sky-600 dark:bg-stone-800"
         } min-w-[50px] translate duration-300 flex flex-col overflow-hidden h-full backdrop-blur-sm`}
       >
-        <div className=""
-             onClick={() => setShowSettings(!showSettings)}
-        >
-          <ProfileItem 
-              icon={profileAI} 
-              user={user} 
-          />
-        </div>
+        <HamburgerButton onclick={() => setMenu(!menu)} state={menu} />
+
         <div className="flex flex-col pt-4">
-          <GroupTitle title={"Views"} toggle={menu} />
+          <GroupTitle title={t("sidebar.overview.title")} toggle={menu} />
           <SideBarItem
-            title={"Dashboard"}
+            title={t("sidebar.overview.dashboard")}
             icon={dashboardIcon}
             onclick={() => nav("/dashboard")}
             transformAnimation={"rotate3d(0,1,0,180deg)"}
           />
           <SideBarItem
-            title={"Mailbox"}
+            title={t("sidebar.overview.mailbox")}
             icon={mailIcon}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
           <SideBarItem
-            title={"Tickets"}
+            title={t("sidebar.overview.tickets")}
             icon={normalIcon}
             onclick={() => nav("/tickets/all")}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
           <Seperator color="white" marginX="4px" marginY="16px" />
           <div className="flex flex-col">
-            <GroupTitle title={"Filters"} toggle={menu} />
+            <GroupTitle title={t("sidebar.filters.title")} toggle={menu} />
             <SideBarItem
-              title={"New"}
+              title={t("sidebar.filters.open")}
               icon={newIcon}
               onclick={() => nav("/tickets/new")}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
             <SideBarItem
-              title={"Critical"}
+              title={t("sidebar.filters.critical")}
               icon={criticalIcon}
               onclick={() => nav("/tickets/critical")}
               transformAnimation={"rotate(360deg)"}
             />
             <SideBarItem
-              title={"Archive"}
+              title={t("sidebar.filters.archive")}
               icon={archiveIcon}
               onclick={() => nav("/tickets/archive")}
               transformAnimation={"rotate3d(0,1,0,180deg"}
@@ -125,9 +119,9 @@ function SideBar() {
           Role == UserRoles.VISCON ? (
             <>
               <Seperator color="white" marginX="4px" marginY="16px" />
-              <GroupTitle title={"Create"} toggle={menu} />
+              <GroupTitle title={t("sidebar.create.title")} toggle={menu} />
               <SideBarItem
-                title={"Add Ticket"}
+                title={t("sidebar.create.ticket")}
                 icon={ticketIcon}
                 onclick={() => nav("/create")}
                 transformAnimation={"rotate(180deg)"}
@@ -138,7 +132,7 @@ function SideBar() {
           )}
           {Role == UserRoles.ADMIN || Role == UserRoles.KEYUSER ? (
             <SideBarItem
-              title={"Add User"}
+              title={t("sidebar.create.user")}
               icon={userIcon}
               onclick={() => nav("/add")}
               transformAnimation={"rotate3d(0,1,0,180deg"}
@@ -157,11 +151,14 @@ function SideBar() {
           {/*  onclick={() => setShowSettings(!showSettings)}*/}
           {/*/>*/}
           <SideBarItem
-            title={"Logout"}
+            title={t("sidebar.logout")}
             icon={logoutIcon}
             onclick={() => nav("/logout")}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
+        </div>
+        <div className="mt-auto" onClick={() => setShowSettings(!showSettings)}>
+          <ProfileItem icon={profileAI} user={user} />
         </div>
       </div>
       <div

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import arrowIcon from "../assets/arrow.svg";
+import arrowIcon from "../assets/icons/arrow.svg";
 
 type TableProps = {
   data: any[];
