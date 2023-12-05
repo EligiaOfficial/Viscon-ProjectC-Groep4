@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { getRole } from "../Endpoints/Jwt";
 import { UserRoles } from "../UserRoles";
 import Layout from "../components/Layout";
-import uploadIcon from "../assets/upload.svg";
-import whiteCrossIcon from "../assets/white-cross.svg";
+import uploadIcon from "../assets/icons/upload.svg";
+import whiteCrossIcon from "../assets/icons/white-cross.svg";
 import { getDepartments } from "../Endpoints/Dto";
 
 const CreateTicket: React.FC = () => {

@@ -1,0 +1,34 @@
+{
+  "header": {
+    "search": "Search",
+    "language": "Language"
+  },
+  "login": {
+    "title": "Welcome!",
+    "subtitle": "Sign in to continue.",
+    "email": "Email Address",
+    "password": "Password",
+    "forgot": "Forgot your password?",
+    "signIn": "Sign in"
+  },
+  "sidebar": {
+    "overview": {
+      "title": "Overview",
+      "dashboard": "Dashboard",
+      "mailbox": "Mailbox",
+      "tickets": "Tickets"
+    },
+    "filters": {
+      "title": "Filter by",
+      "open": "Open",
+      "critical": "Top-priority",
+      "archive": "Archive"
+    },
+    "create": {
+      "title": "Create",
+      "ticket": "New ticket",
+      "user": "New user"
+    },
+    "logout": "Log out"
+  }
+}
