@@ -41,120 +41,99 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             if (_id is null) return BadRequest();
             int id = Int32.Parse(_id);
 
-            try {
-                await using var context = _services.GetService<ApplicationDbContext>();
-                var user = await context!.Users
-                    .Where(u => u.Id == id)
-                    .FirstOrDefaultAsync();
+            await using var context = _services.GetService<ApplicationDbContext>();
+            var user = await context!.Users
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
 
-                if (user == null) return BadRequest();
+            if (user == null) return BadRequest();
 
-                if (data.Password != string.Empty) {
-                    _authenticator.CreatePassHash(
-                        data.Password, out byte[] passwordHash, out byte[] passwordSalt
-                    );
-                    user.Password = passwordHash;
-                    user.PasswSalt = passwordSalt;
-                }
-
-                if (data.Email != string.Empty) {
-                    user.Email = data.Email;
-                }
-
-                if (data.Phone != 0) {
-                    user.PhoneNumber = data.Phone;
-                }
-
-                if (data.Language != string.Empty) {
-                    user.LanguagePreference = data.Language;
-                }
-
-                await context.SaveChangesAsync();
-                var token = _authenticator.CreateToken(user);
-                return Ok(token);
+            if (data.Password != string.Empty) {
+                _authenticator.CreatePassHash(
+                    data.Password, out byte[] passwordHash, out byte[] passwordSalt
+                );
+                user.Password = passwordHash;
+                user.PasswSalt = passwordSalt;
             }
-            catch (Exception ex) {
-                return BadRequest(ex.Message);
+
+            if (data.Email != string.Empty) {
+                user.Email = data.Email;
             }
+
+            if (data.Phone != 0) {
+                user.PhoneNumber = data.Phone;
+            }
+
+            if (data.Language != string.Empty) {
+                user.LanguagePreference = data.Language;
+            }
+
+            await context.SaveChangesAsync();
+            var token = _authenticator.CreateToken(user);
+            return Ok(token);
         }
 
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(LoginDto data) {
-            try {
-                _logger.LogInformation(data.Email + " is trying to log in.");
-                await using var context = _services.GetService<ApplicationDbContext>();
-                var user = await context.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
-                if (user == null) {
-                    _logger.LogError("User not found");
-                    return BadRequest("User not found");
-                }
-
-                if (!_authenticator.VerifyPassword(
-                        data.Password, user.Password, user.PasswSalt
-                    )) {
-                    _logger.LogError("Wrong Password");
-                    return BadRequest("Wrong password");
-                }
-
-                _logger.LogInformation("User and Passw correct", data.Password);
-
-                _logger.LogInformation("Creating user token");
-                var token = _authenticator.CreateToken(user);
-
-                return Ok(token);
+            _logger.LogInformation(data.Email + " is trying to log in.");
+            await using var context = _services.GetService<ApplicationDbContext>();
+            var user = await context.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
+            if (user == null) {
+                _logger.LogError("User not found");
+                return BadRequest("User not found");
             }
-            catch (Exception ex) {
-                return BadRequest(ex.Message);
+
+            if (!_authenticator.VerifyPassword(
+                    data.Password, user.Password, user.PasswSalt
+                )) {
+                _logger.LogError("Wrong Password");
+                return BadRequest("Wrong password");
             }
+
+            _logger.LogInformation("User and Passw correct", data.Password);
+
+            _logger.LogInformation("Creating user token");
+            var token = _authenticator.CreateToken(user);
+
+            return Ok(token);
         }
 
         [Authorize(Policy = "key_user")]
         [HttpPost]
         [Route("Add")]
         public async Task<IActionResult> Add(AddDto data) {
-            try {
-                _logger.LogInformation(data.FirstName + " " + data.LastName + " is trying to be created");
+            _logger.LogInformation(data.FirstName + " " + data.LastName + " is trying to be created");
 
-                _authenticator.CreatePassHash(
-                    data.Password, out byte[] passwordHash, out byte[] passwordSalt
-                );
+            _authenticator.CreatePassHash(
+                data.Password, out byte[] passwordHash, out byte[] passwordSalt
+            );
 
-                _logger.LogInformation(data.Password, passwordHash, passwordSalt);
+            _logger.LogInformation(data.Password, passwordHash, passwordSalt);
 
-                await using var context = _services.GetService<ApplicationDbContext>();
-                var department = await context.Departments.Where(p => p.Id == data.Department).FirstOrDefaultAsync();
-                var company = await context.Companies.Where(p => p.Id == data.Company).FirstOrDefaultAsync();
-                var user = new User {
-                    FirstName = data.FirstName,
-                    LastName = data.LastName,
-                    Email = data.Email,
-                    Password = passwordHash,
-                    PasswSalt = passwordSalt,
-                    Role = (RoleTypes) data.Role,
-                    PhoneNumber = data.Phone,
-                    LanguagePreference = data.Language,
-                    DepartmentId = department?.Id,
-                    CompanyId = company?.Id,
-                };
-                Console.WriteLine(user.ToString());
-                Console.WriteLine(user.Role);
-                try {
-                    context.Users.Add(user);
-                    await context.SaveChangesAsync();
-                    _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " +
-                                           user.Email + ")");
-                }
-                catch (DbUpdateException e) {
-                    _logger.LogError(e.ToString());
-                    return BadRequest(e.Message);
-                }
+            await using var context = _services.GetService<ApplicationDbContext>();
+            var department = await context.Departments.Where(p => p.Id == data.Department).FirstOrDefaultAsync();
+            var company = await context.Companies.Where(p => p.Id == data.Company).FirstOrDefaultAsync();
+            var user = new User {
+                FirstName = data.FirstName,
+                LastName = data.LastName,
+                Email = data.Email,
+                Password = passwordHash,
+                PasswSalt = passwordSalt,
+                Role = (RoleTypes) data.Role,
+                PhoneNumber = data.Phone,
+                LanguagePreference = data.Language,
+                DepartmentId = department?.Id,
+                CompanyId = company?.Id,
+            };
+            Console.WriteLine(user.ToString());
+            Console.WriteLine(user.Role);
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
+            _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " +
+                                   user.Email + ")");
 
-                return Ok("Success");
-            }
-            catch (Exception ex) {
-                return BadRequest(ex.Message);
-            }
+            return Ok("Success");
         }
     }
 }

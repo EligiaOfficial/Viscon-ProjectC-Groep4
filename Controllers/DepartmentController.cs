@@ -22,13 +22,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [HttpGet("All")]
         public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
             await using var context = _services.GetService<ApplicationDbContext>();
-            try {
-                var departments = context?.Departments.ToList();
-                return Ok(departments);
-            }
-            catch (Exception ex) {
-                return StatusCode(500, ex.Message);
-            }
+            var departments = context?.Departments.ToList();
+            return Ok(departments);
         }
     }
 }
