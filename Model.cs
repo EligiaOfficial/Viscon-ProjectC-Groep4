@@ -209,18 +209,6 @@ namespace Viscon_ProjectC_Groep4
                     Resolved = false
                 });
                 
-                this.Add(new Ticket{
-                    MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
-                    Title = "Machine makes a weird noice",
-                    Description = "Dummy Description",
-                    DateCreated = DateTime.UtcNow,
-                    Urgent = false,
-                    ExpectedToBeDone = "Dummy Expected",
-                    MadeAnyChanges = "Dummy Changes",
-                    DepartmentId = 3,
-                    CreatorUserId = 8,
-                    Resolved = false
-                });
                 
                 this.Add(new Ticket{
                     MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
