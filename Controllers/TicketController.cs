@@ -71,39 +71,39 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
         [Authorize(Policy = "key_user")]
         [HttpPost("createticket")]
-        public async Task<ActionResult<Ticket>> CreateTicket([FromForm] TicketDto data)
+        public async Task<ActionResult<Ticket>> CreateTicket([FromForm] CreateTicketDto data)
         {
             {
                 _logger.LogInformation("API Fetched");
                 int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 await using var context = _services.GetService<ApplicationDbContext>();
                 var ticket = new Ticket();
-                ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
-                ticket.Title = data.title;
-                ticket.Description = data.description;
+                ticket.MachineId = context!.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id).FirstOrDefault();
+                ticket.Title = data.Title;
+                ticket.Description = data.Description;
                 ticket.DateCreated = DateTime.UtcNow;
-                ticket.Urgent = data.priority;
-                ticket.ExpectedToBeDone = data.expectedAction;
-                ticket.MadeAnyChanges = data.selfTinkering;
-                ticket.DepartmentId = data.departmentId;
+                ticket.Urgent = data.Priority;
+                ticket.ExpectedToBeDone = data.ExpectedAction;
+                ticket.MadeAnyChanges = data.SelfTinkering;
+                ticket.DepartmentId = data.DepartmentId;
                 ticket.CreatorUserId = id;
                 ticket.Resolved = false;
                 context.Tickets.Add(ticket);
                 context.SaveChanges();
 
-                // ticket.Helper_UserId = null;
-                if (data.image != null)
+                using MemoryStream memoryStream = new();
+                foreach (IFormFile image in data.Images)
                 {
-                    var VisualFile = new VisualFile();
-                    VisualFile.Name = ticket.Title;
-                    VisualFile.TicketId = ticket.Id;
-                    using (var memoryStream = new MemoryStream())
+                    await image.CopyToAsync(memoryStream);
+                    VisualFile visualFile = new()
                     {
-                        await data.image.CopyToAsync(memoryStream);
-                        VisualFile.Image = memoryStream.ToArray();
-                    }
-                    context.VisualFiles.Add(VisualFile);
+                        Name = image.FileName,
+                        Image = memoryStream.ToArray(),
+                        TicketId = ticket.Id
+                    };
+                    _context.VisualFiles.Add(visualFile);
                 }
+
                 context.SaveChanges();
                 return Ok(ticket.Id);
             }
@@ -111,37 +111,37 @@ namespace Viscon_ProjectC_Groep4.Controllers
         
         [Authorize(Policy = "key_user")]
         [HttpPost("createticketforsomeone")]
-        public async Task<ActionResult<Ticket>> CreateTicketForSomeone([FromForm] TicketDto data)
+        public async Task<ActionResult<Ticket>> CreateTicketForSomeone([FromForm] CreateTicketDto data)
         {
             _logger.LogInformation("API Fetched");
             await using var context = _services.GetService<ApplicationDbContext>();
 
             _logger.LogInformation("Token Correct");
             var ticket = new Ticket();
-            ticket.MachineId = context!.Machines.Where(m => m.Name == data.machine).Select(m => m.Id).FirstOrDefault();
-            ticket.Title = $"{DateTime.UtcNow} Prio: {data.priority}, {data.machine}";
-            ticket.Description = data.description;
+            ticket.MachineId = context!.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id).FirstOrDefault();
+            ticket.Title = $"{DateTime.UtcNow} Prio: {data.Priority}, {data.Machine}";
+            ticket.Description = data.Description;
             ticket.DateCreated = DateTime.UtcNow;
             ticket.Urgent = false; //int.Parse(data.priority);
-            ticket.ExpectedToBeDone = data.expectedAction;
-            ticket.MadeAnyChanges = data.selfTinkering;
-            ticket.DepartmentId = data.departmentId;
-            ticket.CreatorUserId = context.Users.Where(u => u.Email == data.userEmail).Select(u => u.Id).FirstOrDefault();
+            ticket.ExpectedToBeDone = data.ExpectedAction;
+            ticket.MadeAnyChanges = data.SelfTinkering;
+            ticket.DepartmentId = data.DepartmentId;
+            ticket.CreatorUserId = context.Users.Where(u => u.Email == data.UserEmail).Select(u => u.Id).FirstOrDefault();
             ticket.Resolved = false;
             context.Tickets.Add(ticket);
             context.SaveChanges();
-            // ticket.Helper_UserId = null;
-            if (data.image != null)
+
+            using MemoryStream memoryStream = new();
+            foreach (IFormFile image in data.Images)
             {
-                var VisualFile = new VisualFile();
-                VisualFile.Name = ticket.Title;
-                VisualFile.TicketId = ticket.Id;
-                using (var memoryStream = new MemoryStream())
+                await image.CopyToAsync(memoryStream);
+                VisualFile visualFile = new()
                 {
-                    await data.image.CopyToAsync(memoryStream);
-                    VisualFile.Image = memoryStream.ToArray();
-                }
-                context.VisualFiles.Add(VisualFile);
+                    Name = image.FileName,
+                    Image = memoryStream.ToArray(),
+                    TicketId = ticket.Id
+                };
+                _context.VisualFiles.Add(visualFile);
             }
             context.SaveChanges();
             return Ok(ticket.Id);
