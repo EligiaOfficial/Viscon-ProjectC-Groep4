@@ -32,7 +32,8 @@ namespace Viscon_ProjectC_Groep4
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("public");
+            modelBuilder.HasDefaultSchema("public")
+                .Entity<User>().HasIndex(e => e.Email).IsUnique();
         }
 
         public void SeedDb()
