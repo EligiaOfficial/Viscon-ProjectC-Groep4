@@ -94,12 +94,12 @@ public class EditDto
 public class GetTicketsDto
 {
     public int TicketID { get; set; }
+    public string Title { get; set; }
     public string Status { get; set; }
     public string Urgent { get; set; }
-    public string Description { get; set; }
     public string Machine { get; set; }
     public DateTime Created { get; set; }
-    public string ETC { get; set; } //Expected time of completion
+    public string Company { get; set; }
     public string Department { get; set; }
     public string Issuer { get; set; }
     public string? Supporter { get; set; }

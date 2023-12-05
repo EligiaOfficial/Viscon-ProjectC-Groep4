@@ -265,11 +265,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
                                 select new GetTicketsDto
                                 {
                                     TicketID = ticket.Id,
+                                    Title = ticket.Title,
                                     Status = ticket.Resolved ? "closed" : "open",
                                     Urgent = ticket.Urgent ? "Yes" : "No",
-                                    Description = ticket.Description,
+                                    Company = ticket.Creator.Company.Name,
                                     Machine = machine.Name,
-                                    ETC = ticket.ExpectedToBeDone,
                                     Department = department.Speciality,
                                     Supporter = (result.LastName + " " + result.FirstName) ?? "-",
                                     Created = ticket.DateCreated,

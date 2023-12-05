@@ -3,7 +3,11 @@ import Layout from "../components/Layout";
 import Table from "../components/Table";
 import { getTickets } from "../Endpoints/Dto";
 
-function Tickets(props: any) {
+type TicketsProps = {
+  filter: string;
+};
+
+function Tickets(props: TicketsProps) {
   const [tickets, setTickets] = useState<[]>([]);
 
   const filterTickets = (data: any) => {
