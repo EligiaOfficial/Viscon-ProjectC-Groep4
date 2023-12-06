@@ -44,18 +44,18 @@ public class MessageDto
     public int sender { get; set; }
 }
 
-public class CreateTicketDto
+public class TicketDto
 {
-    public string Title { get; set; } = string.Empty;
-    public string Machine { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public bool Priority { get; set; }
-    public string ExpectedAction { get; set; } = string.Empty;
-    public string SelfTinkering { get; set; } = string.Empty;
-    public int DepartmentId { get; set; }
-    public string UserEmail { get; set; } = string.Empty;
+    public string title { get; set; }
+    public string machine { get; set; }
+    public string description { get; set; }
+    public bool priority { get; set; }
+    public string expectedAction { get; set; }
+    public string selfTinkering { get; set; }
+    public int departmentId { get; set; }
+    public string? userEmail { get; set; }
 
-    public List<IFormFile> Images { get; set; } = new();
+    public IFormFile? image { get; set; }
 }
 
 public class ChangeTicketDto

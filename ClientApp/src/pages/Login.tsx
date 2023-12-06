@@ -7,11 +7,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginAxios } from "../Endpoints/Dto";
-import { useTranslation } from "react-i18next";
 
 function Login() {
-  const { t } = useTranslation();
-
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const nav = useNavigate();
@@ -51,10 +48,10 @@ function Login() {
         <div className="basis-full md:basis-1/3 bg-gray-150 mt-20">
           <div className="mt-20 sm:mx-auto sm:max-w-sm">
             <h1 className={"mb-3 pt-5 text-xl text-gray-800 dark:text-white"}>
-              {t("login.title")}
+              Welcome!
             </h1>
             <p className={"mb-5 text-sm text-gray-400 dark:text-white"}>
-              {t("login.subtitle")}
+              Voer uw gegevens in om door te gaan.
             </p>
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
@@ -62,7 +59,7 @@ function Login() {
                   htmlFor="email"
                   className="block text-xs font-medium leading-3 text-gray-500 dark:text-stone-400"
                 >
-                  {t("login.email")}
+                  Email address
                 </label>
                 <div className="mt-2">
                   <input
@@ -84,7 +81,7 @@ function Login() {
                     htmlFor="password"
                     className="block text-xs font-medium leading-2 text-gray-500 dark:text-stone-400"
                   >
-                    {t("login.password")}
+                    Password
                   </label>
                 </div>
                 <div className="mt-2">
@@ -105,7 +102,7 @@ function Login() {
                   href="#"
                   className="text-xs text-gray-600 hover:text-indigo-500 dark:text-stone-400 dark:hover:text-stone-200"
                 >
-                  {t("login.forgot")}
+                  Lost your password?
                 </a>
               </div>
               <div className={"flex justify-end"}>
@@ -113,7 +110,7 @@ function Login() {
                   type="submit"
                   className="flex w-1/4 justify-center rounded-md bg-gray-600 dark:bg-stone-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
                 >
-                  {t("login.signIn")}
+                  Sign in
                 </button>
               </div>
             </form>

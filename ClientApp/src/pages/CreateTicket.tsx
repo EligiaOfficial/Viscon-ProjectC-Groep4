@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { getRole } from "../Endpoints/Jwt";
 import { UserRoles } from "../UserRoles";
 import Layout from "../components/Layout";
-import uploadIcon from "../assets/icons/upload.svg";
-import whiteCrossIcon from "../assets/icons/white-cross.svg";
-import { getDepartments } from "../Endpoints/Dto";
+import uploadIcon from "../assets/upload.svg";
+import whiteCrossIcon from "../assets/white-cross.svg";
+import {getDepartments} from "../Endpoints/Dto";
 
 const CreateTicket: React.FC = () => {
   const nav = useNavigate();
@@ -66,7 +66,7 @@ const CreateTicket: React.FC = () => {
     if (selectedDepartment === "") {
       errors.push("Please select a department.");
     }
-
+    
     if (selectedMachine === "") {
       errors.push("Please select a machine.");
     }
@@ -96,7 +96,7 @@ const CreateTicket: React.FC = () => {
 
         if (images.length > 0) {
           images.forEach((image, i) => {
-            formData.append(`images`, image, image!.name);
+            formData.append(`image-${i}`, image, image!.name);
           });
         }
 
@@ -208,37 +208,37 @@ const CreateTicket: React.FC = () => {
             )}
             <div>
               <label
-                htmlFor="title"
-                className="block text-gray-700 mb-1 font-medium"
+                  htmlFor="title"
+                  className="block text-gray-700 mb-1 font-medium"
               >
                 Title:
               </label>
               <input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
               />
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="col-start-1">
                 <label
-                  htmlFor="machine"
-                  className="block text-gray-700 mb-1 font-medium"
+                    htmlFor="machine"
+                    className="block text-gray-700 mb-1 font-medium"
                 >
                   Which department should pick up this ticket?
                 </label>
                 <select
-                  id="machine"
-                  value={selectedDepartment}
-                  onChange={(e) => setSelectedDepartment(e.target.value)}
-                  className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                    id="machine"
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                 >
                   <option value="">Select a department</option>
                   {departments.map((department) => (
-                    <option key={department["id"]} value={department["id"]}>
-                      {department["speciality"]}
-                    </option>
+                      <option key={department["id"]} value={department["id"]}>
+                        {department["speciality"]}
+                      </option>
                   ))}
                 </select>
               </div>
