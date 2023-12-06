@@ -15,19 +15,20 @@ namespace Viscon_ProjectC_Groep4.Controllers
     public class MachineController : ControllerBase
     {
         private readonly ILogger<FetchController> _logger;
-        private readonly IServiceProvider _services;
+        private readonly ApplicationDbContext _dbContext;
 
-        public MachineController(ILogger<FetchController> logger, IServiceProvider services) {
+        public MachineController(
+            ILogger<FetchController> logger, ApplicationDbContext dbContext
+        ) {
             _logger = logger;
-            _services = services;
+            _dbContext = dbContext;
         }
 
         // GET: api/Machine
         [Authorize(Policy = "user")]
         [HttpGet("fetchmachines")]
         public async Task<ActionResult<IEnumerable<Machine>>> GetMachines() {
-            await using var context = _services.GetService<ApplicationDbContext>();;
-            var machines = context!.Machines.Select(machines => machines.Name).ToList();
+            var machines = _dbContext.Machines.Select(machines => machines.Name).ToList();
             return Ok(machines);
         }
     }

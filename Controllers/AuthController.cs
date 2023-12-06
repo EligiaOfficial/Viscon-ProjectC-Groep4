@@ -23,17 +23,16 @@ namespace Viscon_ProjectC_Groep4.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthController> _logger;
         private readonly Authenticator _authenticator;
-        private readonly IServiceProvider _services;
+        private readonly ApplicationDbContext _dbContext;
 
         public AuthController(
             IConfiguration configuration, ILogger<AuthController> logger,
-            Authenticator authenticator, IServiceProvider services
-        )
-        {
+            Authenticator authenticator, ApplicationDbContext dbContext
+        ) {
             _configuration = configuration;
             _logger = logger;
             _authenticator = authenticator;
-            _services = services;
+            _dbContext = dbContext;
         }
 
         [Authorize(Policy = "user")]
@@ -45,8 +44,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
             if (_id is null) return BadRequest();
             int id = Int32.Parse(_id);
 
-            await using var context = _services.GetService<ApplicationDbContext>();
-            var user = await context!.Users
+            var user = await _dbContext!.Users
                 .Where(u => u.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -76,7 +74,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 user.LanguagePreference = data.Language;
             }
 
-            await context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             var token = _authenticator.CreateToken(user);
             return Ok(token);
         }
@@ -86,10 +84,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public async Task<IActionResult> Login(LoginDto data)
         {
             _logger.LogInformation(data.Email + " is trying to log in.");
-            await using var context = _services.GetService<ApplicationDbContext>();
-            var user = await context.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
-            if (user == null)
-            {
+            var user = await _dbContext.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
+            if (user == null) {
                 _logger.LogError("User not found");
                 return BadRequest("User not found");
             }
@@ -123,11 +119,9 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
             _logger.LogInformation(data.Password, passwordHash, passwordSalt);
 
-            await using var context = _services.GetService<ApplicationDbContext>();
-            var department = await context.Departments.Where(p => p.Id == data.Department).FirstOrDefaultAsync();
-            var company = await context.Companies.Where(p => p.Id == data.Company).FirstOrDefaultAsync();
-            var user = new User
-            {
+            var department = await _dbContext.Departments.Where(p => p.Id == data.Department).FirstOrDefaultAsync();
+            var company = await _dbContext.Companies.Where(p => p.Id == data.Company).FirstOrDefaultAsync();
+            var user = new User {
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 Email = data.Email,
@@ -141,8 +135,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
             };
             Console.WriteLine(user.ToString());
             Console.WriteLine(user.Role);
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
+            _dbContext.Users.Add(user);
+            await _dbContext.SaveChangesAsync();
             _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " +
                                    user.Email + ")");
 
