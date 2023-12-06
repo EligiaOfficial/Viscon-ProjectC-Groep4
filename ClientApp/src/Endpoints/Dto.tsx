@@ -11,7 +11,7 @@ type SignUpDto = {
   firstName: string;
   lastName: string;
   password: string;
-  phone: string;
+  phone: number;
   company: number;
   role: number;
   department: number;
