@@ -15,17 +15,17 @@ namespace Viscon_ProjectC_Groep4.Controllers
     {
         private readonly ILogger<TicketController> _logger;
         private readonly IServiceProvider _services;
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         private readonly DbSet<Ticket> _tickets;
 
         public TicketController(
             ILogger<TicketController> logger, IServiceProvider services,
-            ApplicationDbContext context
+            ApplicationDbContext dbContext
         ) {
             _logger = logger;
            _services = services;
-            _context = context;
-            _tickets = context.Set<Ticket>();
+            _dbContext = dbContext;
+            _tickets = dbContext.Set<Ticket>();
         }
 
         [Authorize(Policy = "user")]
@@ -99,7 +99,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                         Image = memoryStream.ToArray(),
                         TicketId = ticket.Id
                     };
-                    _context.VisualFiles.Add(visualFile);
+                    _dbContext.VisualFiles.Add(visualFile);
                 }
 
                 context.SaveChanges();
@@ -139,7 +139,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     Image = memoryStream.ToArray(),
                     TicketId = ticket.Id
                 };
-                _context.VisualFiles.Add(visualFile);
+                _dbContext.VisualFiles.Add(visualFile);
             }
             context.SaveChanges();
             return Ok(ticket.Id);
@@ -202,11 +202,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public async Task<IActionResult> GetTickets()
         {
             List<GetTicketsDto> tickets = await (from ticket in _tickets
-                                join machine in _context.Machines
+                                join machine in _dbContext.Machines
                                     on ticket.MachineId equals machine.Id
-                                join department in _context.Departments
+                                join department in _dbContext.Departments
                                     on ticket.DepartmentId equals department.Id
-                                join user in _context.Users
+                                join user in _dbContext.Users
                                     on ticket.HelperUserId equals user.Id into grouping
                                 from result in grouping.DefaultIfEmpty()
                                 select new GetTicketsDto
@@ -220,7 +220,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                                     Department = department.Speciality,
                                     Supporter = (result.LastName + " " + result.FirstName) ?? "-",
                                     Created = ticket.DateCreated,
-                                    Issuer = _context.Users.Where(user => user.Id == ticket.CreatorUserId)
+                                    Issuer = _dbContext.Users.Where(user => user.Id == ticket.CreatorUserId)
                                         .Select(result => result.LastName + ", " + result.FirstName)
                                         .FirstOrDefault()!
                                 })
