@@ -14,17 +14,15 @@ namespace Viscon_ProjectC_Groep4.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ILogger<TicketController> _logger;
-        private readonly Authenticator _authenticator;
         private readonly IServiceProvider _services;
         private readonly ApplicationDbContext _context;
         private readonly DbSet<Ticket> _tickets;
 
         public TicketController(
-            ILogger<TicketController> logger, Authenticator authenticator,
-            IServiceProvider services, ApplicationDbContext context
+            ILogger<TicketController> logger, IServiceProvider services,
+            ApplicationDbContext context
         ) {
             _logger = logger;
-            _authenticator = authenticator;
            _services = services;
             _context = context;
             _tickets = context.Set<Ticket>();
