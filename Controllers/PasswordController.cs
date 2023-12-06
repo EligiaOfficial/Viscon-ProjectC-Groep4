@@ -74,7 +74,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress("tymovanrijn@gmail.com"), // Replace with your email
+                From = new MailAddress(""), // Replace with your email
                 Subject = "Password Reset Request",
                 Body = $"Click the following link to reset your password: {resetLink}",
                 IsBodyHtml = true,
@@ -84,7 +84,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
             using (var smtpClient = new SmtpClient("smtp.gmail.com")) // Configure SMTP server
             {
                 smtpClient.Port = 587; // Use the appropriate port
-                smtpClient.Credentials = new NetworkCredential("tymovanrijn@gmail.com", "yanv lkyc dqhz rten"); // Replace with your email and app password
+                smtpClient.Credentials = new NetworkCredential("mail", "pw"); // Replace with your email and app password
                 smtpClient.EnableSsl = true; // Enable SSL/TLS
 
                 await smtpClient.SendMailAsync(mailMessage);

@@ -16,31 +16,50 @@ const ForgotPassword: React.FC = () => {
       },
       body: JSON.stringify({ email }),
     })
-      .then((response) => {
-        if (response.ok) {
-          setSubmitted(true);
-        }
-      })
-      .catch((error) => {
-        console.error('Error initiating password reset:', error);
-      });
+    .then((response) => {
+      if (response.ok) {
+        setSubmitted(true);
+      }
+    })
+    .catch((error) => {
+      console.error('Error initiating password reset:', error);
+    });
   };
 
   return (
-    <div>
-      {submitted ? (
-        <p>
-          If an account with the provided email address exists, you will receive an email with instructions to reset your password.
-        </p>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <label>
-            Email Address:
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </label>
-          <button type="submit">Submit</button>
-        </form>
-      )}
+    <div className="flex flex-col items-center justify-center h-screen">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-3xl mb-2 text-center text-blue-600">Forgot Password</h1>
+        {submitted ? (
+          <p className="text-center">
+            If an account with the provided email address exists, you will receive an email with instructions to reset your password.
+          </p>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-gray-700 mb-1 font-medium">
+                Email Address:
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2 transition-all ease-in-out duration-300"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
     </div>
   );
 };
