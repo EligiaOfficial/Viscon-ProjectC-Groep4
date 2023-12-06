@@ -16,7 +16,7 @@ public class AddDto
 
     public string Password { get; set; } = string.Empty;
 
-    public string Phone { get; set; } = string.Empty;
+    public int Phone { get; set; } = 0;
 
     public int Company { get; set; } = 0;
 
@@ -86,7 +86,7 @@ public class EditDto
 
     public string Password { get; set; } = string.Empty;
 
-    public string Phone { get; set; } = string.Empty;
+    public int Phone { get; set; } = 0;
 
     public string Language { get; set; } = string.Empty;
 }
