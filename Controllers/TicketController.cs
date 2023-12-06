@@ -16,7 +16,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
         private readonly ILogger<TicketController> _logger;
         private readonly IServiceProvider _services;
         private readonly ApplicationDbContext _dbContext;
-        private readonly DbSet<Ticket> _tickets;
 
         public TicketController(
             ILogger<TicketController> logger, IServiceProvider services,
@@ -25,7 +24,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _logger = logger;
            _services = services;
             _dbContext = dbContext;
-            _tickets = dbContext.Set<Ticket>();
         }
 
         [Authorize(Policy = "user")]
@@ -201,7 +199,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [HttpGet("tickets")]
         public async Task<IActionResult> GetTickets()
         {
-            List<GetTicketsDto> tickets = await (from ticket in _tickets
+            List<GetTicketsDto> tickets = await (from ticket in _dbContext.Tickets
                                 join machine in _dbContext.Machines
                                     on ticket.MachineId equals machine.Id
                                 join department in _dbContext.Departments
