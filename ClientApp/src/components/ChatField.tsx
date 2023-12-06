@@ -5,9 +5,8 @@ function ChatField({
 }: {
   user: string;
   message: string;
-  timestamp: string;
+  timestamp: Date;
 }) {
-  const date = new Date(timestamp);
   const formattedDate = new Intl.DateTimeFormat("en-GB", {
     year: "2-digit",
     month: "2-digit",
@@ -15,7 +14,7 @@ function ChatField({
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-  }).format(date);
+  }).format(timestamp);
 
   return (
     <div className={"w-full pt-5"}>
