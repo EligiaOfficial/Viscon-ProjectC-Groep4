@@ -102,7 +102,7 @@ function Login() {
               </div>
               <div className="text-sm">
                 <a
-                  href="#"
+                  href="/forgot-password"
                   className="text-xs text-gray-600 hover:text-indigo-500 dark:text-stone-400 dark:hover:text-stone-200"
                 >
                   {t("login.forgot")}

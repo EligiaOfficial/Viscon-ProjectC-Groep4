@@ -74,32 +74,50 @@ const ResetPassword: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 className="text-3xl mb-2 text-center text-blue-600">Reset Password</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="password" className="block text-gray-700 mb-1 font-medium">
-              New Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
-              required
-            />
+    <div className="h-screen flex flex-col dark:bg-stone-900">
+      <div className="flex flex-row h-full">
+        <div className="basis-1/2 hidden md:block">
+        <img
+            className={"object-cover w-full h-full"}
+            src="https://viscongroup.eu/app/mu-plugins/customized-login/dist/images/background.jpg"
+            alt="Background"
+          />
+        </div>
+        <div className="basis-full md:basis-1/3 bg-gray-150 mt-20">
+          <div className="mt-20 sm:mx-auto sm:max-w-sm">
+            <h1 className={"mb-3 pt-5 text-xl text-gray-800 dark:text-white"}>
+              {("Reset Password")}
+            </h1>
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-xs font-medium leading-3 text-gray-500 dark:text-stone-400"
+                >
+                  {("New Password")}
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    required
+                    className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+              <div className={"flex justify-end"}>
+                <button
+                  type="submit"
+                  className="flex w-1/4 justify-center rounded-md bg-gray-600 dark:bg-stone-400 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                >
+                  {("Reset")}
+                </button>
+              </div>
+            </form>
           </div>
-          <div>
-            <button
-              type="submit"
-              className="bg-blue-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2 transition-all ease-in-out duration-300"
-            >
-              Reset Password
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
