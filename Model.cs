@@ -51,7 +51,7 @@ namespace Viscon_ProjectC_Groep4
             {
                 this.Add(new Machine { Id = 1, Name = "T-800", Type = "Schwarzenegger" });
                 this.Add(new Machine { Id = 2, Name = "Rev-9", Type = "Liquid Nano-particles" });
-                this.Add(new Machine {Id = 3, Name = "Model X", Type = "Car"});
+                this.Add(new Machine { Id = 3, Name = "Model X", Type = "Car" });
                 this.SaveChanges();
             }
 
@@ -79,7 +79,7 @@ namespace Viscon_ProjectC_Groep4
                     DepartmentId = Departments.FirstOrDefault()!.Id,
                     CompanyId = null,
                     LanguagePreference = "NL",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // Admin Login: admin@viscon.com Viscon
@@ -92,7 +92,7 @@ namespace Viscon_ProjectC_Groep4
                     DepartmentId = Departments.FirstOrDefault()!.Id,
                     CompanyId = null,
                     LanguagePreference = "NL",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // Viscon Employee Login: viscon@viscon.com Viscon
@@ -105,7 +105,7 @@ namespace Viscon_ProjectC_Groep4
                     CompanyId = Companies.FirstOrDefault()!.Id,
                     DepartmentId = null,
                     LanguagePreference = "NL",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // KeyUser Login: key@viscon.com Viscon
@@ -118,11 +118,11 @@ namespace Viscon_ProjectC_Groep4
                     CompanyId = Companies.FirstOrDefault()!.Id,
                     DepartmentId = null,
                     LanguagePreference = "NL",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // User Login: user@viscon.com Viscon
-                
+
                 this.Add(new User
                 {
                     FirstName = "Kevin",
@@ -132,11 +132,11 @@ namespace Viscon_ProjectC_Groep4
                     CompanyId = Companies.FirstOrDefault(_ => _.Id == 2)!.Id,
                     DepartmentId = null,
                     LanguagePreference = "NL",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // KEY USER for second company
-                
+
                 this.Add(new User
                 {
                     FirstName = "Tobias",
@@ -146,11 +146,11 @@ namespace Viscon_ProjectC_Groep4
                     CompanyId = Companies.FirstOrDefault(_ => _.Id == 2)!.Id,
                     DepartmentId = null,
                     LanguagePreference = "NL",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // USER for second company
-                
+
                 this.Add(new User
                 {
                     FirstName = "Kees",
@@ -160,11 +160,11 @@ namespace Viscon_ProjectC_Groep4
                     CompanyId = Companies.FirstOrDefault(_ => _.Id == 3)!.Id,
                     DepartmentId = null,
                     LanguagePreference = "EN",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 }); // USER for second company
-                
+
                 this.Add(new User
                 {
                     FirstName = "Matt",
@@ -174,11 +174,11 @@ namespace Viscon_ProjectC_Groep4
                     DepartmentId = Departments.FirstOrDefault(_ => _.Id == 2)!.Id,
                     CompanyId = null,
                     LanguagePreference = "EN",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 });
-                
+
                 this.Add(new User
                 {
                     FirstName = "Levi",
@@ -188,17 +188,19 @@ namespace Viscon_ProjectC_Groep4
                     DepartmentId = null,
                     CompanyId = Companies.FirstOrDefault(_ => _.Id == 3)!.Id,
                     LanguagePreference = "EN",
-                    PhoneNumber = 0612345678,
+                    PhoneNumber = "0612345678",
                     Password = passwordHash,
                     PasswSalt = passwordSalt,
                 });
-                
+
                 this.SaveChanges();
             }
 
 
-            if (!this.Tickets.Any()) {
-                this.Add(new Ticket{
+            if (!this.Tickets.Any())
+            {
+                this.Add(new Ticket
+                {
                     MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
                     Title = "My Machine is BROKEN HELP!",
                     Description = "Dummy Description",
@@ -211,8 +213,9 @@ namespace Viscon_ProjectC_Groep4
                     HelperUserId = 8,
                     Resolved = false
                 });
-                
-                this.Add(new Ticket{
+
+                this.Add(new Ticket
+                {
                     MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
                     Title = "Factoy to a hold!",
                     Description = "Dummy Description",
@@ -224,9 +227,10 @@ namespace Viscon_ProjectC_Groep4
                     CreatorUserId = 7,
                     Resolved = false
                 });
-                
-                
-                this.Add(new Ticket{
+
+
+                this.Add(new Ticket
+                {
                     MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
                     Title = "We dont know.",
                     Description = "Dummy Description",
@@ -238,8 +242,9 @@ namespace Viscon_ProjectC_Groep4
                     CreatorUserId = 5,
                     Resolved = false
                 });
-                
-                this.Add(new Ticket{
+
+                this.Add(new Ticket
+                {
                     MachineId = Machines.Select(m => m.Id).FirstOrDefault(),
                     Title = "Uuuuuuuuuh.",
                     Description = "Dummy Description",
@@ -253,7 +258,7 @@ namespace Viscon_ProjectC_Groep4
                 });
                 this.SaveChanges();
             }
-            
+
         }
 
         private static void CreatePassHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

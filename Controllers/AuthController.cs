@@ -14,10 +14,12 @@ using Microsoft.IdentityModel.Tokens;
 using Viscon_ProjectC_Groep4.Dto;
 using Services;
 
-namespace Viscon_ProjectC_Groep4.Controllers {
+namespace Viscon_ProjectC_Groep4.Controllers
+{
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase {
+    public class AuthController : ControllerBase
+    {
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthController> _logger;
         private readonly Authenticator _authenticator;
@@ -26,7 +28,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         public AuthController(
             IConfiguration configuration, ILogger<AuthController> logger,
             Authenticator authenticator, IServiceProvider services
-        ) {
+        )
+        {
             _configuration = configuration;
             _logger = logger;
             _authenticator = authenticator;
@@ -36,7 +39,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [Authorize(Policy = "user")]
         [HttpPut]
         [Route("Edit")]
-        public async Task<IActionResult> Edit(EditDto data) {
+        public async Task<IActionResult> Edit(EditDto data)
+        {
             string? _id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (_id is null) return BadRequest();
             int id = Int32.Parse(_id);
@@ -48,7 +52,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
 
             if (user == null) return BadRequest();
 
-            if (data.Password != string.Empty) {
+            if (data.Password != string.Empty)
+            {
                 _authenticator.CreatePassHash(
                     data.Password, out byte[] passwordHash, out byte[] passwordSalt
                 );
@@ -56,15 +61,18 @@ namespace Viscon_ProjectC_Groep4.Controllers {
                 user.PasswSalt = passwordSalt;
             }
 
-            if (data.Email != string.Empty) {
+            if (data.Email != string.Empty)
+            {
                 user.Email = data.Email;
             }
 
-            if (data.Phone != 0) {
+            if (data.Phone != string.Empty)
+            {
                 user.PhoneNumber = data.Phone;
             }
 
-            if (data.Language != string.Empty) {
+            if (data.Language != string.Empty)
+            {
                 user.LanguagePreference = data.Language;
             }
 
@@ -75,18 +83,21 @@ namespace Viscon_ProjectC_Groep4.Controllers {
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login(LoginDto data) {
+        public async Task<IActionResult> Login(LoginDto data)
+        {
             _logger.LogInformation(data.Email + " is trying to log in.");
             await using var context = _services.GetService<ApplicationDbContext>();
             var user = await context.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
-            if (user == null) {
+            if (user == null)
+            {
                 _logger.LogError("User not found");
                 return BadRequest("User not found");
             }
 
             if (!_authenticator.VerifyPassword(
                     data.Password, user.Password, user.PasswSalt
-                )) {
+                ))
+            {
                 _logger.LogError("Wrong Password");
                 return BadRequest("Wrong password");
             }
@@ -102,7 +113,8 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         [Authorize(Policy = "key_user")]
         [HttpPost]
         [Route("Add")]
-        public async Task<IActionResult> Add(AddDto data) {
+        public async Task<IActionResult> Add(AddDto data)
+        {
             _logger.LogInformation(data.FirstName + " " + data.LastName + " is trying to be created");
 
             _authenticator.CreatePassHash(
@@ -114,13 +126,14 @@ namespace Viscon_ProjectC_Groep4.Controllers {
             await using var context = _services.GetService<ApplicationDbContext>();
             var department = await context.Departments.Where(p => p.Id == data.Department).FirstOrDefaultAsync();
             var company = await context.Companies.Where(p => p.Id == data.Company).FirstOrDefaultAsync();
-            var user = new User {
+            var user = new User
+            {
                 FirstName = data.FirstName,
                 LastName = data.LastName,
                 Email = data.Email,
                 Password = passwordHash,
                 PasswSalt = passwordSalt,
-                Role = (RoleTypes) data.Role,
+                Role = (RoleTypes)data.Role,
                 PhoneNumber = data.Phone,
                 LanguagePreference = data.Language,
                 DepartmentId = department?.Id,

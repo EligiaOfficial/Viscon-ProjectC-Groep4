@@ -43,7 +43,7 @@ function AddAccount() {
         firstName: firstName,
         lastName: lastName,
         password: password,
-        phone: +phone,
+        phone: phone,
         company: usr_role == UserRoles.ADMIN ? +company : +usr_compId,
         role: usr_role == UserRoles.ADMIN ? +role : 4,
         department: usr_role == UserRoles.ADMIN ? +department : +usr_depId,
