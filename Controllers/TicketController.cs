@@ -48,21 +48,17 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [HttpGet("getimage/{ticketId}")]
         public IActionResult GetImage(int ticketId)
         {
-            using (var scope = _services.CreateScope())
+            var context = _services.GetRequiredService<ApplicationDbContext>();
+    
+            var visualFile = context.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
+    
+            if (visualFile == null)
             {
-                var serviceProvider = scope.ServiceProvider;
-                var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
-        
-                var visualFile = context.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
-        
-                if (visualFile == null)
-                {
-                    return NotFound(); // Of een andere foutafhandeling
-                }
-        
-                // Retourneer de afbeeldingsbytes als een File-resultaat met het juiste MIME-type
-                return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
+                return NotFound(); // Of een andere foutafhandeling
             }
+    
+            // Retourneer de afbeeldingsbytes als een File-resultaat met het juiste MIME-type
+            return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
         }
 
         [Authorize(Policy = "key_user")]
