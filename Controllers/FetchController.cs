@@ -15,21 +15,16 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         
         private readonly IServiceProvider _services;
 
-        public FetchController(IConfiguration configuration, IServiceProvider services) {
+        public FetchController(IServiceProvider services) {
             _services = services;
         }
         
         [HttpGet("AccountData")]
         public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
             await using var context = _services.GetService<ApplicationDbContext>();
-            try {
-                var department = context?.Departments.ToList();
-                var company = context?.Companies.ToList();
-                return Ok(new {Companies = company, Departments = department});
-            }
-            catch (Exception ex) {
-                return StatusCode(500, ex.Message);
-            }
+            var department = context?.Departments.ToList();
+            var company = context?.Companies.ToList();
+            return Ok(new {Companies = company, Departments = department});
         }
     }
 }
