@@ -13,17 +13,16 @@ namespace Viscon_ProjectC_Groep4.Controllers {
     [Route("[controller]")]
     public class FetchController : ControllerBase {
         
-        private readonly IServiceProvider _services;
+        private readonly ApplicationDbContext _dbContext;
 
-        public FetchController(IServiceProvider services) {
-            _services = services;
+        public FetchController(ApplicationDbContext dbContext) {
+            _dbContext = dbContext;
         }
         
         [HttpGet("AccountData")]
         public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
-            await using var context = _services.GetService<ApplicationDbContext>();
-            var department = context?.Departments.ToList();
-            var company = context?.Companies.ToList();
+            var department = _dbContext.Departments.ToList();
+            var company = _dbContext?.Companies.ToList();
             return Ok(new {Companies = company, Departments = department});
         }
     }

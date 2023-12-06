@@ -14,15 +14,12 @@ namespace Viscon_ProjectC_Groep4.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ILogger<TicketController> _logger;
-        private readonly IServiceProvider _services;
         private readonly ApplicationDbContext _dbContext;
 
         public TicketController(
-            ILogger<TicketController> logger, IServiceProvider services,
-            ApplicationDbContext dbContext
+            ILogger<TicketController> logger, ApplicationDbContext dbContext
         ) {
             _logger = logger;
-           _services = services;
             _dbContext = dbContext;
         }
 
@@ -32,15 +29,14 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public async Task<IActionResult> AddMessage(MessageDto data) {
             _logger.LogInformation("API Fetched");
             _logger.LogInformation("\n\n\n");
-            await using var context = _services.GetService<ApplicationDbContext>();
             var message = new Message{
                 TimeSent = DateTime.UtcNow,
-                TicketId = context!.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
+                TicketId = _dbContext.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
                 Content = data.content,
                 Sender = data.sender
             };
-            context!.Messages.Add(message);
-            await context.SaveChangesAsync();
+            _dbContext.Messages.Add(message);
+            await _dbContext.SaveChangesAsync();
             _logger.LogInformation("Added message to tickId " + message.TicketId);
             return Ok("Message Added");
         }
@@ -48,9 +44,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [HttpGet("getimage/{ticketId}")]
         public IActionResult GetImage(int ticketId)
         {
-            var context = _services.GetRequiredService<ApplicationDbContext>();
-    
-            var visualFile = context.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
+            var visualFile = _dbContext.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
     
             if (visualFile == null)
             {
@@ -68,9 +62,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
             {
                 _logger.LogInformation("API Fetched");
                 int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                await using var context = _services.GetService<ApplicationDbContext>();
                 var ticket = new Ticket();
-                ticket.MachineId = context!.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id).FirstOrDefault();
+                ticket.MachineId = _dbContext.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id).FirstOrDefault();
                 ticket.Title = data.Title;
                 ticket.Description = data.Description;
                 ticket.DateCreated = DateTime.UtcNow;
@@ -80,8 +73,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 ticket.DepartmentId = data.DepartmentId;
                 ticket.CreatorUserId = id;
                 ticket.Resolved = false;
-                context.Tickets.Add(ticket);
-                context.SaveChanges();
+                _dbContext.Tickets.Add(ticket);
+                _dbContext.SaveChanges();
 
                 using MemoryStream memoryStream = new();
                 foreach (IFormFile image in data.Images)
@@ -96,7 +89,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     _dbContext.VisualFiles.Add(visualFile);
                 }
 
-                context.SaveChanges();
+                _dbContext.SaveChanges();
                 return Ok(ticket.Id);
             }
         }
@@ -106,11 +99,10 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public async Task<ActionResult<Ticket>> CreateTicketForSomeone([FromForm] CreateTicketDto data)
         {
             _logger.LogInformation("API Fetched");
-            await using var context = _services.GetService<ApplicationDbContext>();
 
             _logger.LogInformation("Token Correct");
             var ticket = new Ticket();
-            ticket.MachineId = context!.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id).FirstOrDefault();
+            ticket.MachineId = _dbContext.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id).FirstOrDefault();
             ticket.Title = $"{DateTime.UtcNow} Prio: {data.Priority}, {data.Machine}";
             ticket.Description = data.Description;
             ticket.DateCreated = DateTime.UtcNow;
@@ -118,10 +110,10 @@ namespace Viscon_ProjectC_Groep4.Controllers
             ticket.ExpectedToBeDone = data.ExpectedAction;
             ticket.MadeAnyChanges = data.SelfTinkering;
             ticket.DepartmentId = data.DepartmentId;
-            ticket.CreatorUserId = context.Users.Where(u => u.Email == data.UserEmail).Select(u => u.Id).FirstOrDefault();
+            ticket.CreatorUserId = _dbContext.Users.Where(u => u.Email == data.UserEmail).Select(u => u.Id).FirstOrDefault();
             ticket.Resolved = false;
-            context.Tickets.Add(ticket);
-            context.SaveChanges();
+            _dbContext.Tickets.Add(ticket);
+            _dbContext.SaveChanges();
 
             using MemoryStream memoryStream = new();
             foreach (IFormFile image in data.Images)
@@ -135,23 +127,21 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 };
                 _dbContext.VisualFiles.Add(visualFile);
             }
-            context.SaveChanges();
+            _dbContext.SaveChanges();
             return Ok(ticket.Id);
         }
 
         [Authorize(Policy = "user")]
         [HttpPost("UserName")]
         public async Task<IActionResult> GetUser(getUserDto data) {
-            await using var context = _services.GetService<ApplicationDbContext>();
-            var user = context.Users.FirstOrDefault(_ => _.Id == data.Id);
+            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == data.Id);
             return Ok(user.FirstName + " " + user.LastName);
         }
 
         [Authorize(Policy = "user")]
         [HttpGet("ticketdata")]
         public async Task<ActionResult> GetTicketData([FromQuery] int id) {
-            await using var context = _services.GetService<ApplicationDbContext>();
-            var ticket = context!.Tickets
+            var ticket = _dbContext.Tickets
                 .Include(t => t.Department)
                 .Include(t => t.Machine)
                 .Include(t => t.Creator)
@@ -159,9 +149,9 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 .Include(t => t.Helper)
                 .FirstOrDefault(x => x.Id == id);
             if (ticket == null) return NotFound("No Ticket Found");
-            var messages = context.Messages
+            var messages = _dbContext.Messages
                 .Where(m => m.TicketId == ticket.Id)
-                .Join(context.Users,
+                .Join(_dbContext.Users,
                     message => message.Sender,
                     user => user.Id,
                     (message, user) => new {
@@ -228,17 +218,16 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [Route("changeticket")]
         public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
         {
-            await using var context = _services.GetService<ApplicationDbContext>();
             int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var user = context.Users.FirstOrDefault(_ => _.Id == id)!;
+            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == id)!;
             if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
 
-            var ticket = context.Tickets.FirstOrDefault(_ => _.Id == data.id);
+            var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == data.id);
             if (data.department != 0) ticket!.DepartmentId = data.department;
             ticket!.Urgent = data.urgent;
             ticket.Public = data.publish;
             ticket.Resolved = data.resolved;
-            await context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return Ok("Success");
     }
         
@@ -247,14 +236,13 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [Route("claim")]
         public async Task<IActionResult> Claim(int id)
         {
-            await using var context = _services.GetService<ApplicationDbContext>();
             int userId = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var user = context.Users.FirstOrDefault(_ => _.Id == userId)!;
+            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == userId)!;
             if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
 
-            var ticket = context.Tickets.FirstOrDefault(_ => _.Id == id)!;
+            var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == id)!;
             ticket.HelperUserId = user.Id;
-            await context.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return Ok("Success");
     }
     }

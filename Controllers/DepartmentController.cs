@@ -13,16 +13,15 @@ namespace Viscon_ProjectC_Groep4.Controllers {
     [Route("[controller]")]
     public class DepartmentController : ControllerBase {
         
-        private readonly IServiceProvider _services;
+        private readonly ApplicationDbContext _dbContext;
 
-        public DepartmentController(IServiceProvider services) {
-            _services = services;
+        public DepartmentController(ApplicationDbContext dbContext) {
+            _dbContext = dbContext;
         }
         
         [HttpGet("All")]
         public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
-            await using var context = _services.GetService<ApplicationDbContext>();
-            var departments = context?.Departments.ToList();
+            var departments = _dbContext.Departments.ToList();
             return Ok(departments);
         }
     }
