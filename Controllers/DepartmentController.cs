@@ -15,7 +15,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         
         private readonly IServiceProvider _services;
 
-        public DepartmentController(IConfiguration configuration, IServiceProvider services) {
+        public DepartmentController(IServiceProvider services) {
             _services = services;
         }
         
