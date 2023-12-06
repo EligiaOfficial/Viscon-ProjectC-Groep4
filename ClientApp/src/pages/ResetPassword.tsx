@@ -25,6 +25,18 @@ const ResetPassword: React.FC = () => {
       return;
     }
 
+    if (!isTokenValid) {
+        return (
+          <div className="flex flex-col items-center justify-center h-screen">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+              <p className="text-center text-gray-700">
+                Invalid or expired token.
+              </p>
+            </div>
+          </div>
+        );
+      }
+
     // Send POST request to backend with token and new password
     try {
       const response = await fetch('/api/password/reset-password', {
