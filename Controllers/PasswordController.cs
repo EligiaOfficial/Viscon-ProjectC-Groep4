@@ -69,23 +69,23 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _context.ForgottenPasswords.Add(forgotPasswordEntry);
             await _context.SaveChangesAsync();
 
-            // Send a password reset email with the token
+
             var resetLink = $"http://localhost:5173/reset-password?token={token}";
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(""), // Replace with your email
+                From = new MailAddress("visconticketsystemhelp@gmail.com"),
                 Subject = "Password Reset Request",
                 Body = $"Click the following link to reset your password: {resetLink}",
                 IsBodyHtml = true,
             };
             mailMessage.To.Add(request.Email);
 
-            using (var smtpClient = new SmtpClient("smtp.gmail.com")) // Configure SMTP server
+            using (var smtpClient = new SmtpClient("smtp.gmail.com"))
             {
-                smtpClient.Port = 587; // Use the appropriate port
-                smtpClient.Credentials = new NetworkCredential("mail", "pw"); // Replace with your email and app password
-                smtpClient.EnableSsl = true; // Enable SSL/TLS
+                smtpClient.Port = 587;
+                smtpClient.Credentials = new NetworkCredential("visconticketsystemhelp@gmail.com", "gcph mqwe csfx oxdj ");
+                smtpClient.EnableSsl = true;
 
                 await smtpClient.SendMailAsync(mailMessage);
             }
