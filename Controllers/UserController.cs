@@ -14,19 +14,17 @@ namespace Viscon_ProjectC_Groep4.Controllers
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly DbSet<User> _user;
 
         public UserController(ApplicationDbContext context)
         {
             _context = context;
-            _user = context.Set<User>();
         }
 
         [HttpGet]
         [Route("userdata")]
         public async Task<IActionResult> GetUser([FromQuery] int id)
         {
-            UserDto? user = await _user
+            UserDto? user = await _context.Users
                 .Where(user => user.Id == id)
                 .Select(result => new UserDto
                 {
