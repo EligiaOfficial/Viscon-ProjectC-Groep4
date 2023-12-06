@@ -15,7 +15,7 @@ function SideBarItem(props: Props) {
       onMouseEnter={() => setAnimate(true)}
       onMouseLeave={() => setAnimate(false)}
       onClick={props.onclick}
-      className="group dark:hover:bg-stone-900 hover:bg-white active:bg-stone-400 translate duration-100 flex flex-row justify-start py-2 cursor-pointer select-none"
+      className="group dark:hover:bg-stone-800 hover:bg-white active:bg-stone-400 translate duration-100 flex flex-row justify-start py-2 cursor-pointer select-none"
     >
       <div
         className={`flex items-center justify-center min-w-[50px] max-w-[50px]`}

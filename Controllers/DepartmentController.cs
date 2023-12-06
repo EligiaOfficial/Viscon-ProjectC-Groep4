@@ -15,15 +15,20 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         
         private readonly IServiceProvider _services;
 
-        public DepartmentController(IServiceProvider services) {
+        public DepartmentController(IConfiguration configuration, IServiceProvider services) {
             _services = services;
         }
         
         [HttpGet("All")]
         public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
             await using var context = _services.GetService<ApplicationDbContext>();
-            var departments = context?.Departments.ToList();
-            return Ok(departments);
+            try {
+                var departments = context?.Departments.ToList();
+                return Ok(departments);
+            }
+            catch (Exception ex) {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

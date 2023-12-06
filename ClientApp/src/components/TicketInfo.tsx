@@ -80,7 +80,7 @@ function TicketInfo({
   return (
     <form
       onSubmit={handleSubmit}
-      className={"w-2/12 h-full bg-stone-300 dark:bg-stone-500 flex flex-col items-center"}
+      className={"w-2/12 h-full bg-stone-300 flex flex-col items-center"}
     >
       <div className="flex flex-col">
         <div className="group flex flex-row justify-start py-2">

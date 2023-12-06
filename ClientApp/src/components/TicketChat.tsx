@@ -39,7 +39,7 @@ function TicketChat({
   };
 
   return (
-    <div className={"w-5/6 bg-stone-200 dark:bg-stone-400 flex items-center justify-center"}>
+    <div className={"w-5/6 bg-stone-200 flex items-center justify-center"}>
       <div className={"h-full md:w-5/6 w-full flex flex-col items-center"}>
         <div className={"py-5 md:w-3/4 w-full"}>
           <h1 className={"text-3xl font-bold"}>{ticket["title"]}</h1>
@@ -48,13 +48,13 @@ function TicketChat({
           <h2 className={"text-md font-bold"}>{ticket["expectedToBeDone"]}</h2>
         </div>
 
-        <div className="md:w-3/4 w-full bg-white border rounded-lg dark:bg-stone-500">
+        <div className="md:w-3/4 w-full bg-white border rounded-lg">
           <div className={"w-11/12 mx-auto pt-7"}>
             <textarea
               id="message"
               rows="4"
               onChange={(e) => setMsg(e.target.value)}
-              className="block p-2.5 dark:bg-stone-300 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+              className="block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Write your thoughts here..."
             />
           </div>
@@ -86,7 +86,7 @@ function TicketChat({
         </div>
 
         {messages.length > 0 ? (
-          <div className="md:w-3/4 w-full border rounded-lg mt-2.5 dark:bg-stone-500 bg-white">
+          <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
             <div className="mx-10">
               {messages.map((message, index) => (
                 <ChatField
@@ -99,7 +99,7 @@ function TicketChat({
             </div>
           </div>
         ) : (
-          <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white dark:bg-stone-400">
+          <div className="md:w-3/4 w-full border rounded-lg mt-2.5 bg-white">
             <div className="mx-10">
               <div className={"w-full py-5"}>
                 <div className={""}>

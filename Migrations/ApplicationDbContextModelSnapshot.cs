@@ -217,9 +217,6 @@ namespace Viscon_ProjectC_Groep4.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.ToTable("Users", "public");
                 });
 

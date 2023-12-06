@@ -64,7 +64,7 @@ const Ticket = () => {
               resolved={ticket["resolved"]}
             />
           ) : null}
-          <div className="bg-stone-200 dark:bg-stone-400 h-full w-full">
+          <div className="bg-stone-200 h-full w-full">
             <section className="flex h-full overflow-y-auto">
               <TicketChat ticket={ticket} messages={messages || []} />
             </section>

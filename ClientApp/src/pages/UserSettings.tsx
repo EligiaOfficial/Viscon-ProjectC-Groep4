@@ -53,7 +53,7 @@ const EditAccount = ({ toggleSettings }) => {
   };
 
   return (
-      <div className={"h-screen mt-[50px] z-50 w-fit bg-gray-700 dark:bg-stone-600 text-white p-4"}>
+    <div className={"h-screen mt-[50px] z-50 w-fit bg-gray-800 text-white p-4"}>
       <div className={"flex justify-end"}>
         <div
           className={
@@ -72,12 +72,14 @@ const EditAccount = ({ toggleSettings }) => {
               <div>
                 <div className={"flex w-full"}>
                   <label
+                    htmlFor="email"
                     className="flex-1 block text-xs font-medium leading-3 text-gray-500"
                   >
                     First Name
                   </label>
 
                   <label
+                    htmlFor="email"
                     className="flex-1 block text-xs font-medium leading-3 text-gray-500"
                   >
                     Last Name
@@ -94,7 +96,7 @@ const EditAccount = ({ toggleSettings }) => {
                       name="firstName"
                       type="firstName"
                       autoComplete="firstName"
-                      className="pl-2 mr-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                      className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                     />
 
                     <input
@@ -105,7 +107,7 @@ const EditAccount = ({ toggleSettings }) => {
                       name="LastName"
                       type="LastName"
                       autoComplete="LastName"
-                      className="pl-2 ml-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                      className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -180,7 +182,7 @@ const EditAccount = ({ toggleSettings }) => {
                       name="password"
                       type="password"
                       autoComplete="password"
-                      className="pl-2 mr-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                      className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                     />
 
                     <input
@@ -191,7 +193,7 @@ const EditAccount = ({ toggleSettings }) => {
                       name="password"
                       type="password"
                       autoComplete="password"
-                      className="pl-2 ml-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
+                      className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
