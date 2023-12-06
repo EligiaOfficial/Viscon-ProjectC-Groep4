@@ -13,20 +13,11 @@ namespace Viscon_ProjectC_Groep4.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<TicketController> _logger;
-        private readonly Authenticator _authenticator;
-        private readonly IServiceProvider _services;
         private readonly ApplicationDbContext _context;
         private readonly DbSet<User> _user;
 
-        public UserController(
-            ILogger<TicketController> logger, Authenticator authenticator,
-            IServiceProvider services, ApplicationDbContext context
-        )
+        public UserController(ApplicationDbContext context)
         {
-            _logger = logger;
-            _authenticator = authenticator;
-            _services = services;
             _context = context;
             _user = context.Set<User>();
         }
