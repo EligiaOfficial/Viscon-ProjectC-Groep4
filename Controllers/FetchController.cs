@@ -15,7 +15,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         
         private readonly IServiceProvider _services;
 
-        public FetchController(IConfiguration configuration, IServiceProvider services) {
+        public FetchController(IServiceProvider services) {
             _services = services;
         }
         
