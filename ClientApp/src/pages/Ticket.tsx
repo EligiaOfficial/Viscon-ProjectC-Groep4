@@ -33,6 +33,12 @@ const Ticket = () => {
           messages,
           ticket,
         } = res.data;
+
+        for (let i=0; i < messages.length; i ++) {
+            messages[i].timeSent = new Date(messages[i].timeSent);
+        }
+        messages.sort((a, b) => a.timeSent.getTime() - b.timeSent.getTime());
+
         setCompany(company);
         setCreator(creator);
         setDepartment(department);
