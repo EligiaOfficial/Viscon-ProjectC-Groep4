@@ -8,20 +8,28 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginAxios } from "../Endpoints/Dto";
 import { useTranslation } from "react-i18next";
+import ErrorField from "../components/ErrorField";
 
 function Login() {
   const { t } = useTranslation();
-
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const nav = useNavigate();
 
+  const [err, setErr] = useState("");
+  const [emailErr, setEmailErr] = useState("");
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Passw:", password);
+    
+    if (!emailRegex.test(email)) {
+        setEmailErr("Please fill in a valid email adress.") // TODO: Language
+    } else {
+        setEmailErr("");
+    }
 
-    if (email !== "" && password !== "") {
+    if (email !== "" && password !== "" && emailRegex.test(email)) {
       LoginAxios({
         email: email,
         password: password,
@@ -33,7 +41,7 @@ function Login() {
         })
         .catch((error) => {
           console.error("Error:", error);
-          alert("Email and or Password not found");
+          setErr("Email and Password combination not found.") // TODO: Language
         });
     }
   };
@@ -75,6 +83,7 @@ function Login() {
                     required
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 "
                   />
+                  {emailErr != "" ? <ErrorField error={emailErr}/> : null}
                 </div>
               </div>
 
@@ -98,6 +107,7 @@ function Login() {
                     required
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                   />
+                  {err != "" ? <ErrorField error={err}/> : null}
                 </div>
               </div>
               <div className="text-sm">

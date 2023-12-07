@@ -57,15 +57,7 @@ export function LoginAxios(data: LoginDto) {
 }
 
 export function SignupAxios(data: SignUpDto) {
-  console.log("Before Axios request", data);
-  return axiosInstance
-    .post("/api/Auth/Add", data)
-    .then((response) => {
-      console.log("Axios request succeeded:", response);
-    })
-    .catch((error) => {
-      console.error("Axios request failed:", error);
-    });
+  return axiosInstance.post("/api/Auth/Add", data)
 }
 
 export function createMessageAxios(data: MessageDto) {
