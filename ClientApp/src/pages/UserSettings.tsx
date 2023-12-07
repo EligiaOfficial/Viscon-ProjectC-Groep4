@@ -14,6 +14,7 @@ import {
 } from "../Endpoints/Jwt";
 import { UserRoles } from "../UserRoles";
 import HamburgerButton from "../components/HamburgerButton";
+import ErrorField from "../components/ErrorField";
 
 const EditAccount = ({ toggleSettings }) => {
   const [password, setPassword] = useState("");
@@ -22,6 +23,10 @@ const EditAccount = ({ toggleSettings }) => {
   const [phone, setPhone] = useState("");
   const [language, setLanguage] = useState("");
   const [menu, setMenu] = useState<boolean>(false);
+  
+  const [passErr, setPassErr] = useState("");
+  const [emailErr, setEmailErr] = useState("");
+  const [phoneErr, setPhoneErr] = useState("");
 
   const token = localStorage.getItem("token");
   const usr_name = getName(token);
@@ -30,9 +35,29 @@ const EditAccount = ({ toggleSettings }) => {
   const usr_lang = getLang(token);
 
   const nav = useNavigate();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^[+]?[0-9]*[\s./-]?[(]?[0-9]+[)]?[-\s./]?[0-9]+[-\s./]?[0-9]+$/;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (password != confirmPassowrd) {
+      setPassErr("New passwords to not match");
+    } else {
+      setPassErr("")
+    }
+
+    if (email != "" && !emailRegex.test(email)) {
+      setEmailErr("Please fill in a correct email adress\nExample: yourname@email.com")
+    } else {
+      setEmailErr("");
+    }
+
+    if (phone != "" && !phoneRegex.test(phone)) {
+      setPhoneErr("Not a valid phone number found.\nExamples: +31652457819, 0615984565, 080058856")
+    } else {
+      setPhoneErr("")
+    }
 
     if (password == confirmPassowrd) {
       EditUserAxios({
@@ -96,7 +121,6 @@ const EditAccount = ({ toggleSettings }) => {
                       autoComplete="firstName"
                       className="pl-2 mr-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                     />
-
                     <input
                       id="LastName"
                       disabled
@@ -129,6 +153,7 @@ const EditAccount = ({ toggleSettings }) => {
                     autoComplete="email"
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                   />
+                  {emailErr != "" ? <ErrorField error={emailErr}/> : null}
                 </div>
               </div>
 
@@ -150,6 +175,7 @@ const EditAccount = ({ toggleSettings }) => {
                     autoComplete="phone"
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                   />
+                  {phoneErr != "" ? <ErrorField error={phoneErr}/> : null}
                 </div>
               </div>
 
@@ -161,7 +187,6 @@ const EditAccount = ({ toggleSettings }) => {
                   >
                     New password
                   </label>
-
                   <label
                     htmlFor="email"
                     className="flex-1 block text-xs font-medium leading-3 text-gray-500"
@@ -194,6 +219,7 @@ const EditAccount = ({ toggleSettings }) => {
                       className="pl-2 ml-1 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                     />
                   </div>
+                  {passErr != "" ? <ErrorField error={passErr}/> : null}
                 </div>
               </div>
 

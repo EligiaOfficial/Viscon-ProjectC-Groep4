@@ -8,6 +8,8 @@ import {useNavigate} from "react-router-dom";
 import {getCompany, getDepartment, getRole} from "../Endpoints/Jwt";
 import Layout from "../components/Layout";
 import {UserRoles} from "../UserRoles";
+import ErrorField from "../components/ErrorField";
+import Toast from "../components/Toast";
 
 function AddAccount() {
   const [password, setPassword] = useState("");
@@ -18,26 +20,98 @@ function AddAccount() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
 
+  const [passErr, setPassErr] = useState("");
+  const [emailErr, setEmailErr] = useState("");
+  const [firstNameErr, setFirstNameErr] = useState("");
+  const [lastNameErr, setLastNameErr] = useState("");
+  const [phoneErr, setPhoneErr] = useState("");
+  
+  const [roleErr, setRoleErr] = useState("");
+  const [departmentErr, setDepartmentErr] = useState("");
+  const [companyErr, setCompanyErr] = useState("");
+
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState<object[]>([]);
 
   const [company, setCompany] = useState("");
   const [companies, setCompanies] = useState<object[]>([]);
 
+  const [showToast, setShowToast] = useState(false);
+  
   const token = localStorage.getItem("token");
   const usr_role = getRole(token);
   const usr_compId = getCompany(token);
   const usr_depId = getDepartment(token);
 
   const nav = useNavigate();
-
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^[+]?[0-9]*[\s./-]?[(]?[0-9]+[)]?[-\s./]?[0-9]+[-\s./]?[0-9]+$/;
+  
   if (usr_role >= UserRoles.USER) return <div>Error 404</div>;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
+    
+    if (showToast) return;
+    
+    if (password == "") {
+      setPassErr("Please fill in a password.")
+    } else if (confirmPassword == "") {
+      setPassErr("Please fill in your password confirmation")
+    } else if (password != confirmPassword) {
+      setPassErr("Passwords to not match");
+    } else {
+      setPassErr("")
+    }
+    
+    if (email == "") {
+      setEmailErr("Please fill in a email adress");
+    } else if (email != "" && !emailRegex.test(email)) {
+      setEmailErr("Please fill in a correct email adress\nExample: yourname@email.com")
+    } else {
+      setEmailErr("");
+    }
+    
+    if (firstName == "") {
+      setFirstNameErr("Please fill in a first name.");
+    } else {
+      setFirstNameErr("");
+    }
 
-    if (email !== "" && password !== "" && confirmPassword !== "") {
+    if (lastName == "") {
+      setLastNameErr("Please fill in a last name.");
+    } else {
+      setLastNameErr("");
+    }
+    
+    if (phone == "") { //TODO: Check if we want to make this nullable
+      setPhoneErr("Please fill in a phone number.")
+    } else if (phone != "" && !phoneRegex.test(phone)) {
+      setPhoneErr("Not a valid phone number found.\nExamples: +31652457819, 0615984565, 080058856")
+    } else {
+      setPhoneErr("")
+    }
+    
+    if (role == "" && usr_role == UserRoles.ADMIN) {
+      setRoleErr("Please select a user type.")
+    } else {
+      setRoleErr("");
+    }
+    
+    if (department == "" && usr_role == UserRoles.ADMIN && (role == 0 || role == 1)) {
+      setDepartmentErr("Please select which department the user will work.")
+    } else {
+      setDepartmentErr("");
+    }
+
+    if (company == "" && usr_role == UserRoles.ADMIN && (role == 2 || role == 3)) {
+      setCompanyErr("Please select which department the user will work.")
+    } else {
+      setCompanyErr("");
+    }
+       
+
+    if ([passErr, emailErr, firstNameErr, lastNameErr, phoneErr, roleErr, departmentErr, companyErr].every((str) => str === '')) {
       SignupAxios({
         email: email,
         firstName: firstName,
@@ -49,11 +123,13 @@ function AddAccount() {
         department: usr_role == UserRoles.ADMIN ? +department : +usr_depId,
         language: "EN",
       })
-        .then(() => {
-          nav("/");
+        .then((res) => {
+          if (res.status == 200) {
+            setShowToast(true)
+          }
         })
         .catch((error) => {
-          console.error("Error:", error);
+          if (error.response.status === 500) setEmailErr("Email already in use."); // TODO: This is a really BAD way to fix it, fix later.
         });
     }
   };
@@ -65,22 +141,33 @@ function AddAccount() {
       setDepartments(departments);
     });
   }, []);
-
   return (
     <>
       <Layout>
+
+        {showToast && (
+            <Toast
+                title={"Account Successfully Created"}
+                description={"For " + firstName + " " + lastName}
+                buttonText={"Return to Dashboard"}
+                buttonFunction={() => {
+                  setShowToast(false);
+                }}
+            />
+        )}
+        
         <div className="flex flex-col items-center justify-center min-h-[calc(100%-100px)] h-full">
           {/*<span className="text-2xl py-4">Add Ticket</span>*/}
           <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400">
             <h1 className="text-3xl mb-2 text-center text-blue-600 dark:text-stone-600">
               Create New User
-            </h1>
+            </h1>            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className={`${usr_role == UserRoles.KEYUSER ? " " : "grid grid-cols-2 gap-6"}`}>
                 <div className={"flex flex-col"}>
                   <div className={"flex justify-between flex-row"}>
                     <div className={"w-full mr-2.5"}>
-                    <span
+                      <span
                         className="block text-gray-700 mb-1 font-medium"
                     >
                       First Name
@@ -92,9 +179,9 @@ function AddAccount() {
                           name="first_name"
                           type="first_name"
                           autoComplete="first_name"
-                          required
                           className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
+                      {firstNameErr != "" ? <ErrorField error={firstNameErr}/> : null}
                     </div>
                     <div className={"w-full ml-2.5"}>
                     <span
@@ -109,9 +196,9 @@ function AddAccount() {
                           name="last_name"
                           type="last_name"
                           autoComplete="last_name"
-                          required
                           className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
+                      {lastNameErr != "" ? <ErrorField error={lastNameErr}/> : null}
                     </div>
                   </div>
                   
@@ -129,9 +216,9 @@ function AddAccount() {
                           name="email"
                           type="email"
                           autoComplete="email"
-                          required
                           className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
+                      {emailErr != "" ? <ErrorField error={emailErr}/> : null}
                     </div>
 
                     <div className={"w-full ml-2.5"}>
@@ -147,9 +234,9 @@ function AddAccount() {
                           name="phone"
                           type="phone"
                           autoComplete="phone"
-                          required
                           className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
+                      {phoneErr != "" ? <ErrorField error={phoneErr}/> : null}
                     </div> 
                   </div>
 
@@ -167,9 +254,9 @@ function AddAccount() {
                           name="password"
                           type="password"
                           autoComplete="password"
-                          required
                           className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
+                      {passErr != "" ? <ErrorField error={passErr}/> : null}
                     </div>
 
                     <div className={"w-full ml-2.5"}>
@@ -185,7 +272,7 @@ function AddAccount() {
                           name="password"
                           type="password"
                           autoComplete="password"
-                          required
+                          autoComplete="password"
                           className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
                     </div>
@@ -206,12 +293,13 @@ function AddAccount() {
                             onChange={(e) => setRole(e.target.value)}
                             className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                         >
-                          <option value="5">Select User Type</option>
+                          <option value="">Select User Type</option>
                           <option value="0">Admin</option>
                           <option value="1">Viscon Employee</option>
                           <option value="2">Trained User</option>
                           <option value="3">User</option>
                         </select>
+                        {roleErr != "" ? <ErrorField error={roleErr}/> : null}
                       </div>
                   ) : (
                       <div />
@@ -237,6 +325,7 @@ function AddAccount() {
                               </option>
                           ))}
                         </select>
+                        {departmentErr != "" ? <ErrorField error={departmentErr}/> : null}
                       </div>
                   ) : (
                       <div />
@@ -262,6 +351,7 @@ function AddAccount() {
                               </option>
                           ))}
                         </select>
+                        {companyErr != "" ? <ErrorField error={companyErr}/> : null}
                       </div>
                   ) : (
                       <div />

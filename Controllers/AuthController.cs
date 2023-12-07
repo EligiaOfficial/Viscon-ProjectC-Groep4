@@ -139,7 +139,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
             await _dbContext.SaveChangesAsync();
             _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " +
                                    user.Email + ")");
-
             return Ok("Success");
         }
     }

@@ -7,6 +7,7 @@ import Layout from "../components/Layout";
 import uploadIcon from "../assets/icons/upload.svg";
 import whiteCrossIcon from "../assets/icons/white-cross.svg";
 import { getDepartments } from "../Endpoints/Dto";
+import ErrorField from "../components/ErrorField";
 
 const CreateTicket: React.FC = () => {
   const nav = useNavigate();
@@ -35,6 +36,15 @@ const CreateTicket: React.FC = () => {
   const [images, setImages] = useState<File[]>([]);
   const [duplicateFile, setDuplicateFile] = useState<boolean>(false);
 
+  const [titleError, setTitleError] = useState("");
+  const [machineError, setMachineError] = useState("");
+  const [departmentError, setDepartmentError] = useState("");
+  const [companyError, setCompanyError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [actionTakenError, setActionTakenError] = useState("");
+  const [changesMadeError, setChangesMadeError] = useState("");
+
+
   const allImages: string[] = [
     "png",
     "jpg",
@@ -61,36 +71,21 @@ const CreateTicket: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const errors: string[] = [];
+    // TODO: Language
+    title == "" ? setTitleError("Please provide a fitting title.") : setTitleError("");
+    selectedMachine == "" ? setMachineError("Select a machine.") : setMachineError("");
+    description == "" ? setDescriptionError("Please fill what\'s happening") : setDescriptionError("");
+    expectedAction == "" ? setActionTakenError("Please fill in a everything you have done so far to try and fix the problem.") : setActionTakenError("");
+    selfTinkering == "" ? setChangesMadeError("Please fill what changes you have made\nIf you have made no changes fill in that you haven't made changes..") : setChangesMadeError("");
+    selectedDepartment == "" ? setDepartmentError("Please select a department that might help you.") : setDepartmentError("");
 
-    if (selectedDepartment === "") {
-      errors.push("Please select a department.");
-    }
-
-    if (selectedMachine === "") {
-      errors.push("Please select a machine.");
-    }
-
-    if (description.trim() === "") {
-      errors.push("Please fill in a description of the problem.");
-    }
-
-    if (expectedAction.trim() === "") {
-      errors.push("Please fill in what have you tried to fix it.");
-    }
-
-    if (selfTinkering.trim() === "") {
-      errors.push("Please fill in what changed you have made.");
-    }
-
-    if (errors.length === 0) {
       try {
         const formData: any = new FormData();
         formData.append("title", title);
         formData.append("machine", selectedMachine);
         formData.append("description", description);
         formData.append("priority", stringToBoolean(priority));
-        formData.append("expectedAction", expectedAction);
+        formData.append("expectedAction", expectedAction); // TODO: Rename these
         formData.append("selfTinkering", selfTinkering);
         formData.append("departmentId", selectedDepartment);
 
@@ -119,9 +114,6 @@ const CreateTicket: React.FC = () => {
       } catch (error) {
         console.error("Error creating ticket:", error);
       }
-    } else {
-      setValidationErrors(errors);
-    }
   };
 
   const fetchMachines = async () => {
@@ -219,6 +211,7 @@ const CreateTicket: React.FC = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
               />
+              {titleError != "" ? <ErrorField error={titleError}/> : null}
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="col-start-1">
@@ -241,6 +234,7 @@ const CreateTicket: React.FC = () => {
                     </option>
                   ))}
                 </select>
+                {descriptionError != "" ? <ErrorField error={departmentError}/> : null}
               </div>
               <div className="relative row-span-3 flex flex-col">
                 <label
@@ -296,14 +290,15 @@ const CreateTicket: React.FC = () => {
                     supportedFile ? "hidden" : ""
                   } absolute top-full left-0 translate-y-1/2 text-red-600`}
                 >
-                  File type not supported.
+                  <ErrorField error={"File type not supported."}/>
+                  
                 </span>
                 <span
                   className={`${
                     !duplicateFile ? "hidden" : ""
                   } absolute top-full left-0 translate-y-1/2 text-red-600`}
                 >
-                  Duplicate files are not allowed.
+                  <ErrorField error={"Duplicate files are not allowed."}/> 
                 </span>
               </div>
               <div className="col-start-1">
@@ -326,6 +321,7 @@ const CreateTicket: React.FC = () => {
                     </option>
                   ))}
                 </select>
+                {machineError != "" ? <ErrorField error={machineError}/> : null}
               </div>
               <div className="col-start-1">
                 <label
@@ -392,14 +388,15 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
-                ></textarea>
+                />
+                {descriptionError != "" ? <ErrorField error={descriptionError}/> : null}
               </div>
               <div className="col-span-2">
                 <label
                   htmlFor="expectedAction"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  What have you tried to fix it
+                  What have you tried to fix it?
                 </label>
                 <textarea
                   id="expectedAction"
@@ -407,7 +404,8 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setExpectedAction(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
-                ></textarea>
+                />
+                {actionTakenError != "" ? <ErrorField error={actionTakenError}/> : null}
               </div>
               <div className="col-span-2">
                 <label
@@ -422,7 +420,8 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setSelfTinkering(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
-                ></textarea>
+                />
+                {changesMadeError != "" ? <ErrorField error={changesMadeError}/> : null}
               </div>
 
               <div className="col-span-2">
