@@ -9,7 +9,7 @@ function TicketChat({
   ticket,
   messages,
 }: {
-    ticketId: int
+    ticketId: number
     ticket: object;
     messages: object[];
 }) {
