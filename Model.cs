@@ -42,10 +42,10 @@ namespace Viscon_ProjectC_Groep4
         {
             if (!this.Departments.Any())
             {
-                this.Add(new Department { Id = 1, Speciality = "Viscon Plant Technology" });
-                this.Add(new Department { Id = 2, Speciality = "Viscon Fresh Produce" });
-                this.Add(new Department { Id = 3, Speciality = "Viscon Logistics" });
-                this.Add(new Department { Id = 4, Speciality = "Viscon Hatchery Automation" });
+                this.Add(new Department { Id = 1, Speciality = "Plant Technology" });
+                this.Add(new Department { Id = 2, Speciality = "Fresh Produce" });
+                this.Add(new Department { Id = 3, Speciality = "Logistics" });
+                this.Add(new Department { Id = 4, Speciality = "Hatchery Automation" });
                 this.SaveChanges();
             }
 

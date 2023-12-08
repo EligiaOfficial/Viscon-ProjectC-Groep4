@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.w-3-24 {
+    width: 12.5%;
+}
+
 .carousel-open:checked + .carousel-item {
      position: static;
      opacity: 100;

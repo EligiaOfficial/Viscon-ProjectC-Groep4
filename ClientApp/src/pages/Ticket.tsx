@@ -68,6 +68,7 @@ const Ticket = () => {
               urgent={ticket["urgent"]}
               published={ticket["published"]}
               resolved={ticket["resolved"]}
+              createdAt={ticket["dateCreated"]}
             />
           ) : null}
           <div className="bg-stone-200 dark:bg-stone-400 h-full w-full">

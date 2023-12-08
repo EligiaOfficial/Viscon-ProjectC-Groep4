@@ -248,7 +248,7 @@ function AddAccount() {
                       Password
                     </span>
                       <input
-                          id="password"
+                          id=""
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           name="password"
@@ -266,7 +266,7 @@ function AddAccount() {
                       Confirm Password
                     </span>
                       <input
-                          id="password"
+                          id=""
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           name="password"
