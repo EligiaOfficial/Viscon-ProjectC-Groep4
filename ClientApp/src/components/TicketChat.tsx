@@ -5,16 +5,14 @@ import { getId } from "../Endpoints/Jwt";
 import ChatField from "./ChatField";
 
 function TicketChat({
+  ticketId,
   ticket,
   messages,
 }: {
-  ticket: object;
-  messages: object[];
+    ticketId: int
+    ticket: object;
+    messages: object[];
 }) {
-  const [searchParams] = useSearchParams();
-  const Id = searchParams.get("id") || " ";
-  const TicketId = parseInt(Id, 10);
-
   const [content, setMsg] = useState("");
   const [img] = useState("");
   const token = localStorage.getItem("token");
@@ -26,7 +24,7 @@ function TicketChat({
     if (content !== "") {
       createMessageAxios({
         content: content,
-        ticketId: +TicketId,
+        ticketId: +ticketId,
         sender: +getId(token),
       })
         .then(() => {
