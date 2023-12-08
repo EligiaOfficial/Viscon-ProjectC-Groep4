@@ -30,6 +30,8 @@ namespace Viscon_ProjectC_Groep4
 
         public DbSet<VisualFile> VisualFiles { get; set; } = null!;
 
+        public DbSet<ForgottenPassword> ForgottenPasswords { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("public")

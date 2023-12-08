@@ -11,6 +11,8 @@ import SuccessCreating from "./pages/SuccessCreating";
 import Ticket from "./pages/Ticket";
 import CreateTicketForSomeone from "./pages/CreateTicketForSomeone";
 import Tickets from "./pages/Tickets";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 export const routes = [
   { path: "/", name: "dashboard", component: <Dashboard /> },
@@ -26,6 +28,8 @@ export const routes = [
   { path: "/create", name: "create", component: <CreateTicket /> },
   { path: "/success", name: "success", component: <SuccessCreating /> },
   { path: "/ticket", name: "ticket", component: <Ticket /> },
+  { path: "/forgot-password", name: "forgotpassword", component: <ForgotPassword /> },
+  { path: "/reset-password", name: "resetpassword", component: <ResetPassword /> },
   {
     path: "/tickets/new",
     name: "new-filter",
