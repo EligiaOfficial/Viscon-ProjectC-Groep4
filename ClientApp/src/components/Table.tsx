@@ -16,7 +16,6 @@ type FilterType = {
 
 function Table(props: TableProps) {
   const [keys, setKeys] = useState<string[]>([]);
-  const [dataRendered, setDataRendered] = useState<boolean>(false);
   const nav = useNavigate();
   const [sort, setSort] = useState<string>("");
   const [ascending, setAscending] = useState<boolean>(true);
@@ -29,13 +28,11 @@ function Table(props: TableProps) {
     if (
       props.data != undefined &&
       props.data != null &&
-      props.data.length > 0 &&
-      !dataRendered
+      props.data.length > 0
     ) {
       setKeys(Object.keys(props.data[0]));
       setSort(Object.keys(props.data[0])[0]);
       setFiltererdData(props.data);
-      setDataRendered(true);
     }
   }, [props]);
 
@@ -133,7 +130,7 @@ function Table(props: TableProps) {
 
   return (
     <>
-      {!dataRendered || props.data == undefined ? (
+      {props.data == undefined ? (
         <>No data to show.</>
       ) : (
         <div className="flex flex-col gap-4">
