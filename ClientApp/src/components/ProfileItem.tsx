@@ -32,7 +32,7 @@ function ProfileItem(props: Props) {
       >
         {props.icon ? (
           <img
-            className={`translate duration-300 min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] rounded-full border border-black dark:border-white group-hover:border-sky-600 dark:group-hover:border-stone-900`}
+            className={`translate object-cover duration-300 min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] rounded-full border border-black dark:border-white group-hover:border-sky-600 dark:group-hover:border-stone-900`}
             src={props.icon}
             onError={(e) => setDefaultProfile(e)}
           />

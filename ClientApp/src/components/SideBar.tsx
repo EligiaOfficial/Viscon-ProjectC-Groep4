@@ -21,6 +21,7 @@ import mailIcon from "../assets/icons/mail.svg";
 import profileAI from "../assets/images/ai-generated-7751688_1280.jpg";
 import { getUser } from "../Endpoints/Dto";
 import { useTranslation } from "react-i18next";
+import animatedImg from "../assets/images/dribbble_100_size25fps.gif";
 
 type User = {
   firstName: string;
@@ -158,7 +159,7 @@ function SideBar() {
           />
         </div>
         <div className="mt-auto" onClick={() => setShowSettings(!showSettings)}>
-          <ProfileItem icon={profileAI} user={user} />
+          <ProfileItem icon={animatedImg} user={user} />
         </div>
       </div>
       <div
