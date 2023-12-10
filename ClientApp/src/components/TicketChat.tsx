@@ -37,13 +37,20 @@ function TicketChat({
   };
 
   return (
-    <div className={"w-5/6 bg-stone-200 dark:bg-stone-400 flex items-center justify-center"}>
+    <div className={"w-5/6 bg-stone-200 bg-stone-400 flex items-center justify-center"}>
       <div className={"h-full md:w-5/6 w-full flex flex-col items-center"}>
         <div className={"py-5 md:w-3/4 w-full"}>
           <h1 className={"text-3xl font-bold"}>{ticket["title"]}</h1>
-          <h2 className={"text-md font-bold"}>{ticket["description"]}</h2>
-          <h2 className={"text-md font-bold"}>{ticket["madeAnyChanges"]}</h2>
-          <h2 className={"text-md font-bold"}>{ticket["expectedToBeDone"]}</h2>
+          <hr />
+          <table className={"text-left"}>
+            {[
+                ['Description', ticket["description"]],
+                ['Changes made', ticket["madeAnyChanges"]],
+                ['Expected to be done', ticket["expectedToBeDone"]]
+            ].map(([title, content]) => (
+                <tr><th className="after:content-[':'] pr-6">{title}</th><td>{content}</td></tr>
+            ))}
+          </table>
         </div>
 
         <div className="md:w-3/4 w-full bg-white border rounded-lg dark:bg-stone-500">
