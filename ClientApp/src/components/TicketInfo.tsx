@@ -4,8 +4,15 @@ import {UserRoles} from "../UserRoles";
 import {changeTicket, claimTicket, getDepartments} from "../Endpoints/Dto";
 import {getName, getRole} from "../Endpoints/Jwt";
 
-import userIcon from "../assets/icons/user.svg";
-
+import userIcon from "../assets/icons/user_alt.svg";
+import userAddIcon from "../assets/icons/user.svg";
+import companyIcon from "../assets/icons/company.svg";
+import dateIcon from "../assets/icons/date.svg";
+import departmentIcon from "../assets/icons/department.svg";
+import publishedIcon from "../assets/icons/published.svg";
+import statusIcon from "../assets/icons/status.svg";
+import urgentIcon from "../assets/icons/urgent.svg";
+import machineIcon from "../assets/icons/cogs.svg";
 
 function TicketInfo({
   requester,
@@ -109,12 +116,12 @@ function TicketInfo({
               />
               <h1 className="flex font-bold italic text-md">Requestor</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
+              {/*<img*/}
+              {/*    className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}*/}
+              {/*    alt={""}*/}
+              {/*    src={userIcon}*/}
+              {/*/>*/}
               <h1 className="text-md flex">{requester}</h1>
             </div>
           </div>
@@ -126,16 +133,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={companyIcon}
               />
               <h1 className="flex font-bold italic text-md">Company</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               <h1 className="text-md flex">{company}</h1>
             </div>
           </div>
@@ -147,16 +149,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={machineIcon}
               />
               <h1 className="flex font-bold italic text-md">Machine</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               <h1 className="text-md flex">{machine}</h1>
             </div>
           </div>
@@ -170,16 +167,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={urgentIcon}
               />
               <h1 className="flex font-bold italic text-md">Urgent</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               {role >= UserRoles.KEYUSER ? (
                   <h1 className="text-md flex">{!urgent ? "No" : "Yes"}</h1>
               ) : (
@@ -205,16 +197,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={dateIcon}
               />
               <h1 className="flex font-bold italic text-md">Created At</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               <h1 className="text-md flex">{formattedDate}</h1>
             </div>
           </div>
@@ -228,16 +215,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={departmentIcon}
               />
               <h1 className="flex font-bold italic text-md">Department</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               {role >= UserRoles.KEYUSER ? (
                   <h1 className="text-md flex">{department}</h1>
               ) : (
@@ -265,16 +247,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={userAddIcon}
               />
               <h1 className="flex font-bold italic text-md">Assignee</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               {role >= UserRoles.KEYUSER ? (
                   <h1 className="text-md flex">{assigneeState}</h1>
               ) : (
@@ -309,16 +286,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={publishedIcon}
               />
               <h1 className="flex font-bold italic text-md">Public</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               {role >= UserRoles.KEYUSER ? (
                   <h1 className="text-md flex">{published.toString() === "true" ? "Yes" : "No"}</h1>
               ) : (
@@ -344,16 +316,11 @@ function TicketInfo({
               <img
                   className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                   alt={""}
-                  src={userIcon}
+                  src={statusIcon}
               />
               <h1 className="flex font-bold italic text-md">Status</h1>
             </div>
-            <div className={"flex w-full flex-row items-center ml-5"}>
-              <img
-                  className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
-                  alt={""}
-                  src={userIcon}
-              />
+            <div className={"flex w-full flex-row items-center ml-6"}>
               {role >= UserRoles.KEYUSER ? (
                   <h1 className="text-md flex">{resolved.toString() !== 'false' ? "Closed" : "Open"}</h1>
               ) : (
