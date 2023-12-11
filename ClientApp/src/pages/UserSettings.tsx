@@ -15,6 +15,7 @@ import {
 import { UserRoles } from "../UserRoles";
 import HamburgerButton from "../components/HamburgerButton";
 import ErrorField from "../components/ErrorField";
+import ThemeSwitcher from "../components/ThemeSwitcher";
 
 const EditAccount = ({ toggleSettings }) => {
   const [password, setPassword] = useState("");
@@ -77,6 +78,11 @@ const EditAccount = ({ toggleSettings }) => {
     }
   };
 
+  function changeTheme() {
+    return undefined;
+    
+  }
+
   return (
       <div className={"h-screen mt-[50px] z-50 w-fit bg-gray-700 dark:bg-stone-600 text-white p-4"}>
       <div className={"flex justify-end"}>
@@ -97,13 +103,13 @@ const EditAccount = ({ toggleSettings }) => {
               <div>
                 <div className={"flex w-full"}>
                   <label
-                    className="flex-1 block text-xs font-medium leading-3 text-gray-500"
+                    className="flex-1 block text-xs font-medium leading-3 dark:text-stone-400 text-gray-500"
                   >
                     First Name
                   </label>
 
                   <label
-                    className="flex-1 block text-xs font-medium leading-3 text-gray-500"
+                    className="flex-1 block text-xs font-medium leading-3 dark:text-stone-400 text-gray-500"
                   >
                     Last Name
                   </label>
@@ -138,9 +144,13 @@ const EditAccount = ({ toggleSettings }) => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-xs font-medium leading-3 text-gray-500"
+                  className="block text-xs font-medium leading-3 dark:text-stone-400 text-gray-500"
                 >
                   Email address
+                  <br/>
+                  <span className={"font-xs"}>
+                      (Leave empty to not change)
+                    </span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -160,9 +170,13 @@ const EditAccount = ({ toggleSettings }) => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-xs font-medium leading-3 text-gray-500"
+                  className="block text-xs font-medium leading-3 dark:text-stone-400 text-gray-500"
                 >
                   Phone
+                  <br/>
+                  <span className={"font-xs"}>
+                      (Leave empty to not change)
+                    </span>
                 </label>
                 <div className="mt-2">
                   <input
@@ -183,13 +197,17 @@ const EditAccount = ({ toggleSettings }) => {
                 <div className={"flex w-full"}>
                   <label
                     htmlFor="email"
-                    className="flex-1 block text-xs font-medium leading-3 text-gray-500"
+                    className="flex-1 block text-xs font-medium leading-3 dark:text-stone-400 text-gray-500"
                   >
                     New password
+                    <br/>
+                    <span className={"font-xs"}>
+                      (Leave empty to not change)
+                    </span>
                   </label>
                   <label
                     htmlFor="email"
-                    className="flex-1 block text-xs font-medium leading-3 text-gray-500"
+                    className="flex-1 block text-xs font-medium leading-3 dark:text-stone-400 text-gray-500"
                   >
                     Confirm new password
                   </label>
@@ -223,31 +241,13 @@ const EditAccount = ({ toggleSettings }) => {
                 </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="language"
-                  className="block text-xs font-medium leading-3 text-gray-500"
-                >
-                  Prefered Language
-                </label>
-                <div className={"mt-2"}>
-                  <select
-                    id="language"
-                    value={usr_lang}
-                    onChange={(e) => setLanguage(e.target.value)}
-                    className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
-                  >
-                    <option value="EN">English</option>
-                    <option value="NL">Nederlands</option>
-                  </select>
-                </div>
-              </div>
+              <ThemeSwitcher/>
 
               <button
                 type="submit"
-                className="flex w-2/4 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="flex w-full justify-center rounded-md inline-flex w-full items-center justify-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-r dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-stone-900 hover:bg-blue-800"
               >
-                Edit Data
+                Edit User Info
               </button>
             </form>
           </div>
