@@ -29,7 +29,7 @@ function Tickets(props: TicketsProps) {
       case "critical":
         setTickets(
           data.filter((ticket: any) => {
-            return ticket["urgent"] == "Yes";
+            return ticket["urgent"] == "true";
           })
         );
         break;

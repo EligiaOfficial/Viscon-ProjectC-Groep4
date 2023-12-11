@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore; // Make sure this namespace exists
 using Services;
 using Viscon_ProjectC_Groep4.Dto;
@@ -189,32 +190,53 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [HttpGet("tickets")]
         public async Task<IActionResult> GetTickets()
         {
-            List<GetTicketsDto> tickets = await (from ticket in _dbContext.Tickets
-                                join machine in _dbContext.Machines
-                                    on ticket.MachineId equals machine.Id
-                                join department in _dbContext.Departments
-                                    on ticket.DepartmentId equals department.Id
-                                join user in _dbContext.Users
-                                    on ticket.HelperUserId equals user.Id into grouping
-                                from result in grouping.DefaultIfEmpty()
-                                select new GetTicketsDto
-                                {
-                                    TicketID = ticket.Id,
-                                    Title = ticket.Title,
-                                    Status = ticket.Resolved ? "closed" : "open",
-                                    Urgent = ticket.Urgent ? "Yes" : "No",
-                                    Company = ticket.Creator.Company.Name,
-                                    Machine = machine.Name,
-                                    Department = department.Speciality,
-                                    Supporter = (result.LastName + " " + result.FirstName) ?? "-",
-                                    Created = ticket.DateCreated,
-                                    Issuer = _dbContext.Users.Where(user => user.Id == ticket.CreatorUserId)
-                                        .Select(result => result.LastName + ", " + result.FirstName)
-                                        .FirstOrDefault()!
-                                })
-                                .ToListAsync();
+            string? _id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            var usr = _dbContext.Users.FirstOrDefault(_ => _.Id == int.Parse(_id))!;
+
+            var tickets = from ticket in _dbContext.Tickets
+                join machine in _dbContext.Machines on ticket.MachineId equals machine.Id
+                join department in _dbContext.Departments on ticket.DepartmentId equals department.Id
+                join user in _dbContext.Users on ticket.HelperUserId equals user.Id into grouping
+                from result in grouping.DefaultIfEmpty()
+                select new
+                {
+                    TicketID = ticket.Id,
+                    Title = ticket.Title,
+                    Status = ticket.Resolved ? "closed" : "open",
+                    Urgent = ticket.Urgent ? "Yes" : "No",
+                    Company = ticket.Creator.Company.Name,
+                    CompanyId = ticket.Creator.Company.Id,
+                    Machine = machine.Name,
+                    Department = department.Speciality,
+                    DepartmentId = department.Id,
+                    Supporter = (result.LastName + " " + result.FirstName) ?? "-",
+                    Created = ticket.DateCreated,
+                    Issuer = _dbContext.Users.Where(u => u.Id == ticket.CreatorUserId)
+                        .Select(u => u.LastName + ", " + u.FirstName)
+                        .FirstOrDefault()!
+                };
+
+            tickets = usr.Role switch {
+                >= (RoleTypes) 2 => tickets.Where(_ => _.CompanyId == usr.CompanyId),
+                (RoleTypes) 1 => tickets.Where(_ => _.DepartmentId == usr.DepartmentId),
+                _ => tickets
+            };
+
+            List<GetTicketsDto> res = await tickets.Select(t => new GetTicketsDto
+            {
+                TicketID = t.TicketID,
+                Title = t.Title,
+                Status = t.Status,
+                Urgent = t.Urgent,
+                Company = t.Company,
+                Machine = t.Machine,
+                Department = t.Department,
+                Supporter = t.Supporter,
+                Created = t.Created,
+                Issuer = t.Issuer
+            }).ToListAsync();
             
-            return Ok(tickets);
+            return Ok(res);
         }
         
         [Authorize(Policy = "viscon")]
