@@ -8,6 +8,7 @@ import uploadIcon from "../assets/icons/upload.svg";
 import whiteCrossIcon from "../assets/icons/white-cross.svg";
 import { getDepartments } from "../Endpoints/Dto";
 import ErrorField from "../components/ErrorField";
+import { useTranslation } from "react-i18next";
 
 const CreateTicket: React.FC = () => {
   const nav = useNavigate();
@@ -44,6 +45,7 @@ const CreateTicket: React.FC = () => {
   const [actionTakenError, setActionTakenError] = useState("");
   const [changesMadeError, setChangesMadeError] = useState("");
 
+  const { t } = useTranslation();
 
   const allImages: string[] = [
     "png",
@@ -72,48 +74,64 @@ const CreateTicket: React.FC = () => {
     e.preventDefault();
 
     // TODO: Language
-    title == "" ? setTitleError("Please provide a fitting title.") : setTitleError("");
-    selectedMachine == "" ? setMachineError("Select a machine.") : setMachineError("");
-    description == "" ? setDescriptionError("Please fill what\'s happening") : setDescriptionError("");
-    expectedAction == "" ? setActionTakenError("Please fill in a everything you have done so far to try and fix the problem.") : setActionTakenError("");
-    selfTinkering == "" ? setChangesMadeError("Please fill what changes you have made\nIf you have made no changes fill in that you haven't made changes..") : setChangesMadeError("");
-    selectedDepartment == "" ? setDepartmentError("Please select a department that might help you.") : setDepartmentError("");
+    title == ""
+      ? setTitleError("Please provide a fitting title.")
+      : setTitleError("");
+    selectedMachine == ""
+      ? setMachineError("Select a machine.")
+      : setMachineError("");
+    description == ""
+      ? setDescriptionError("Please fill what's happening")
+      : setDescriptionError("");
+    expectedAction == ""
+      ? setActionTakenError(
+          "Please fill in a everything you have done so far to try and fix the problem."
+        )
+      : setActionTakenError("");
+    selfTinkering == ""
+      ? setChangesMadeError(
+          "Please fill what changes you have made\nIf you have made no changes fill in that you haven't made changes.."
+        )
+      : setChangesMadeError("");
+    selectedDepartment == ""
+      ? setDepartmentError("Please select a department that might help you.")
+      : setDepartmentError("");
 
-      try {
-        const formData: any = new FormData();
-        formData.append("title", title);
-        formData.append("machine", selectedMachine);
-        formData.append("description", description);
-        formData.append("priority", stringToBoolean(priority));
-        formData.append("expectedAction", expectedAction); // TODO: Rename these
-        formData.append("selfTinkering", selfTinkering);
-        formData.append("departmentId", selectedDepartment);
+    try {
+      const formData: any = new FormData();
+      formData.append("title", title);
+      formData.append("machine", selectedMachine);
+      formData.append("description", description);
+      formData.append("priority", stringToBoolean(priority));
+      formData.append("expectedAction", expectedAction); // TODO: Rename these
+      formData.append("selfTinkering", selfTinkering);
+      formData.append("departmentId", selectedDepartment);
 
-        if (images.length > 0) {
-          images.forEach((image, i) => {
-            formData.append(`images`, image, image!.name);
-          });
-        }
-
-        const response = await axiosInstance.post(
-          "api/ticket/createticket",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          console.log("Ticket created successfully:", response.data);
-          nav(`/ticket?id=${response.data}`);
-        } else {
-          console.error("Ticket creation failed:", response.data);
-        }
-      } catch (error) {
-        console.error("Error creating ticket:", error);
+      if (images.length > 0) {
+        images.forEach((image, i) => {
+          formData.append(`images`, image, image!.name);
+        });
       }
+
+      const response = await axiosInstance.post(
+        "api/ticket/createticket",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Ticket created successfully:", response.data);
+        nav(`/ticket?id=${response.data}`);
+      } else {
+        console.error("Ticket creation failed:", response.data);
+      }
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+    }
   };
 
   const fetchMachines = async () => {
@@ -177,7 +195,7 @@ const CreateTicket: React.FC = () => {
         {/*<span className="text-2xl py-4">Add Ticket</span>*/}
         <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400 h-full my-20">
           <h1 className="text-3xl mb-2 text-center text-blue-600 dark:text-stone-600">
-            Create a new Ticket
+            {t("createTicket.title")}
           </h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             {validationErrors.length > 0 && (
@@ -203,7 +221,7 @@ const CreateTicket: React.FC = () => {
                 htmlFor="title"
                 className="block text-gray-700 mb-1 font-medium"
               >
-                Title:
+                {t("createTicket.form.titlelabel")}:
               </label>
               <input
                 id="title"
@@ -211,7 +229,7 @@ const CreateTicket: React.FC = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
               />
-              {titleError != "" ? <ErrorField error={titleError}/> : null}
+              {titleError != "" ? <ErrorField error={titleError} /> : null}
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="col-start-1">
@@ -219,7 +237,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="machine"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Which department should pick up this ticket?
+                  {t("createTicket.form.departmentlabel")}
                 </label>
                 <select
                   id="machine"
@@ -227,21 +245,25 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setSelectedDepartment(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                 >
-                  <option value="">Select a department</option>
+                  <option value="">
+                    {t("createTicket.form.defaultdepartment")}
+                  </option>
                   {departments.map((department) => (
                     <option key={department["id"]} value={department["id"]}>
                       {department["speciality"]}
                     </option>
                   ))}
                 </select>
-                {descriptionError != "" ? <ErrorField error={departmentError}/> : null}
+                {descriptionError != "" ? (
+                  <ErrorField error={departmentError} />
+                ) : null}
               </div>
               <div className="relative row-span-3 flex flex-col">
                 <label
                   htmlFor="image"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Add picture(s):
+                  {t("createTicket.form.medialabel")}:
                 </label>
                 <div
                   onDragOver={(e) => e.preventDefault()}
@@ -270,17 +292,17 @@ const CreateTicket: React.FC = () => {
                     <div className="flex flex-1 flex-col items-center justify-center">
                       <img className="max-w-[60px]" src={uploadIcon} />
                       <span className="text-stone-600 font-bold">
-                        Drag & drop
+                        {t("createTicket.form.dragndrop")}
                       </span>
                     </div>
                     <div className="relative h-full border border-stone-400">
                       <span className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 bg-stone-100 dark:bg-stone-300 py-2 font-bold text-stone-600">
-                        or
+                        {t("createTicket.form.or")}
                       </span>
                     </div>
                     <div className="flex-1 flex justify-center items-center ">
                       <span className="border border-stone-200 px-2 py-1 font-bold bg-stone-200 text-stone-600 rounded-md">
-                        Browse Files
+                        {t("createTicket.form.browse")}
                       </span>
                     </div>
                   </div>
@@ -290,15 +312,14 @@ const CreateTicket: React.FC = () => {
                     supportedFile ? "hidden" : ""
                   } absolute top-full left-0 translate-y-1/2 text-red-600`}
                 >
-                  <ErrorField error={"File type not supported."}/>
-                  
+                  <ErrorField error={"File type not supported."} />
                 </span>
                 <span
                   className={`${
                     !duplicateFile ? "hidden" : ""
                   } absolute top-full left-0 translate-y-1/2 text-red-600`}
                 >
-                  <ErrorField error={"Duplicate files are not allowed."}/> 
+                  <ErrorField error={"Duplicate files are not allowed."} />
                 </span>
               </div>
               <div className="col-start-1">
@@ -306,7 +327,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="machine"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Which machine is in question?
+                  {t("createTicket.form.machinelabel")}
                 </label>
                 <select
                   id="machine"
@@ -314,21 +335,25 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setSelectedMachine(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                 >
-                  <option value="">Select a machine</option>
+                  <option value="">
+                    {t("createTicket.form.defaultmachine")}
+                  </option>
                   {machines.map((machine) => (
                     <option key={machine} value={machine}>
                       {machine}
                     </option>
                   ))}
                 </select>
-                {machineError != "" ? <ErrorField error={machineError}/> : null}
+                {machineError != "" ? (
+                  <ErrorField error={machineError} />
+                ) : null}
               </div>
               <div className="col-start-1">
                 <label
                   htmlFor="priority"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Has all work stopped?
+                  {t("createTicket.form.urgency")}
                 </label>
                 <select
                   id="priority"
@@ -336,8 +361,8 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setPriority(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                 >
-                  <option value="false">No</option>
-                  <option value="true">Yes</option>
+                  <option value="false">{t("createTicket.form.no")}</option>
+                  <option value="true">{t("createTicket.form.yes")}</option>
                 </select>
               </div>
               <div
@@ -380,7 +405,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="description"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  What do you see happening?
+                  {t("createTicket.form.description1")}
                 </label>
                 <textarea
                   id="description"
@@ -389,14 +414,16 @@ const CreateTicket: React.FC = () => {
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
                 />
-                {descriptionError != "" ? <ErrorField error={descriptionError}/> : null}
+                {descriptionError != "" ? (
+                  <ErrorField error={descriptionError} />
+                ) : null}
               </div>
               <div className="col-span-2">
                 <label
                   htmlFor="expectedAction"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  What have you tried to fix it?
+                  {t("createTicket.form.description2")}
                 </label>
                 <textarea
                   id="expectedAction"
@@ -405,14 +432,16 @@ const CreateTicket: React.FC = () => {
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
                 />
-                {actionTakenError != "" ? <ErrorField error={actionTakenError}/> : null}
+                {actionTakenError != "" ? (
+                  <ErrorField error={actionTakenError} />
+                ) : null}
               </div>
               <div className="col-span-2">
                 <label
                   htmlFor="selfTinkering"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Have you made any changes to the machine?
+                  {t("createTicket.form.description3")}
                 </label>
                 <textarea
                   id="selfTinkering"
@@ -421,7 +450,9 @@ const CreateTicket: React.FC = () => {
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
                 />
-                {changesMadeError != "" ? <ErrorField error={changesMadeError}/> : null}
+                {changesMadeError != "" ? (
+                  <ErrorField error={changesMadeError} />
+                ) : null}
               </div>
 
               <div className="col-span-2">
@@ -429,7 +460,7 @@ const CreateTicket: React.FC = () => {
                   type="submit"
                   className="bg-blue-600 dark:bg-stone-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2  transition-all ease-in-out duration-300"
                 >
-                  Create Ticket
+                  {t("createTicket.form.submit")}
                 </button>
               </div>
             </div>

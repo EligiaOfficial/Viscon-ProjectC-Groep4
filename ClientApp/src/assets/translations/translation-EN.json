@@ -20,7 +20,7 @@
     },
     "filters": {
       "title": "Filter by",
-      "open": "Open",
+      "open": "Unassigned",
       "critical": "Top-priority",
       "archive": "Archive"
     },
@@ -29,6 +29,59 @@
       "ticket": "New ticket",
       "user": "New user"
     },
-    "logout": "Log out"
+    "logout": "Sign out"
+  },
+  "tickets": {
+    "title": {
+      "all": "All tickets",
+      "unassigned": "Unasssigned tickets",
+      "critical": "Critical tickets",
+      "archive": "Archived tickets"
+    },
+    "table": {
+      "title": "What are you looking for?",
+      "category": "Category",
+      "all": "All",
+      "search": "Search"
+    }
+  },
+  "createTicket": {
+    "title": "Create a new ticket",
+    "form": {
+      "titlelabel": "Title",
+      "departmentlabel": "Which department should pick up this ticket?",
+      "defaultdepartment": "Select a department",
+      "machinelabel": "Which machine is in question?",
+      "defaultmachine": "Select a machine",
+      "urgency": "Is it urgent?",
+      "yes": "Yes",
+      "no": "No",
+      "medialabel": "Add picture(s)",
+      "dragndrop": "Drag & drop",
+      "or": "Or",
+      "browse": "Browse files",
+      "description1": "What do you see happening?",
+      "description2": "What have you tried to fix it?",
+      "description3": "Have you made any changes to the machine?",
+      "submit": "Submit"
+    }
+  },
+  "createUser": {
+    "title": "Create new user",
+    "form": {
+      "firstname": "First name",
+      "lastname": "Last name",
+      "email": "Email Address",
+      "phone": "Phone number",
+      "password": "Password",
+      "confirm": "Confirm password",
+      "userlabel": "What's the type of user?",
+      "defaultuser": "Select a role",
+      "departmentlabel": "In what department?",
+      "defaultdepartment": "Select a department",
+      "companylabel": "For which company?",
+      "defaultcompany": "Select a company",
+      "submit": "Submit"
+    }
   }
 }

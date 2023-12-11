@@ -77,7 +77,10 @@ function SideBar() {
           <SideBarItem
             title={t("sidebar.overview.dashboard")}
             icon={dashboardIcon}
-            onclick={() => nav("/dashboard")}
+            onclick={() => {
+              setMenu(false);
+              nav("/dashboard");
+            }}
             transformAnimation={"rotate3d(0,1,0,180deg)"}
           />
           <SideBarItem
@@ -88,7 +91,10 @@ function SideBar() {
           <SideBarItem
             title={t("sidebar.overview.tickets")}
             icon={normalIcon}
-            onclick={() => nav("/tickets/all")}
+            onclick={() => {
+              setMenu(false);
+              nav("/tickets/all");
+            }}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
           <Seperator color="white" marginX="4px" marginY="16px" />
@@ -97,19 +103,28 @@ function SideBar() {
             <SideBarItem
               title={t("sidebar.filters.open")}
               icon={newIcon}
-              onclick={() => nav("/tickets/new")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/unassigned");
+              }}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
             <SideBarItem
               title={t("sidebar.filters.critical")}
               icon={criticalIcon}
-              onclick={() => nav("/tickets/critical")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/critical");
+              }}
               transformAnimation={"rotate(360deg)"}
             />
             <SideBarItem
               title={t("sidebar.filters.archive")}
               icon={archiveIcon}
-              onclick={() => nav("/tickets/archive")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/archive");
+              }}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
           </div>

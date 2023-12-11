@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import arrowIcon from "../assets/icons/arrow.svg";
 import searchIcon from "../assets/icons/search.svg";
 import crossIcon from "../assets/icons/cross.svg";
+import { useTranslation } from "react-i18next";
 
 type TableProps = {
   data: any[];
@@ -24,6 +25,8 @@ function Table(props: TableProps) {
   const [filteredData, setFiltererdData] = useState<any[]>([]);
   const [filters, setFilters] = useState<FilterType[]>([]);
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     if (
       props.data != undefined &&
@@ -31,6 +34,7 @@ function Table(props: TableProps) {
       props.data.length > 0
     ) {
       setKeys(Object.keys(props.data[0]));
+      sortData(Object.keys(props.data[0])[0], true);
       setSort(Object.keys(props.data[0])[0]);
       setFiltererdData(props.data);
     }
@@ -113,7 +117,7 @@ function Table(props: TableProps) {
   };
 
   const handleSearch = () => {
-    // Duplicate filter
+    // Eliminate duplicate filter
     if (
       filters.some(
         (filter) =>
@@ -126,6 +130,7 @@ function Table(props: TableProps) {
       applyFilterOnData(filteredData, categoryFilter, textSearch)
     );
     setFilters([...filters, { category: categoryFilter, term: textSearch }]);
+    setTextSearch("");
   };
 
   return (
@@ -135,21 +140,22 @@ function Table(props: TableProps) {
       ) : (
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-5 gap-x-4">
-            <span className="col-start-1 col-span-3 font-semibold dark:text-stone-200">
-              What are you looking for?
+            <span className="col-start-1 col-span-2 font-semibold dark:text-stone-200">
+              {t("tickets.table.title")}
             </span>
-            <span className="col-start-4 col-span-1 font-semibold dark:text-stone-200">
-              Category
+            <span className="col-start-3 col-span-1 font-semibold dark:text-stone-200">
+              {t("tickets.table.category")}
             </span>
             <input
               onChange={(e) => setTextSearch(e.target.value)}
-              className="col-start-1 col-span-3 outline-none rounded-md px-2"
+              value={textSearch}
+              className="col-start-1 col-span-2 outline-none rounded-md px-2"
             />
             <select
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="col-start-4 col-span-1 outline-none rounded-md px-1"
+              className="col-start-3 col-span-1 outline-none rounded-md px-1"
             >
-              <option>All</option>
+              <option>{t("tickets.table.all")}</option>
               {keys.map((key) => (
                 <option key={key} value={key}>
                   {key.charAt(0).toUpperCase() + key.slice(1)}
@@ -166,7 +172,7 @@ function Table(props: TableProps) {
                 className="w-[20px] max-w-[20px] min-w-[20px]"
                 src={searchIcon}
               />
-              <span className="">Search</span>
+              <span className="">{t("tickets.table.search")}</span>
             </div>
           </div>
           <div className="flex flex-row gap-1">

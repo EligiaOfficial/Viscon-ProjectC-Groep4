@@ -10,6 +10,7 @@ import Layout from "../components/Layout";
 import { UserRoles } from "../UserRoles";
 import ErrorField from "../components/ErrorField";
 import Toast from "../components/Toast";
+import { useTranslation } from "react-i18next";
 
 function AddAccount() {
   const [password, setPassword] = useState("");
@@ -42,6 +43,8 @@ function AddAccount() {
   const usr_role = getRole(token);
   const usr_compId = getCompany(token);
   const usr_depId = getDepartment(token);
+
+  const { t } = useTranslation();
 
   const nav = useNavigate();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -184,7 +187,7 @@ function AddAccount() {
           {/*<span className="text-2xl py-4">Add Ticket</span>*/}
           <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400">
             <h1 className="text-3xl mb-2 text-center text-blue-600 dark:text-stone-600">
-              Create New User
+              {t("createUser.title")}
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div
@@ -196,7 +199,7 @@ function AddAccount() {
                   <div className={"flex justify-between flex-row"}>
                     <div className={"w-full mr-2.5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        First Name
+                        {t("createUser.form.firstname")}
                       </span>
                       <input
                         id="first_name"
@@ -213,7 +216,7 @@ function AddAccount() {
                     </div>
                     <div className={"w-full ml-2.5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        Last Name
+                        {t("createUser.form.lastname")}
                       </span>
                       <input
                         id="last_name"
@@ -233,7 +236,7 @@ function AddAccount() {
                   <div className={"mt-5 flex justify-between flex-row"}>
                     <div className={"w-full mr-2.5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        Email Adress
+                        {t("createUser.form.email")}
                       </span>
                       <input
                         id="email"
@@ -249,7 +252,7 @@ function AddAccount() {
 
                     <div className={"w-full ml-2.5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        Phone Number
+                        {t("createUser.form.phone")}
                       </span>
                       <input
                         id="phone"
@@ -267,7 +270,7 @@ function AddAccount() {
                   <div className={"mt-5 flex justify-between flex-row"}>
                     <div className={"w-full mr-2.5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        Password
+                        {t("createUser.form.password")}
                       </span>
                       <input
                         value={password}
@@ -282,7 +285,7 @@ function AddAccount() {
 
                     <div className={"w-full ml-2.5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        Confirm Password
+                        {t("createUser.form.confirm")}
                       </span>
                       <input
                         value={confirmPassword}
@@ -299,7 +302,7 @@ function AddAccount() {
                   {usr_role == UserRoles.ADMIN ? (
                     <div>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        What's the type of user?
+                        {t("createUser.form.userlabel")}
                       </span>
                       <select
                         id="role"
@@ -307,7 +310,9 @@ function AddAccount() {
                         onChange={(e) => setRole(e.target.value)}
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       >
-                        <option value="">Select User Type</option>
+                        <option value="">
+                          {t("createUser.form.defaultuser")}
+                        </option>
                         <option value="0">Admin</option>
                         <option value="1">Viscon Employee</option>
                         <option value="2">Trained User</option>
@@ -324,7 +329,7 @@ function AddAccount() {
                     role == UserRoles.VISCON.toString()) ? (
                     <div className={"mt-5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        In what department?
+                        {t("createUser.form.departmentlabel")}
                       </span>
                       <select
                         id="department"
@@ -332,7 +337,9 @@ function AddAccount() {
                         onChange={(e) => setDepartment(e.target.value)}
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       >
-                        <option value="">Select a Department</option>
+                        <option value="">
+                          {t("createUser.form.defaultdepartment")}
+                        </option>
                         {departments.map((dep) => (
                           <option key={dep["id"]} value={dep["id"]}>
                             {dep["speciality"]}
@@ -352,7 +359,7 @@ function AddAccount() {
                     role == UserRoles.USER.toString()) ? (
                     <div className={"mt-5"}>
                       <span className="block text-gray-700 mb-1 font-medium">
-                        For what Company?
+                        {t("createUser.form.companylabel")}
                       </span>
                       <select
                         id="company"
@@ -360,7 +367,9 @@ function AddAccount() {
                         onChange={(e) => setCompany(e.target.value)}
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       >
-                        <option value="">Select a Company</option>
+                        <option value="">
+                          {t("createUser.form.defaultcompany")}
+                        </option>
                         {companies.map((comp) => (
                           <option key={comp["id"]} value={comp["id"]}>
                             {comp["name"]}
@@ -381,7 +390,7 @@ function AddAccount() {
                   type="submit"
                   className="bg-blue-600 dark:bg-stone-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2  transition-all ease-in-out duration-300"
                 >
-                  Add Account
+                  {t("createUser.form.submit")}
                 </button>
               </div>
             </form>
