@@ -178,7 +178,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
                     expectedToBeDone = ticket.ExpectedToBeDone,
                     urgent = ticket.Urgent,
                     resolved = ticket.Resolved,
-                    published = ticket.Public
+                    published = ticket.Public,
+                    dateCreated = ticket.DateCreated
                 },
                 Messages = messages
             };
