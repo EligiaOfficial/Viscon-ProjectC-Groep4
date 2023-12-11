@@ -1,18 +1,21 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useSearchParams } from "react-router-dom";
-import { createMessageAxios } from "../Endpoints/Dto";
-import { getId } from "../Endpoints/Jwt";
+import {createMessageAxios, getDepartments} from "../Endpoints/Dto";
+import {getId, getName} from "../Endpoints/Jwt";
 import ChatField from "./ChatField";
+import {UserRoles} from "../UserRoles";
 
 function TicketChat({
   ticketId,
   ticket,
-  messages,
+  messages: initialMessages,
 }: {
     ticketId: number
     ticket: object;
     messages: object[];
 }) {
+
+  const [messages, setMessages] = useState(initialMessages);
   const [content, setMsg] = useState("");
   const [img] = useState("");
   const token = localStorage.getItem("token");
@@ -24,6 +27,21 @@ function TicketChat({
     setSelectedFiles(files);
   };
 
+  const addMessage = (content) => {
+    let newMessage = {
+      content: content, 
+      sender: getName(token)[0] + " " + getName(token)[1], 
+      timeSend: new Date()
+    }
+    console.log(newMessage)
+    setMessages((prevMessages) => [newMessage, ...prevMessages]);
+  };
+
+  useEffect(() => {
+    setMessages(initialMessages || []);
+  }, [initialMessages]);
+
+
   const submitMessage = (e) => {
     e.preventDefault(); // TODO: Reload Chat ipv Page
     console.log("msg: " + content);
@@ -34,8 +52,11 @@ function TicketChat({
         ticketId: +ticketId,
         sender: +getId(token),
       })
-        .then(() => {
-          console.log(content, img);
+        .then((res) => {
+          if (res.status === 200) {
+            addMessage(content)
+          }
+          setMsg('');
         })
         .catch((error) => {
           console.error("Error:", error);
@@ -44,16 +65,16 @@ function TicketChat({
   };
 
   return (
-    <div className={"w-full bg-stone-200 dark:bg-stone-400 flex items-center justify-center"}>
+    <div className={"w-full bg-white dark:bg-stone-400 flex items-center justify-center"}>
       <div className={"h-full w-full flex flex-col items-center"}>
-        <div className="py-5 w-full border">
+        <div className="py-5 w-full border-b-2">
           <div className="text-3xl font-bold mx-auto w-11/12 group relative">
             <span className="text-sm font-normal italic absolute left-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity inline-block -mt-4">Title:</span>
             {ticket["title"]}
           </div>
         </div>
 
-        <div className={"w-full border py-2.5"}>
+        <div className={"w-full border-b-2 py-2.5"}>
           <div className={"flex flex-col"}>
             <div className={"text-md font-bold w-11/12 mx-auto"}>
               <span className={"text-sm font-normal italic inline-block w-32 mx-auto"}>Description:</span> {ticket["description"]}
@@ -74,18 +95,19 @@ function TicketChat({
 
             <form>
               <div
-                  className="w-full mt-10 bg-stone-50 dark:bg-stone-700 border dark:border-stone-600">
+                  className="w-full mt-10 bg-stone-50 dark:bg-stone-700 border-2 dark:border-stone-600">
                 <div className="px-4 py-2 bg-white dark:bg-stone-800">
                   <label htmlFor="comment" className="sr-only">Your comment</label>
                   <textarea id="comment" rows="4"
-                            className="w-full px-0 text-sm text-stone-900 bg-white dark:bg-stone-800 focus:ring-0 dark:text-white dark:placeholder-stone-400"
+                            value = {content}
+                            className="w-full px-0 my-1.5 text-sm text-stone-900 bg-white dark:bg-stone-800 dark:focus:ring-gray-900 focus:ring-0 focus:ring-blue-900 dark:text-white dark:placeholder-stone-400"
                             placeholder="Write a comment..." required
                             onChange={(e) => setMsg(e.target.value)}
                   />
                 </div>
                 <div className="flex items-center justify-between px-3 py-2">
                   <button type="submit"
-                          className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
+                          className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-stone-900 hover:bg-blue-800"
                           onClick={submitMessage}
                   >
                     Post Message

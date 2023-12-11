@@ -56,7 +56,8 @@ function TicketInfo({
     getDepartments().then((res) => {
       setDepartments(res.data);
     });
-  }, [urgent, published, resolved]);
+    setAssignee(assignee)
+  }, [urgent, published, resolved, assignee]);
 
   const stringToBoolean = (stringValue) => {
     switch (stringValue?.toLowerCase()?.trim()) {
@@ -89,12 +90,12 @@ function TicketInfo({
 
   const token = localStorage.getItem("token");
   const role = getRole(token);
-  const name = getName(token);
+  const name = getName(token)[0] + " " + getName(token)[1];
   
   return (
     <form
       onSubmit={handleSubmit}
-      className={"w-1/5 h-full bg-stone-300 dark:bg-stone-500 flex flex-col items-center"}
+      className={"w-1/5 h-full border-r-2 bg-white dark:bg-stone-500 flex flex-col items-center"}
     >
       <div className="flex flex-col">
         
@@ -183,7 +184,7 @@ function TicketInfo({
                   <h1 className="text-md flex">{!urgent ? "No" : "Yes"}</h1>
               ) : (
                 <select
-                      className="w-auto bg-stone-500 hover:bg-stone-400"
+                    className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400"
                       onChange={(e) => setUrgency(stringToBoolean(e.target.value))}
                   >
                     <option value={urgent.toString() === "true" ? "Yes" : "No"}>
@@ -241,7 +242,7 @@ function TicketInfo({
                   <h1 className="text-md flex">{department}</h1>
               ) : (
                 <select
-                  className="w-auto bg-stone-500 hover:bg-stone-400"
+                    className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400"
                   onChange={(e) => setNewDepartment(e.target.value)}
                 >
                   <option className="">{department}</option>
@@ -275,9 +276,9 @@ function TicketInfo({
                   src={userIcon}
               />
               {role >= UserRoles.KEYUSER ? (
-                  <h1 className="text-md flex">{assignee}</h1>
+                  <h1 className="text-md flex">{assigneeState}</h1>
               ) : (
-                  <h1 className="text-md flex">{assignee}</h1>
+                  <h1 className="text-md flex">{assigneeState}</h1>
               )}
             </div>
             { role <= UserRoles.VISCON ? (
@@ -285,14 +286,14 @@ function TicketInfo({
                 <div
                     onClick={async () => await claimTicket(TicketId).then(setAssignee(name))}
                     type="submit"
-                    className={"flex flex-row ml-5 text-gray-700 cursor-pointer hover:text-orange-400"}
+                    className={"flex flex-row ml-5 text-blue-700 hover:text-purple-700 dark:text-gray-700 cursor-pointer dark:hover:text-orange-400"}
                 >
                   <img
                       className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
                       alt={""}
                       src={userIcon}
                   />
-                  <h1>Claim Ticket</h1>
+                  <h1>{ assigneeState === 'Unassigned' ? "Claim Ticket" : "Take Ticket" }</h1>
                 </div>
             ):(
                 <div/>
@@ -322,7 +323,7 @@ function TicketInfo({
                   <h1 className="text-md flex">{published.toString() === "true" ? "Yes" : "No"}</h1>
               ) : (
                 <select
-                      className="w-auto bg-stone-500 hover:bg-stone-400"
+                    className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400"
                       onChange={(e) => setPublished(stringToBoolean(e.target.value))}
                   >
                     <option value={published.toString() === "true" ? "Yes" : "No"}>
@@ -357,7 +358,7 @@ function TicketInfo({
                   <h1 className="text-md flex">{resolved.toString() !== 'false' ? "Closed" : "Open"}</h1>
               ) : (
                 <select
-                      className="w-auto bg-stone-500 hover:bg-stone-400"
+                      className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400"
                       onChange={(e) => setResolved(stringToBoolean(e.target.value))}
                   >
                     <option value={resolved.toString() === "true" ? "yes" : "no"}>
@@ -375,7 +376,7 @@ function TicketInfo({
         {role == UserRoles.ADMIN || role == UserRoles.VISCON ? (
             <button
                 type="submit"
-                className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-blue-700 dark:bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-800 dark:hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
             >
               Update Ticket
             </button>
