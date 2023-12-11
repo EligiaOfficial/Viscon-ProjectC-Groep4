@@ -41,7 +41,6 @@ public class MessageDto
 {
     public string content { get; set; }
     public int ticketId { get; set; }
-    public int sender { get; set; }
 }
 
 public class CreateTicketDto

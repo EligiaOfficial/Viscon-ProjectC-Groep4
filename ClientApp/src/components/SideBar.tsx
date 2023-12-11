@@ -21,6 +21,7 @@ import mailIcon from "../assets/icons/mail.svg";
 import profileAI from "../assets/images/ai-generated-7751688_1280.jpg";
 import { getUser } from "../Endpoints/Dto";
 import { useTranslation } from "react-i18next";
+import animatedImg from "../assets/images/dribbble_100_size25fps.gif";
 
 type User = {
   firstName: string;
@@ -76,7 +77,10 @@ function SideBar() {
           <SideBarItem
             title={t("sidebar.overview.dashboard")}
             icon={dashboardIcon}
-            onclick={() => nav("/dashboard")}
+            onclick={() => {
+              setMenu(false);
+              nav("/dashboard");
+            }}
             transformAnimation={"rotate3d(0,1,0,180deg)"}
           />
           <SideBarItem
@@ -87,7 +91,10 @@ function SideBar() {
           <SideBarItem
             title={t("sidebar.overview.tickets")}
             icon={normalIcon}
-            onclick={() => nav("/tickets/all")}
+            onclick={() => {
+              setMenu(false);
+              nav("/tickets/all");
+            }}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
           <Seperator color="white" marginX="4px" marginY="16px" />
@@ -96,19 +103,28 @@ function SideBar() {
             <SideBarItem
               title={t("sidebar.filters.open")}
               icon={newIcon}
-              onclick={() => nav("/tickets/new")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/unassigned");
+              }}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
             <SideBarItem
               title={t("sidebar.filters.critical")}
               icon={criticalIcon}
-              onclick={() => nav("/tickets/critical")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/critical");
+              }}
               transformAnimation={"rotate(360deg)"}
             />
             <SideBarItem
               title={t("sidebar.filters.archive")}
               icon={archiveIcon}
-              onclick={() => nav("/tickets/archive")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/archive");
+              }}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
           </div>
@@ -158,7 +174,7 @@ function SideBar() {
           />
         </div>
         <div className="mt-auto" onClick={() => setShowSettings(!showSettings)}>
-          <ProfileItem icon={profileAI} user={user} />
+          <ProfileItem icon={animatedImg} user={user} />
         </div>
       </div>
       <div

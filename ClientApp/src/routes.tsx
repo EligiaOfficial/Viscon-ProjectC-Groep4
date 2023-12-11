@@ -28,12 +28,20 @@ export const routes = [
   { path: "/create", name: "create", component: <CreateTicket /> },
   { path: "/success", name: "success", component: <SuccessCreating /> },
   { path: "/ticket", name: "ticket", component: <Ticket /> },
-  { path: "/forgot-password", name: "forgotpassword", component: <ForgotPassword /> },
-  { path: "/reset-password", name: "resetpassword", component: <ResetPassword /> },
   {
-    path: "/tickets/new",
+    path: "/forgot-password",
+    name: "forgotpassword",
+    component: <ForgotPassword />,
+  },
+  {
+    path: "/reset-password",
+    name: "resetpassword",
+    component: <ResetPassword />,
+  },
+  {
+    path: "/tickets/unassigned",
     name: "new-filter",
-    component: <Tickets filter={"new"} />,
+    component: <Tickets filter={"unassigned"} />,
   },
   {
     path: "/tickets/critical",

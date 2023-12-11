@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
@@ -6,6 +5,7 @@ using Entities;
 using Microsoft.EntityFrameworkCore; // Make sure this namespace exists
 using Services;
 using Viscon_ProjectC_Groep4.Dto;
+using ModelBinding;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {
@@ -26,14 +26,17 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [Authorize(Policy = "user")]
         [HttpPost]
         [Route("AddMessage")]
-        public async Task<IActionResult> AddMessage(MessageDto data) {
+        public async Task<IActionResult> AddMessage(
+            MessageDto data,
+            [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid
+        ) {
             _logger.LogInformation("API Fetched");
             _logger.LogInformation("\n\n\n");
             var message = new Message{
                 TimeSent = DateTime.UtcNow,
                 TicketId = _dbContext.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
                 Content = data.content,
-                Sender = data.sender
+                Sender = uid
             };
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();

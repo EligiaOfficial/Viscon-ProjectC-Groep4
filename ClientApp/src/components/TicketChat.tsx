@@ -50,7 +50,6 @@ function TicketChat({
       createMessageAxios({
         content: content,
         ticketId: +ticketId,
-        sender: +getId(token),
       })
         .then((res) => {
           if (res.status === 200) {
