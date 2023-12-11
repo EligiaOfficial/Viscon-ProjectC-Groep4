@@ -2,7 +2,7 @@
  *   Copyright (c) 2023
  *   All rights reserved.
  */
-import { useRef, useState } from "react";
+import {useRef, useState} from "react";
 import visconLogo from "../assets/icons/Viscon-Group_logo-gradient.svg";
 import flagNL from "../assets/icons/nl.svg";
 import flagGB from "../assets/icons/gb.svg";

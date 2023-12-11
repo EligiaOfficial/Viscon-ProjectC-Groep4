@@ -295,7 +295,7 @@ function TicketInfo({
                   <h1 className="text-md flex">{published.toString() === "true" ? "Yes" : "No"}</h1>
               ) : (
                 <select
-                    className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400"
+                    className=" w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400"
                       onChange={(e) => setPublished(stringToBoolean(e.target.value))}
                   >
                     <option value={published.toString() === "true" ? "Yes" : "No"}>
