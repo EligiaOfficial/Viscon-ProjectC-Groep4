@@ -30,5 +30,58 @@
       "user": "Nieuwe gebruiker"
     },
     "logout": "Afmelden"
+  },
+  "tickets": {
+    "title": {
+      "all": "Alle tickets",
+      "unassigned": "Openstaande tickets",
+      "critical": "Urgente tickets",
+      "archive": "Gearchiveerde tickets"
+    },
+    "table": {
+      "title": "Waar ben je naar op zoek?",
+      "category": "Categorie",
+      "all": "Alles",
+      "search": "Zoeken"
+    }
+  },
+  "createTicket": {
+    "title": "Maak een nieuwe ticket aan",
+    "form": {
+      "titlelabel": "Titel",
+      "departmentlabel": "Voor welke afdeling is dit bestemd?",
+      "defaultdepartment": "Selecteer een afdeling",
+      "machinelabel": "Om welke machine gaat het?",
+      "defaultmachine": "Selecteer een machine",
+      "urgency": "Is het urgent?",
+      "yes": "Ja",
+      "no": "Nee",
+      "medialabel": "Voeg afbeelding(en) toe",
+      "dragndrop": "Slepen & neerzetten",
+      "or": "Of",
+      "browse": "Bladeren",
+      "description1": "Wat zie je gebeuren?",
+      "description2": "Wat heb je al geprobeerd?",
+      "description3": "Heb je aanpassingen gemaakt aan de machine?",
+      "submit": "Verzenden"
+    }
+  },
+  "createUser": {
+    "title": "Maak een nieuwe gebruiker aan",
+    "form": {
+      "firstname": "Voornaam",
+      "lastname": "Achternaam",
+      "email": "E-mailadres",
+      "phone": "Telefoonnummer",
+      "password": "Wachtwoord",
+      "confirm": "Herhaal wachtwoord",
+      "userlabel": "Welke rechten heeft de nieuwe gebruiker?",
+      "defaultuser": "Selecteer een rol",
+      "departmentlabel": "Voor welke afdeling?",
+      "defaultdepartment": "Selecteer een afdeling",
+      "companylabel": "Voor welk bedrijf?",
+      "defaultcompany": "Selecteer een bedrijf",
+      "submit": "Verzenden"
+    }
   }
 }
