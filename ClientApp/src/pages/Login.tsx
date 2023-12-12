@@ -22,11 +22,11 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!emailRegex.test(email)) {
-        setEmailErr("Please fill in a valid email adress.") // TODO: Language
+      setEmailErr("Please fill in a valid email adress."); // TODO: Language
     } else {
-        setEmailErr("");
+      setEmailErr("");
     }
 
     if (email !== "" && password !== "" && emailRegex.test(email)) {
@@ -41,7 +41,7 @@ function Login() {
         })
         .catch((error) => {
           console.error("Error:", error);
-          setErr("Email and Password combination not found.") // TODO: Language
+          setErr("Email and Password combination not found."); // TODO: Language
         });
     }
   };
@@ -83,7 +83,7 @@ function Login() {
                     required
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 "
                   />
-                  {emailErr != "" ? <ErrorField error={emailErr}/> : null}
+                  {emailErr != "" ? <ErrorField error={emailErr} /> : null}
                 </div>
               </div>
 
@@ -107,7 +107,7 @@ function Login() {
                     required
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                   />
-                  {err != "" ? <ErrorField error={err}/> : null}
+                  {err != "" ? <ErrorField error={err} /> : null}
                 </div>
               </div>
               <div className="text-sm">

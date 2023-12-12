@@ -83,11 +83,11 @@ function SideBar() {
             }}
             transformAnimation={"rotate3d(0,1,0,180deg)"}
           />
-          <SideBarItem
+          {/* <SideBarItem
             title={t("sidebar.overview.mailbox")}
             icon={mailIcon}
             transformAnimation={"rotate3d(0,1,0,180deg"}
-          />
+          /> */}
           <SideBarItem
             title={t("sidebar.overview.tickets")}
             icon={normalIcon}
