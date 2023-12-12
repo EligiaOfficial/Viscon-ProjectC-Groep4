@@ -217,8 +217,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
                 };
 
             tickets = usr.Role switch {
-                >= (RoleTypes) 2 => tickets.Where(_ => _.CompanyId == usr.CompanyId),
-                (RoleTypes) 1 => tickets.Where(_ => _.DepartmentId == usr.DepartmentId),
+                >= RoleTypes.KEYUSER => tickets.Where(_ => _.CompanyId == usr.CompanyId),
+                RoleTypes.VISCON => tickets.Where(_ => _.DepartmentId == usr.DepartmentId),
                 _ => tickets
             };
 
