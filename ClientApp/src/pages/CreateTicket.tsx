@@ -55,6 +55,11 @@ const CreateTicket: React.FC = () => {
     "tiff",
     "bpg",
     "image/png",
+    "image/jpg",
+    "image/jpeg",
+    "image/gif",
+    "image/tiff",
+    "image/bpg",
   ];
 
   const stringToBoolean = (stringValue) => {
@@ -153,6 +158,7 @@ const CreateTicket: React.FC = () => {
       setSupportedFile(true);
       setDuplicateFile(false);
       if (allImages.indexOf(imageArray[i].type) === -1) {
+        console.log(imageArray[i].type);
         setSupportedFile(false);
         return;
       }

@@ -10,7 +10,6 @@ type TicketsProps = {
 
 function Tickets(props: TicketsProps) {
   const [tickets, setTickets] = useState<[]>([]);
-  const [title, setTitle] = useState<string>("");
 
   const { t } = useTranslation();
 

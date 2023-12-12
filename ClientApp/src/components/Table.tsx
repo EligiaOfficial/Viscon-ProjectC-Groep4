@@ -150,9 +150,16 @@ function Table(props: TableProps) {
               onChange={(e) => setTextSearch(e.target.value)}
               value={textSearch}
               className="col-start-1 col-span-2 outline-none rounded-md px-2"
+              onKeyDown={(e) => {
+                e.key == "Enter" ? handleSearch() : "";
+              }}
             />
             <select
               onChange={(e) => setCategoryFilter(e.target.value)}
+              onKeyDown={(e) => {
+                e.preventDefault();
+                e.key == "Enter" ? handleSearch() : "";
+              }}
               className="col-start-3 col-span-1 outline-none rounded-md px-1"
             >
               <option>{t("tickets.table.all")}</option>
