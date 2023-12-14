@@ -92,7 +92,7 @@ public class EditDto
 
 public class GetTicketsDto
 {
-    public int TicketID { get; set; }
+    public int Id { get; set; }
     public string Title { get; set; }
     public string Status { get; set; }
     public string Urgent { get; set; }

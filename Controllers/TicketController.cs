@@ -224,7 +224,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
             List<GetTicketsDto> res = await tickets.Select(t => new GetTicketsDto
             {
-                TicketID = t.TicketID,
+                Id = t.TicketID,
                 Title = t.Title,
                 Status = t.Status,
                 Urgent = t.Urgent,
