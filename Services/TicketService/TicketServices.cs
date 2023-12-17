@@ -19,14 +19,14 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
         private readonly ILogger<AuthServices> _logger;
 
         public TicketServices(
-            ApplicationDbContext dbContext, 
+            ApplicationDbContext dbContext,
             ILogger<AuthServices> logger
         )
         {
             _dbContext = dbContext;
             _logger = logger;
         }
-        
+
         public async Task<IActionResult> AddMessage(
             MessageDto data,
             [FromClaim(Name = ClaimTypes.NameIdentifier)]
@@ -61,8 +61,8 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             // Retourneer de afbeeldingsbytes als een File-resultaat met het juiste MIME-type
             return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
         }
-        
-        public async Task<ActionResult<Ticket>> CreateTicket([FromForm] CreateTicketDto data)
+
+        public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data)
         {
             {
                 _logger.LogInformation("API Fetched");
@@ -100,7 +100,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             }
         }
 
-        public async Task<ActionResult<Ticket>> CreateTicketForSomeone([FromForm] CreateTicketDto data)
+        public async Task<ActionResult<Ticket>> CreateTicketForSomeone(CreateTicketDto data)
         {
             _logger.LogInformation("API Fetched");
 
@@ -137,14 +137,14 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             _dbContext.SaveChanges();
             return Ok(ticket.Id);
         }
-        
+
         public async Task<IActionResult> GetUser(getUserDto data)
         {
             var user = _dbContext.Users.FirstOrDefault(_ => _.Id == data.Id);
             return Ok(user.FirstName + " " + user.LastName);
         }
-        
-        public async Task<ActionResult> GetTicketData([FromQuery] int id)
+
+        public async Task<ActionResult> GetTicketData(int id)
         {
             var ticket = _dbContext.Tickets
                 .Include(t => t.Department)
@@ -191,10 +191,9 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             return Ok(result);
         }
 
-        public async Task<IActionResult> GetTickets()
+        public async Task<IActionResult> GetTickets(int id)
         {
-            string? _id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            var usr = _dbContext.Users.FirstOrDefault(_ => _.Id == int.Parse(_id))!;
+            var usr = _dbContext.Users.FirstOrDefault(_ => _.Id == id)!;
 
             var tickets = from ticket in _dbContext.Tickets
                 join machine in _dbContext.Machines on ticket.MachineId equals machine.Id
@@ -228,7 +227,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
 
             List<GetTicketsDto> res = await tickets.Select(t => new GetTicketsDto
             {
-                Id = t.TicketID,
+                TicketID = t.TicketID,
                 Title = t.Title,
                 Status = t.Status,
                 Urgent = t.Urgent,
@@ -243,9 +242,13 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             return Ok(res);
         }
 
-        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
+        public Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
         {
-            int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            throw new NotImplementedException();
+        }
+
+        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data, int id)
+        {
             var user = _dbContext.Users.FirstOrDefault(_ => _.Id == id)!;
             if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
 
@@ -258,13 +261,20 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             return Ok("Success");
         }
 
-        public async Task<IActionResult> Claim(int id)
+        public async Task<IActionResult> Claim(int ticketId, int userId)
         {
-            int userId = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == userId)!;
-            if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
+            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == userId);
+            var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == ticketId);
 
-            var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == id)!;
+            if (user?.Role >= RoleTypes.KEYUSER)
+            {
+                return StatusCode(500);
+            }
+
+            Console.WriteLine(user);
+            Console.WriteLine(ticket);
+
+            if (user == null || ticket == null) return StatusCode(500);
             ticket.HelperUserId = user.Id;
             await _dbContext.SaveChangesAsync();
             return Ok("Success");

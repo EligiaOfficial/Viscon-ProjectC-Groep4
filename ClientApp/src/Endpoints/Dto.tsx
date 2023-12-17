@@ -111,7 +111,7 @@ type changeTicketDto = {
 };
 
 export function claimTicket(id: number) {
-  return axiosInstance.post(`api/ticket/claim?id=${id}`);
+  return axiosInstance.post(`api/ticket/claim?ticketId=${id}`);
 }
 
 export function changeTicket(data: changeTicketDto) {

@@ -16,7 +16,7 @@ namespace Viscon_ProjectC_Groep4.Services.DepartmentService {
             _dbContext = dbContext;
         }
         
-        public async Task<List<Department>> GetAll() {
+        public async Task<ActionResult<IEnumerable<Department>>> GetAll() {
             var departments = _dbContext.Departments.ToList();
             return departments;
         }

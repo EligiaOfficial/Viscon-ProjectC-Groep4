@@ -3,6 +3,7 @@
  *   All rights reserved.
  */
 
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Viscon_ProjectC_Groep4.Dto;
@@ -23,9 +24,13 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _authServices = authServices;
         }
 
-        [Authorize(Policy = "user")] [HttpPut("Edit")] 
-        public async Task<IActionResult> Edit(EditDto data) => 
-            await _authServices.Edit(data);
+        [Authorize(Policy = "user")]
+        [HttpPut("Edit")]
+        public async Task<IActionResult> Edit(EditDto data)
+        {
+            string? id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return await _authServices.Edit(data, int.Parse(id));
+        }
         
         [HttpPost("Login")] 
         public async Task<IActionResult> Login(LoginDto data) =>

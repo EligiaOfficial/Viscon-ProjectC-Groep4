@@ -55,15 +55,26 @@ namespace Viscon_ProjectC_Groep4.Controllers
             await _ticketServices.GetTicketData(id);
 
         [HttpGet("tickets")]
-        public async Task<IActionResult> GetTickets() =>
-            await _ticketServices.GetTickets();
+        public async Task<IActionResult> GetTickets()
+        {
+            string? id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            return await _ticketServices.GetTickets(int.Parse(id));
+        }
 
-        [Authorize(Policy = "viscon")] [HttpPost("changeticket")]
-        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data) =>
-            await _ticketServices.ChangeTicketDepartment(data);
+        [Authorize(Policy = "viscon")]
+        [HttpPost("changeticket")]
+        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
+        {
+            int id = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            return await _ticketServices.ChangeTicketDepartment(data, id);
+        }
 
-        [Authorize(Policy = "viscon")] [HttpPost("claim")]
-        public async Task<IActionResult> Claim(int id) =>
-            await _ticketServices.Claim(id);
+        [Authorize(Policy = "viscon")]
+        [HttpPost("claim")]
+        public async Task<IActionResult> Claim(int ticketId)
+        {
+            int userId = int.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            return await _ticketServices.Claim(ticketId, userId);
+        }
     }
 }

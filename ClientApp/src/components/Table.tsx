@@ -208,7 +208,7 @@ function Table(props: TableProps) {
                       className={`${
                         key == sort
                           ? "hover:bg-stone-500 bg-stone-400 dark:hover:bg-stone-600 dark:bg-stone-700 dark:text-white active:bg-stone-500"
-                          : "hover:bg-stone-300 dark:bg-stone-400 active:bg-white"
+                          : "hover:bg-stone-300 dark:hover:bg-stone-200 dark:bg-stone-400 active:bg-white"
                       }  duration-300 p-1 cursor-pointer border border-stone-300 dark:border-stone-600`}
                       onClick={() => handleSort(key)}
                       key={key}
@@ -233,12 +233,12 @@ function Table(props: TableProps) {
                 {filteredData.map((ticket: any) => (
                   <tr
                     key={ticket[props.uid]}
-                    className="hover:bg-stone-300 cursor-pointer translate duration-100 border border-stone-200 active:bg-stone-100 dark:bg-stone-400 dark:border-stone-600"
+                    className="group hover:bg-stone-300 cursor-pointer translate duration-100 border border-stone-200 active:bg-stone-100 dark:bg-stone-400 dark:border-stone-600"
                     onClick={() => nav(`/ticket?id=${ticket[props.uid]}`)}
                   >
                     {keys.map((key) => (
                       <td
-                        className="p-1 border border-white dark:border-stone-600"
+                        className="group-hover:bg-stone-300 p-1 border border-white dark:border-stone-600"
                         key={ticket[props.uid] + key}
                       >
                         {key === "created"

@@ -11,6 +11,6 @@ namespace Viscon_ProjectC_Groep4.Services.UserService {
     
     public interface IUserServices
     {
-        public Task<IActionResult> GetUser([FromQuery] int id);
+        public Task<IActionResult> GetUser(int id);
     }
 }

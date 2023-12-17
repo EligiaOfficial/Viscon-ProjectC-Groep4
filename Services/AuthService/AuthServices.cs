@@ -31,12 +31,8 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Edit(EditDto data)
+        public async Task<IActionResult> Edit(EditDto data, int id)
         {
-            string? _id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (_id is null) return BadRequest();
-            int id = Int32.Parse(_id);
-
             var user = await _dbContext!.Users
                 .Where(u => u.Id == id)
                 .FirstOrDefaultAsync();
@@ -132,7 +128,7 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             return Ok("Success");
         }
 
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
         {
             // Check if the provided email exists in your database
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == request.Email);
@@ -186,7 +182,7 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             return Ok();
         }
         
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
         {
             // Retrieve the entry from your ForgottenPasswords table using the provided token
             var forgotPasswordEntry = _dbContext.ForgottenPasswords.FirstOrDefault(f => f.FP_Token == request.Token && f.FP_Expire > DateTime.UtcNow);

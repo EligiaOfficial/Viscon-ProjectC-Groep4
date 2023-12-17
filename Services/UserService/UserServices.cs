@@ -17,7 +17,7 @@ namespace Viscon_ProjectC_Groep4.Services.UserService {
             _dbContext = dbContext;
         }
         
-        public async Task<IActionResult> GetUser([FromQuery] int id)
+        public async Task<IActionResult> GetUser(int id)
         {
             UserDto? user = await _dbContext.Users
                 .Where(user => user.Id == id)
