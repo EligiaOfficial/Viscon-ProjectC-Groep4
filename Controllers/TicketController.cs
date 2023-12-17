@@ -248,9 +248,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
             [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid
         )
         {
-            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == uid)!;
-            if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
-
             var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == data.id);
             if (data.department != 0) ticket!.DepartmentId = data.department;
             ticket!.Urgent = data.urgent;
@@ -268,7 +265,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
         )
         {
             var user = _dbContext.Users.FirstOrDefault(_ => _.Id == uid)!;
-            if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
 
             var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == id)!;
             ticket.HelperUserId = user.Id;
