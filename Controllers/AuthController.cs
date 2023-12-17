@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Viscon_ProjectC_Groep4.Dto;
 using Services;
+using ModelBinding;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {
@@ -38,14 +39,12 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [Authorize(Policy = "user")]
         [HttpPut]
         [Route("Edit")]
-        public async Task<IActionResult> Edit(EditDto data)
+        public async Task<IActionResult> Edit(
+            EditDto data, [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid
+        )
         {
-            string? _id = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (_id is null) return BadRequest();
-            int id = Int32.Parse(_id);
-
             var user = await _dbContext!.Users
-                .Where(u => u.Id == id)
+                .Where(u => u.Id == uid)
                 .FirstOrDefaultAsync();
 
             if (user == null) return BadRequest();
