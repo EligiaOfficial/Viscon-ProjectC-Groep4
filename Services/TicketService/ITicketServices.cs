@@ -26,8 +26,6 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
 
         public Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data, int id);
 
-        public Task<ActionResult<Ticket>> CreateTicketForSomeone(CreateTicketDto data);
-
         public Task<IActionResult> GetUser(getUserDto data);
 
         public Task<ActionResult> GetTicketData(int id);

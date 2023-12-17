@@ -46,10 +46,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
             return await _ticketServices.CreateTicket(data, id);
         }
 
-        [Authorize(Policy = "key_user")] [HttpPost("createticketforsomeone")]
-        public async Task<ActionResult<Ticket>> CreateTicketForSomeone([FromForm] CreateTicketDto data) =>
-            await _ticketServices.CreateTicketForSomeone(data);
-
         [Authorize(Policy = "user")] [HttpPost("UserName")]
         public async Task<IActionResult> GetUser(getUserDto data) =>
             await _ticketServices.GetUser(data);

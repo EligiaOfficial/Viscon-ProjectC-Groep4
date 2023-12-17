@@ -53,10 +53,4 @@ export const routes = [
     name: "archive-filter",
     component: <Tickets filter={"archive"} />,
   },
-  // { path: '/edit', name: 'edit', component: <UserSettings /> },
-  {
-    path: "/createforsomeone",
-    name: "createforsomeone",
-    component: <CreateTicketForSomeone />,
-  },
 ];

@@ -64,59 +64,28 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
 
         public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data, int id)
         {
-            {
-                _logger.LogInformation("API Fetched");
-                var ticket = new Ticket();
-                ticket.MachineId = data.Machine;
-                ticket.Title = data.Title;
-                ticket.Description = data.Description;
-                ticket.DateCreated = DateTime.UtcNow;
-                ticket.Urgent = data.Priority;
-                ticket.ExpectedToBeDone = data.ExpectedAction;
-                ticket.MadeAnyChanges = data.SelfTinkering;
-                ticket.DepartmentId = data.DepartmentId;
-                ticket.CreatorUserId = id;
-                ticket.Resolved = false;
-                _dbContext.Tickets.Add(ticket);
-                _dbContext.SaveChanges();
-
-                using MemoryStream memoryStream = new();
-                foreach (IFormFile image in data.Images)
-                {
-                    await image.CopyToAsync(memoryStream);
-                    VisualFile visualFile = new()
-                    {
-                        Name = image.FileName,
-                        Image = memoryStream.ToArray(),
-                        TicketId = ticket.Id
-                    };
-                    _dbContext.VisualFiles.Add(visualFile);
-                }
-
-                _dbContext.SaveChanges();
-                return Ok(ticket.Id);
-            }
-        }
-
-        public async Task<ActionResult<Ticket>> CreateTicketForSomeone(CreateTicketDto data)
-        {
+            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == id)!;
             _logger.LogInformation("API Fetched");
-
-            _logger.LogInformation("Token Correct");
-            var ticket = new Ticket();
-            ticket.MachineId = data.Machine;
-            ticket.Title = $"{DateTime.UtcNow} Prio: {data.Priority}, {data.Machine}";
-            ticket.Description = data.Description;
-            ticket.DateCreated = DateTime.UtcNow;
-            ticket.Urgent = false; //int.Parse(data.priority);
-            ticket.ExpectedToBeDone = data.ExpectedAction;
-            ticket.MadeAnyChanges = data.SelfTinkering;
-            ticket.DepartmentId = data.DepartmentId;
-            ticket.CreatorUserId = _dbContext.Users.Where(u => u.Email == data.UserEmail).Select(u => u.Id)
-                .FirstOrDefault();
-            ticket.Resolved = false;
+            _logger.LogInformation(id.ToString());
+            _logger.LogInformation(data.UserEmail);
+            var ticket = new Ticket
+            {
+                CreatorUserId = user.Role <= RoleTypes.VISCON
+                    ? _dbContext.Users.Where(_ => _.Email == data.UserEmail).Select(_ => _.Id).FirstOrDefault()
+                    : id,
+                MachineId = data.Machine,
+                Title = data.Title,
+                Description = data.Description,
+                DateCreated = DateTime.UtcNow,
+                Urgent = data.Priority,
+                ExpectedToBeDone = data.ExpectedAction,
+                MadeAnyChanges = data.SelfTinkering,
+                DepartmentId = data.DepartmentId,
+                Resolved = false
+            };
             _dbContext.Tickets.Add(ticket);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
+
 
             using MemoryStream memoryStream = new();
             foreach (IFormFile image in data.Images)
