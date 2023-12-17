@@ -62,14 +62,12 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
         }
 
-        public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data)
+        public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data, int id)
         {
             {
                 _logger.LogInformation("API Fetched");
-                int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
                 var ticket = new Ticket();
-                ticket.MachineId = _dbContext.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id)
-                    .FirstOrDefault();
+                ticket.MachineId = data.Machine;
                 ticket.Title = data.Title;
                 ticket.Description = data.Description;
                 ticket.DateCreated = DateTime.UtcNow;
@@ -106,8 +104,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
 
             _logger.LogInformation("Token Correct");
             var ticket = new Ticket();
-            ticket.MachineId = _dbContext.Machines.Where(m => m.Name == data.Machine).Select(m => m.Id)
-                .FirstOrDefault();
+            ticket.MachineId = data.Machine;
             ticket.Title = $"{DateTime.UtcNow} Prio: {data.Priority}, {data.Machine}";
             ticket.Description = data.Description;
             ticket.DateCreated = DateTime.UtcNow;

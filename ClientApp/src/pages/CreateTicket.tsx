@@ -134,13 +134,13 @@ const CreateTicket: React.FC = () => {
   const fetchMachines = async () => {
     try {
       const response = await getMachines();
-      setMachines(response);
+      setMachines(response.data);
     } catch (error) {
       console.error("Error fetching machines:", error);
     }
 
     getDepartments().then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setDepartments(res.data);
     });
   };
@@ -337,9 +337,9 @@ const CreateTicket: React.FC = () => {
                     {t("createTicket.form.defaultmachine")}
                   </option>
                   {machines.map((machine) => (
-                    <option key={machine} value={machine}>
-                      {machine}
-                    </option>
+                      <option key={machine["id"]} value={machine["id"]}>
+                        {machine["name"]}
+                      </option>
                   ))}
                 </select>
                 {machineError != "" ? (

@@ -84,10 +84,7 @@ export function getDepartments() {
 }
 
 export function getMachines() {
-  return axiosInstance.get("api/machine/All")
-      .then((res) => {
-        return res.data;
-      });
+  return axiosInstance.get("api/machine/All");
 }
 
 export function createTicketAxios(formData: any) {

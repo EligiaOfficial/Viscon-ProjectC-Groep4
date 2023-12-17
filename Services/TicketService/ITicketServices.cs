@@ -24,7 +24,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
         [HttpGet("getimage/{ticketId}")]
         public IActionResult GetImage(int ticketId);
 
-        public Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data);
+        public Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data, int id);
 
         public Task<ActionResult<Ticket>> CreateTicketForSomeone(CreateTicketDto data);
 

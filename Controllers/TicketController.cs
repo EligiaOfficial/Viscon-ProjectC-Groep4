@@ -38,9 +38,13 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _ticketServices.GetImage(ticketId);
 
 
-        [Authorize(Policy = "key_user")] [HttpPost("createticket")]
-        public async Task<ActionResult<Ticket>> CreateTicket([FromForm] CreateTicketDto data) =>
-            await _ticketServices.CreateTicket(data);
+        [Authorize(Policy = "key_user")]
+        [HttpPost("createticket")]
+        public async Task<ActionResult<Ticket>> CreateTicket([FromForm] CreateTicketDto data)
+        {
+            int id = Int32.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return await _ticketServices.CreateTicket(data, id);
+        }
 
         [Authorize(Policy = "key_user")] [HttpPost("createticketforsomeone")]
         public async Task<ActionResult<Ticket>> CreateTicketForSomeone([FromForm] CreateTicketDto data) =>
