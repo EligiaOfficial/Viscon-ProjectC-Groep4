@@ -1,13 +1,16 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Viscon_ProjectC_Groep4;
-using Entities;
 using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.AuthService;
+using Viscon_ProjectC_Groep4.Services.CompanyService;
+using Viscon_ProjectC_Groep4.Services.DepartmentService;
+using Viscon_ProjectC_Groep4.Services.MachineService;
+using Viscon_ProjectC_Groep4.Services.TicketService;
+using Viscon_ProjectC_Groep4.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
@@ -32,6 +35,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false
         };
     });
+builder.Services.AddScoped<AuthServices>();
+builder.Services.AddScoped<CompanyServices>();
+builder.Services.AddScoped<DepartmentServices>();
+builder.Services.AddScoped<MachineServices>();
+builder.Services.AddScoped<TicketServices>();
+builder.Services.AddScoped<UserServices>();
+
 builder.Services.AddAuthorization(options => {
     options.AddPolicy("user", p => p.RequireClaim(
         ClaimTypes.Role, "ADMIN", "VISCON", "KEYUSER", "USER"

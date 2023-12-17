@@ -9,7 +9,7 @@ using Viscon_ProjectC_Groep4.Dto;
 
 namespace Viscon_ProjectC_Groep4.Services.UserService {
     
-    public class UserServices : ControllerBase {
+    public class UserServices : ControllerBase, IUserServices {
         
         private readonly ApplicationDbContext _dbContext;
 
