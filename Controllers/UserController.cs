@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.UserService;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {

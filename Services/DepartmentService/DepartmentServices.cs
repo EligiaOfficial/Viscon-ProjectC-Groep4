@@ -2,12 +2,13 @@
  *   Copyright (c) 2023 
  *   All rights reserved.
  */
-using Microsoft.AspNetCore.Mvc;
+
 using Entities;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Viscon_ProjectC_Groep4.Services {
+namespace Viscon_ProjectC_Groep4.Services.DepartmentService {
 
-    public class DepartmentServices : ControllerBase {
+    public class DepartmentServices : ControllerBase, IDepartmentServices {
         
         private readonly ApplicationDbContext _dbContext;
 

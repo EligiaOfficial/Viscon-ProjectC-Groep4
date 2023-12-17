@@ -5,15 +5,15 @@
 
 using System.Net;
 using System.Net.Mail;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Viscon_ProjectC_Groep4.Dto;
 
-namespace Viscon_ProjectC_Groep4.Services
+namespace Viscon_ProjectC_Groep4.Services.AuthService
 {
-    public class AuthServices : ControllerBase
+    public class AuthServices : ControllerBase, IAuthServices
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthServices> _logger;

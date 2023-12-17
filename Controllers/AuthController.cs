@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Viscon_ProjectC_Groep4.Dto;
 using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.AuthService;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {

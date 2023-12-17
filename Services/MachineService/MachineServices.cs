@@ -2,12 +2,13 @@
  *   Copyright (c) 2023
  *   All rights reserved.
  */
-using Microsoft.AspNetCore.Mvc;
-using Entities;
 
-namespace Viscon_ProjectC_Groep4.Services {
+using Entities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Viscon_ProjectC_Groep4.Services.MachineService {
     
-    public class MachineServices : ControllerBase {
+    public class MachineServices : ControllerBase, IMachineServices {
         
         private readonly ApplicationDbContext _dbContext;
 
@@ -16,8 +17,8 @@ namespace Viscon_ProjectC_Groep4.Services {
         }
         
         public async Task<ActionResult<IEnumerable<Machine>>> GetAll() {
-            var departments = _dbContext.Departments.ToList();
-            return Ok(departments);
+            var machines = _dbContext.Machines.ToList();
+            return Ok(machines);
         }
     }
 }

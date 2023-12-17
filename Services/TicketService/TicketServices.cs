@@ -4,15 +4,16 @@
  */
 
 using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelBinding;
 using Viscon_ProjectC_Groep4.Dto;
+using Viscon_ProjectC_Groep4.Services.AuthService;
 
-namespace Viscon_ProjectC_Groep4.Services
+namespace Viscon_ProjectC_Groep4.Services.TicketService
 {
-    public class TicketServices : ControllerBase
+    public class TicketServices : ControllerBase, ITicketServices
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<AuthServices> _logger;

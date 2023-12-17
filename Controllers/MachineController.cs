@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Entities;
 using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.MachineService;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {

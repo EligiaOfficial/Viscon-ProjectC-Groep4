@@ -5,6 +5,7 @@ using Entities;
 using Viscon_ProjectC_Groep4.Dto;
 using ModelBinding;
 using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.TicketService;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {
