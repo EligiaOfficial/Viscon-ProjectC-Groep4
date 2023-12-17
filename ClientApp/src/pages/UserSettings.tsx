@@ -64,15 +64,22 @@ const EditAccount = ({ toggleSettings }) => {
       EditUserAxios({
         email: email,
         password: password,
-        phone: +phone,
+        phone: phone,
         language: language,
       })
         .then((res) => {
+          setPassword("");
+          setConfirmPassword("");
+          setEmail("");
+          setPhone("");
           localStorage.setItem("token", res["data"]);
           toggleSettings();
           // nav('/');
         })
         .catch((error) => {
+          if (error.response.status == 500) {
+            setEmailErr("Email already taken.")
+          }
           console.error("Error:", error);
         });
     }

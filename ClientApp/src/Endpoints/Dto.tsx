@@ -21,7 +21,7 @@ type SignUpDto = {
 type EditUserDto = {
   email: string;
   password: string;
-  phone: number;
+  phone: string;
   language: string;
 };
 
