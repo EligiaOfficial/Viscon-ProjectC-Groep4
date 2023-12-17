@@ -244,7 +244,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [HttpPost]
         [Route("changeticket")]
         public async Task<IActionResult> ChangeTicketDepartment(
-            ChangeTicketDto data,
+            ChangeTicketDto data
         )
         {
             var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == data.id);
