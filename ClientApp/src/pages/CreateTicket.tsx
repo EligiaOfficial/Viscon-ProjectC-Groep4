@@ -6,7 +6,7 @@ import { UserRoles } from "../UserRoles";
 import Layout from "../components/Layout";
 import uploadIcon from "../assets/icons/upload.svg";
 import whiteCrossIcon from "../assets/icons/white-cross.svg";
-import { getDepartments } from "../Endpoints/Dto";
+import {createTicketAxios, getDepartments, getMachines} from "../Endpoints/Dto";
 import ErrorField from "../components/ErrorField";
 import { useTranslation } from "react-i18next";
 
@@ -118,15 +118,7 @@ const CreateTicket: React.FC = () => {
         });
       }
 
-      const response = await axiosInstance.post(
-        "api/ticket/createticket",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await createTicketAxios(formData);
 
       if (response.status === 200) {
         console.log("Ticket created successfully:", response.data);
@@ -141,8 +133,8 @@ const CreateTicket: React.FC = () => {
 
   const fetchMachines = async () => {
     try {
-      const response = await axiosInstance.get("/api/machine/fetchmachines");
-      setMachines(response.data);
+      const response = await getMachines();
+      setMachines(response);
     } catch (error) {
       console.error("Error fetching machines:", error);
     }

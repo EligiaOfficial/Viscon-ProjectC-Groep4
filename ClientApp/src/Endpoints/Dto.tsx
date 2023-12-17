@@ -28,7 +28,6 @@ type EditUserDto = {
 type MessageDto = {
   content: string;
   ticketId: number;
-  sender: number;
 };
 
 export function EditUserAxios(data: EditUserDto) {
@@ -82,6 +81,25 @@ export function getUser() {
 
 export function getDepartments() {
   return axiosInstance.get("api/department/All");
+}
+
+export function getMachines() {
+  return axiosInstance.get("api/machine/All")
+      .then((res) => {
+        return res.data;
+      });
+}
+
+export function createTicketAxios(formData: any) {
+  return axiosInstance.post(
+      "api/ticket/createticket",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+  );
 }
 
 type changeTicketDto = {

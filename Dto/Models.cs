@@ -103,3 +103,15 @@ public class GetTicketsDto
     public string Issuer { get; set; }
     public string? Supporter { get; set; }
 }
+
+public class ResetPasswordRequest
+{
+    public string Token { get; set; }
+    public string NewPassword { get; set; }
+}
+
+
+public class ForgotPasswordRequest
+{
+    public string Email { get; set; }
+}

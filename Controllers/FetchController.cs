@@ -2,10 +2,8 @@
  *   Copyright (c) 2023 
  *   All rights reserved.
  */
-using System.Runtime.Intrinsics.Arm;
 using Microsoft.AspNetCore.Mvc;
-using Entities;
-using Viscon_ProjectC_Groep4.Dto;
+using Viscon_ProjectC_Groep4.Services;
 
 namespace Viscon_ProjectC_Groep4.Controllers {
     
@@ -13,16 +11,21 @@ namespace Viscon_ProjectC_Groep4.Controllers {
     [Route("[controller]")]
     public class FetchController : ControllerBase {
         
-        private readonly ApplicationDbContext _dbContext;
+        private readonly DepartmentServices _departmentServices;
+        private readonly CompanyServices _companyServices;
 
-        public FetchController(ApplicationDbContext dbContext) {
-            _dbContext = dbContext;
+        public FetchController(
+            DepartmentServices departmentServices,
+            CompanyServices companyServices
+        ) {
+            _departmentServices = departmentServices;
+            _companyServices = companyServices;
         }
         
         [HttpGet("AccountData")]
-        public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
-            var department = _dbContext.Departments.ToList();
-            var company = _dbContext?.Companies.ToList();
+        public async Task<ActionResult> GetData() {
+            var department = _departmentServices.GetAll();
+            var company = _companyServices.GetData();
             return Ok(new {Companies = company, Departments = department});
         }
     }

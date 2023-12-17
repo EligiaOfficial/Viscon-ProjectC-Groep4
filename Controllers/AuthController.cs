@@ -22,11 +22,25 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _authServices = authServices;
         }
 
-        [Authorize(Policy = "user")] [HttpPut("Edit")] public async Task<IActionResult> Edit(EditDto data) => 
+        [Authorize(Policy = "user")] [HttpPut("Edit")] 
+        public async Task<IActionResult> Edit(EditDto data) => 
             await _authServices.Edit(data);
-        [HttpPost("Login")] public async Task<IActionResult> Login(LoginDto data) =>
+        
+        [HttpPost("Login")] 
+        public async Task<IActionResult> Login(LoginDto data) =>
             await _authServices.Login(data);
-        [Authorize(Policy = "key_user")] [HttpPost("Add")] public async Task<IActionResult> Add(AddDto data) =>
+        
+        [Authorize(Policy = "key_user")] [HttpPost("Add")] 
+        public async Task<IActionResult> Add(AddDto data) =>
             await _authServices.Add(data);
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request) =>
+            await _authServices.ForgotPassword(request);
+
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request) =>
+            await _authServices.ResetPassword(request);
     }
 }

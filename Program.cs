@@ -6,8 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Viscon_ProjectC_Groep4;
-using Services;
 using Entities;
+using Viscon_ProjectC_Groep4.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();

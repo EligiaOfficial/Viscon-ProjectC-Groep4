@@ -10,7 +10,7 @@ const ForgotPassword: React.FC = () => {
     e.preventDefault();
 
     // Make an API request to your C# backend to initiate the password reset
-    fetch('/api/password/forgot-password', {
+    fetch('/api/auth/forgot-password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

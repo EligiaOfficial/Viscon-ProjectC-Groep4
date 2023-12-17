@@ -7,17 +7,17 @@ using Entities;
 
 namespace Viscon_ProjectC_Groep4.Services {
     
-    public class MachineServices : ControllerBase {
+    public class CompanyServices : ControllerBase {
         
         private readonly ApplicationDbContext _dbContext;
 
-        public MachineServices(ApplicationDbContext dbContext) {
+        public CompanyServices(ApplicationDbContext dbContext) {
             _dbContext = dbContext;
         }
         
-        public async Task<ActionResult<IEnumerable<Machine>>> GetAll() {
-            var departments = _dbContext.Departments.ToList();
-            return Ok(departments);
+        public async Task<List<Company>> GetData() {
+            var companies = _dbContext.Companies.ToList();
+            return companies;
         }
     }
 }
