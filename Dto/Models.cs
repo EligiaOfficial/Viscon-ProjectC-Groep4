@@ -46,7 +46,7 @@ public class MessageDto
 public class CreateTicketDto
 {
     public string Title { get; set; } = string.Empty;
-    public string Machine { get; set; } = string.Empty;
+    public int Machine { get; set; }
     public string Description { get; set; } = string.Empty;
     public bool Priority { get; set; }
     public string ExpectedAction { get; set; } = string.Empty;
@@ -92,7 +92,7 @@ public class EditDto
 
 public class GetTicketsDto
 {
-    public int Id { get; set; }
+    public int TicketID { get; set; }
     public string Title { get; set; }
     public string Status { get; set; }
     public string Urgent { get; set; }
