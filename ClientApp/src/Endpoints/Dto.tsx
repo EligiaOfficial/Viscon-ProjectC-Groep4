@@ -21,14 +21,13 @@ type SignUpDto = {
 type EditUserDto = {
   email: string;
   password: string;
-  phone: number;
+  phone: string;
   language: string;
 };
 
 type MessageDto = {
   content: string;
   ticketId: number;
-  sender: number;
 };
 
 export function EditUserAxios(data: EditUserDto) {
@@ -84,6 +83,22 @@ export function getDepartments() {
   return axiosInstance.get("api/department/All");
 }
 
+export function getMachines() {
+  return axiosInstance.get("api/machine/All");
+}
+
+export function createTicketAxios(formData: any) {
+  return axiosInstance.post(
+      "api/ticket/createticket",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+  );
+}
+
 type changeTicketDto = {
   id: number;
   department: number;
@@ -93,7 +108,7 @@ type changeTicketDto = {
 };
 
 export function claimTicket(id: number) {
-  return axiosInstance.post(`api/ticket/claim?id=${id}`);
+  return axiosInstance.post(`api/ticket/claim?ticketId=${id}`);
 }
 
 export function changeTicket(data: changeTicketDto) {

@@ -13,6 +13,7 @@ import publishedIcon from "../assets/icons/published.svg";
 import statusIcon from "../assets/icons/status.svg";
 import urgentIcon from "../assets/icons/urgent.svg";
 import machineIcon from "../assets/icons/cogs.svg";
+import Ticket from "../pages/Ticket.tsx";
 
 function TicketInfo({
   requester,

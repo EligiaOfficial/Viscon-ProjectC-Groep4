@@ -1,9 +1,10 @@
-namespace Services;
-using System.Security.Cryptography;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 using Entities;
+using Microsoft.IdentityModel.Tokens;
+
+namespace Viscon_ProjectC_Groep4.Services;
 
 public class Authenticator {
     public string CreateToken(User user) {
@@ -35,20 +36,20 @@ public class Authenticator {
         return tokenString;
     }
 
-    public void CreatePassHash(
+    public static void CreatePassHash(
         string password, out byte[] passwordHash, out byte[] passwordSalt
-    ) {
-        using (var hmac = new HMACSHA512()) {
-            passwordSalt = hmac.Key;
-            passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-        }
+    )
+    {
+        using var hmac = new HMACSHA512();
+        passwordSalt = hmac.Key;
+        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
     }
 
-    public bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt) {
-        using (var hmac = new HMACSHA512(passwordSalt)) {
-            var CalcHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            return CalcHash.SequenceEqual(passwordHash);
-        }
+    public static bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
+    {
+        using var hmac = new HMACSHA512(passwordSalt);
+        var CalcHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+        return CalcHash.SequenceEqual(passwordHash);
     }
 
     public bool VerifyToken(string token, out int Id) {

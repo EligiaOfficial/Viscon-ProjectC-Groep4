@@ -2,10 +2,10 @@
  *   Copyright (c) 2023 
  *   All rights reserved.
  */
-using System.Runtime.Intrinsics.Arm;
 using Microsoft.AspNetCore.Mvc;
 using Entities;
-using Viscon_ProjectC_Groep4.Dto;
+using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.DepartmentService;
 
 namespace Viscon_ProjectC_Groep4.Controllers {
     
@@ -13,16 +13,16 @@ namespace Viscon_ProjectC_Groep4.Controllers {
     [Route("[controller]")]
     public class DepartmentController : ControllerBase {
         
-        private readonly ApplicationDbContext _dbContext;
+        private readonly DepartmentServices _departmentServices;
 
-        public DepartmentController(ApplicationDbContext dbContext) {
-            _dbContext = dbContext;
+        public DepartmentController(
+            DepartmentServices departmentServices
+        ) {
+            _departmentServices = departmentServices;
         }
-        
+
         [HttpGet("All")]
-        public async Task<ActionResult<IEnumerable<Machine>>> GetData() {
-            var departments = _dbContext.Departments.ToList();
-            return Ok(departments);
-        }
+        public async Task<ActionResult<IEnumerable<Department>>> GetData() => 
+            await _departmentServices.GetAll();
     }
 }

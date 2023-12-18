@@ -46,7 +46,7 @@ public class MessageDto
 public class CreateTicketDto
 {
     public string Title { get; set; } = string.Empty;
-    public string Machine { get; set; } = string.Empty;
+    public int Machine { get; set; }
     public string Description { get; set; } = string.Empty;
     public bool Priority { get; set; }
     public string ExpectedAction { get; set; } = string.Empty;
@@ -102,4 +102,16 @@ public class GetTicketsDto
     public string Department { get; set; }
     public string Issuer { get; set; }
     public string? Supporter { get; set; }
+}
+
+public class ResetPasswordRequest
+{
+    public string Token { get; set; }
+    public string NewPassword { get; set; }
+}
+
+
+public class ForgotPasswordRequest
+{
+    public string Email { get; set; }
 }

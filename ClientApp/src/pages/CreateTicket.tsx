@@ -1,14 +1,13 @@
-import { axiosInstance } from "../axiosInstance";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getRole } from "../Endpoints/Jwt";
-import { UserRoles } from "../UserRoles";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {getRole} from "../Endpoints/Jwt";
+import {UserRoles} from "../UserRoles";
 import Layout from "../components/Layout";
 import uploadIcon from "../assets/icons/upload.svg";
 import whiteCrossIcon from "../assets/icons/white-cross.svg";
-import { getDepartments } from "../Endpoints/Dto";
+import {createTicketAxios, getDepartments, getMachines} from "../Endpoints/Dto";
 import ErrorField from "../components/ErrorField";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 const CreateTicket: React.FC = () => {
   const nav = useNavigate();
@@ -36,11 +35,12 @@ const CreateTicket: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const [duplicateFile, setDuplicateFile] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState('');
 
   const [titleError, setTitleError] = useState("");
   const [machineError, setMachineError] = useState("");
   const [departmentError, setDepartmentError] = useState("");
-  const [companyError, setCompanyError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [actionTakenError, setActionTakenError] = useState("");
   const [changesMadeError, setChangesMadeError] = useState("");
@@ -111,29 +111,29 @@ const CreateTicket: React.FC = () => {
       formData.append("expectedAction", expectedAction); // TODO: Rename these
       formData.append("selfTinkering", selfTinkering);
       formData.append("departmentId", selectedDepartment);
-
+      if (usr_role <= UserRoles.VISCON) formData.append("userEmail", userEmail);
+      
       if (images.length > 0) {
         images.forEach((image, i) => {
           formData.append(`images`, image, image!.name);
         });
       }
+      
+      console.log(formData);
 
-      const response = await axiosInstance.post(
-        "api/ticket/createticket",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        console.log("Ticket created successfully:", response.data);
-        nav(`/ticket?id=${response.data}`);
-      } else {
-        console.error("Ticket creation failed:", response.data);
-      }
+      const response = await createTicketAxios(formData)
+          .then((res) => {
+            if (res.status === 200) {
+              console.log("Ticket created successfully:", res.data);
+              nav(`/ticket?id=${res.data}`);
+            }
+          })
+          .catch((err) => {
+            if (err.response.status === 500) {
+              setEmailError("Email Not Found");
+            }
+          });
+      
     } catch (error) {
       console.error("Error creating ticket:", error);
     }
@@ -141,14 +141,14 @@ const CreateTicket: React.FC = () => {
 
   const fetchMachines = async () => {
     try {
-      const response = await axiosInstance.get("/api/machine/fetchmachines");
+      const response = await getMachines();
       setMachines(response.data);
     } catch (error) {
       console.error("Error fetching machines:", error);
     }
 
     getDepartments().then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setDepartments(res.data);
     });
   };
@@ -222,20 +222,41 @@ const CreateTicket: React.FC = () => {
                 </button>
               </div>
             )}
-            <div>
-              <label
-                htmlFor="title"
-                className="block text-gray-700 mb-1 font-medium"
-              >
-                {t("createTicket.form.titlelabel")}:
-              </label>
-              <input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
-              />
-              {titleError != "" ? <ErrorField error={titleError} /> : null}
+            <div className={"flex w-full"}>
+              <div className={"w-full"}>
+                <label
+                    htmlFor="title"
+                    className="block text-gray-700 mb-1 font-medium"
+                >
+                  {t("createTicket.form.titlelabel")}:
+                </label>
+                <input
+                    id="title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                />
+                {titleError != "" ? <ErrorField error={titleError} /> : null}
+              </div>
+
+              { usr_role <= UserRoles.VISCON ? (
+                  <div className={"w-full ml-5"}>
+                    <label htmlFor="userEmail" className="block text-gray-700 mb-1 font-medium">User Email:</label>
+                    <input
+                        type="text"
+                        id="userEmail"
+                        value={userEmail}
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        required
+                    />
+                    {emailError != "" ? <ErrorField error={emailError} /> : null}
+                  </div>
+              ) : (
+                  <div/>
+              )}
+
+
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="col-start-1">
@@ -345,9 +366,9 @@ const CreateTicket: React.FC = () => {
                     {t("createTicket.form.defaultmachine")}
                   </option>
                   {machines.map((machine) => (
-                    <option key={machine} value={machine}>
-                      {machine}
-                    </option>
+                      <option key={machine["id"]} value={machine["id"]}>
+                        {machine["name"]}
+                      </option>
                   ))}
                 </select>
                 {machineError != "" ? (
