@@ -5,6 +5,7 @@ const ForgotPassword: React.FC = () => {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(''); 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,16 +23,17 @@ const ForgotPassword: React.FC = () => {
         setSubmitted(true);
       }
       else {
-        throw new Error('Failed to send reset email');
+        // Verwerk de response en zet de foutmelding
+        response.text().then(message => {
+          setError(message);
+        });
       }
     })
-    .catch((error) => {
-      console.error('Error initiating password reset:', error);
-    });
   };
 
   return (
     <div className="h-screen flex flex-col dark:bg-stone-900">
+      
       <div className="flex flex-row h-full">
         <div className="basis-1/2 hidden md:block">
           <img
@@ -45,6 +47,11 @@ const ForgotPassword: React.FC = () => {
             <h1 className={"mb-3 pt-5 text-xl text-gray-800 dark:text-white"}>
               {t("Forgot Password")}
             </h1>
+            {!submitted && error && (
+        <p className="text-center text-red-600">
+          {error}
+        </p>
+      )}
             {submitted ? (
               <p className="text-center text-green-600">
                 If an account with the provided email address exists, you will receive an email with instructions to reset your password.
