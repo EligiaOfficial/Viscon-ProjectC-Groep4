@@ -24,6 +24,8 @@ const EditAccount = ({ toggleSettings }) => {
   const [phone, setPhone] = useState("");
   const [language, setLanguage] = useState("");
   const [menu, setMenu] = useState<boolean>(false);
+
+  const [showPopup, setShowPopup] = useState(false);
   
   const [passErr, setPassErr] = useState("");
   const [emailErr, setEmailErr] = useState("");
@@ -39,49 +41,57 @@ const EditAccount = ({ toggleSettings }) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[+]?[0-9]*[\s./-]?[(]?[0-9]+[)]?[-\s./]?[0-9]+[-\s./]?[0-9]+$/;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (password != confirmPassowrd) {
       setPassErr("New passwords to not match");
+      setShowPopup(false); 
     } else {
       setPassErr("")
     }
 
     if (email != "" && !emailRegex.test(email)) {
       setEmailErr("Please fill in a correct email adress\nExample: yourname@email.com")
+      setShowPopup(false); 
     } else {
       setEmailErr("");
     }
 
     if (phone != "" && !phoneRegex.test(phone)) {
       setPhoneErr("Not a valid phone number found.\nExamples: +31652457819, 0615984565, 080058856")
+      setShowPopup(false); 
     } else {
       setPhoneErr("")
     }
 
-    if (password == confirmPassowrd) {
-      EditUserAxios({
-        email: email,
-        password: password,
-        phone: phone,
-        language: language,
-      })
-        .then((res) => {
+    if (password === confirmPassowrd) {
+      try {
+        const response = await EditUserAxios({
+          email: email,
+          password: password,
+          phone: phone,
+          language: language,
+        });
+  
+        if (response.status === 200) {
+          setShowPopup(true); 
           setPassword("");
           setConfirmPassword("");
           setEmail("");
           setPhone("");
-          localStorage.setItem("token", res["data"]);
+          localStorage.setItem("token", response["data"]);
           toggleSettings();
-          // nav('/');
-        })
-        .catch((error) => {
-          if (error.response.status == 500) {
-            setEmailErr("Email already taken.")
-          }
-          console.error("Error:", error);
-        });
+          // Additional logic if needed
+        } else {
+          // Handle other response statuses if needed
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 500) {
+          setEmailErr("Email already taken.");
+        }
+        console.error("Error:", error);
+      }
     }
   };
 
@@ -219,6 +229,9 @@ const EditAccount = ({ toggleSettings }) => {
                     Confirm new password
                   </label>
                 </div>
+                <div>
+               
+                </div>
 
                 <div className="mt-2">
                   <div className={"flex"}>
@@ -257,6 +270,20 @@ const EditAccount = ({ toggleSettings }) => {
                 Edit User Info
               </button>
             </form>
+            {showPopup && (
+  <div className="fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex justify-center items-center">
+    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Success!</h3>
+      <p className="text-sm text-gray-600 dark:text-gray-300">Your changes have been saved.</p>
+      <button
+        onClick={() => setShowPopup(false)}
+        className="mt-4 bg-gray-300 dark:bg-gray-600 hover:bg-blue-800 dark:hover:bg-gray-700 text-black dark:text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-stone-900"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
           </div>
         </div>
       </div>
