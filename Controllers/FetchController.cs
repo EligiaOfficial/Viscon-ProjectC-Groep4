@@ -30,7 +30,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         public async Task<IActionResult> GetData() {
             var department = await _departmentServices.GetAll();
             var company = await _companyServices.GetData();
-            return Ok(new {Companies = company.Value, Departments = department.Value});
+            return Ok(new {Companies = company, Departments = department});
         }
     }
 }

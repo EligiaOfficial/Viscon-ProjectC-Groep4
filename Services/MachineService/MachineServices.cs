@@ -5,10 +5,11 @@
 
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Viscon_ProjectC_Groep4.Services.MachineService {
     
-    public class MachineServices : ControllerBase, IMachineServices {
+    public class MachineServices : IMachineServices {
         
         private readonly ApplicationDbContext _dbContext;
 
@@ -16,9 +17,7 @@ namespace Viscon_ProjectC_Groep4.Services.MachineService {
             _dbContext = dbContext;
         }
         
-        public async Task<ActionResult<IEnumerable<Machine>>> GetAll() {
-            var machines = _dbContext.Machines.ToList();
-            return Ok(machines);
-        }
+        public async Task<List<Machine>> GetAll() =>
+            await _dbContext.Machines.ToListAsync();
     }
 }

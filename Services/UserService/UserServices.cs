@@ -3,13 +3,14 @@
  *   All rights reserved.
  */
 
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Viscon_ProjectC_Groep4.Dto;
 
 namespace Viscon_ProjectC_Groep4.Services.UserService {
     
-    public class UserServices : ControllerBase, IUserServices {
+    public class UserServices : IUserServices {
         
         private readonly ApplicationDbContext _dbContext;
 
@@ -17,7 +18,7 @@ namespace Viscon_ProjectC_Groep4.Services.UserService {
             _dbContext = dbContext;
         }
         
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<object> GetUser(int id)
         {
             UserDto? user = await _dbContext.Users
                 .Where(user => user.Id == id)
@@ -29,7 +30,7 @@ namespace Viscon_ProjectC_Groep4.Services.UserService {
                     Role = result.Role.ToString() ?? "N/A"
                 })
                 .FirstOrDefaultAsync();
-            return Ok(user);
+            return user;
         }
     }
 }

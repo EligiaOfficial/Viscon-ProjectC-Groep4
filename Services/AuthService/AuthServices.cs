@@ -31,13 +31,13 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             _dbContext = dbContext;
         }
 
-        public async Task<IActionResult> Edit(EditDto data, int id)
+        public async Task<string> Edit(EditDto data, int id)
         {
             var user = await _dbContext!.Users
                 .Where(u => u.Id == id)
                 .FirstOrDefaultAsync();
 
-            if (user == null) return BadRequest();
+            if (user == null) return "No User";
 
             if (data.Password != string.Empty)
             {
@@ -64,18 +64,18 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             }
 
             await _dbContext.SaveChangesAsync();
-            var token = _authenticator.CreateToken(user);
-            return Ok(token);
+            string token = _authenticator.CreateToken(user);
+            return token;
         }
 
-        public async Task<IActionResult> Login(LoginDto data)
+        public async Task<string> Login(LoginDto data)
         {
             _logger.LogInformation(data.Email + " is trying to log in.");
             var user = await _dbContext.Users.Where(p => p.Email == data.Email).FirstOrDefaultAsync();
             if (user == null)
             {
                 _logger.LogError("User not found");
-                return BadRequest("User not found");
+                return ("User not found");
             }
 
             if (!Authenticator.VerifyPassword(
@@ -83,7 +83,7 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
                 ))
             {
                 _logger.LogError("Wrong Password");
-                return BadRequest("Wrong password");
+                return ("Wrong password");
             }
 
             _logger.LogInformation("User and Passw correct", data.Password);
@@ -91,10 +91,10 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             _logger.LogInformation("Creating user token");
             var token = _authenticator.CreateToken(user);
 
-            return Ok(token);
+            return token;
         }
 
-        public async Task<IActionResult> Add(AddDto data)
+        public async Task Add(AddDto data)
         {
             _logger.LogInformation(data.FirstName + " " + data.LastName + " is trying to be created");
 
@@ -125,20 +125,13 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             await _dbContext.SaveChangesAsync();
             _logger.LogInformation("Created account for user: (" + user.FirstName + " " + user.LastName + " " +
                                    user.Email + ")");
-            return Ok("Success");
         }
 
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        public async Task ForgotPassword(ForgotPasswordRequest request)
         {
             // Check if the provided email exists in your database
             var user = _dbContext.Users.FirstOrDefault(u => u.Email == request.Email);
-
-            if (user == null)
-            {
-                // User with the provided email does not exist
-                return BadRequest("User not found");
-            }
-
+            
             // Generate a unique token for this reset request (e.g., a GUID)
             var token = Guid.NewGuid().ToString();
 
@@ -156,8 +149,7 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
 
             _dbContext.ForgottenPasswords.Add(forgotPasswordEntry);
             await _dbContext.SaveChangesAsync();
-
-
+            
             var resetLink = $"http://localhost:5173/reset-password?token={token}";
 
             var mailMessage = new MailMessage
@@ -169,36 +161,23 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             };
             mailMessage.To.Add(request.Email);
 
-            using (var smtpClient = new SmtpClient("smtp.gmail.com"))
-            {
-                smtpClient.Port = 587;
-                smtpClient.Credentials =
-                    new NetworkCredential("visconticketsystemhelp@gmail.com", "gcph mqwe csfx oxdj ");
-                smtpClient.EnableSsl = true;
+            using var smtpClient = new SmtpClient("smtp.gmail.com");
+            smtpClient.Port = 587;
+            smtpClient.Credentials =
+                new NetworkCredential("visconticketsystemhelp@gmail.com", "gcph mqwe csfx oxdj ");
+            smtpClient.EnableSsl = true;
 
-                await smtpClient.SendMailAsync(mailMessage);
-            }
-
-            return Ok();
+            await smtpClient.SendMailAsync(mailMessage);
         }
         
-        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        public async Task ResetPassword(ResetPasswordRequest request)
         {
             // Retrieve the entry from your ForgottenPasswords table using the provided token
             var forgotPasswordEntry = _dbContext.ForgottenPasswords.FirstOrDefault(f => f.FP_Token == request.Token && f.FP_Expire > DateTime.UtcNow);
-
-            if (forgotPasswordEntry == null)
-            {
-                return BadRequest("Invalid or expired token");
-            }
-
+            
             // Retrieve the user using the FP_Id
             var user = _dbContext.Users.FirstOrDefault(u => u.Id == forgotPasswordEntry.FP_Id);
-            if (user == null)
-            {
-                return BadRequest("User not found");
-            }
-
+            
             Authenticator.CreatePassHash(
                 request.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
             // Update the user's password
@@ -207,10 +186,6 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
 
             // Save changes to the database
             await _dbContext.SaveChangesAsync();
-
-            // Optional: Invalidate the token after successful password reset
-
-            return Ok("Password reset successfully");
         }
     }
 }

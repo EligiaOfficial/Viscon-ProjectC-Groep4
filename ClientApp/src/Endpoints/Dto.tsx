@@ -76,7 +76,7 @@ export function getTickets() {
 }
 
 export function getUser() {
-  return axiosInstance.get("/api/user/userdata?id=1");
+  return axiosInstance.get("/api/user/getUser?id=1");
 }
 
 export function getDepartments() {

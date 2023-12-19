@@ -14,8 +14,8 @@ namespace Viscon_ProjectC_Groep4.Controllers
             _userServices = userServices;
         }
 
-        [HttpGet("userdata")]
-        public async Task<IActionResult> GetUser([FromQuery] int id) =>
+        [HttpGet("getUser")]
+        public async Task<ActionResult<object>> GetUser([FromQuery] int id) =>
             await _userServices.GetUser(id);
     }
 }

@@ -20,7 +20,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
         [Authorize(Policy = "user")]
         [HttpGet("All")]
-        public async Task<ActionResult<IEnumerable<Machine>>> GetMachines() =>
+        public async Task<ActionResult<List<Machine>>> GetMachines() => 
             await _machineServices.GetAll();
     }
 }

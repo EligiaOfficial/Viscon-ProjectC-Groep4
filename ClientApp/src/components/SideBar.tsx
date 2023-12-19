@@ -38,7 +38,7 @@ function SideBar() {
   const [user, setUser] = useState<User | undefined>();
 
   const nav = useNavigate();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token") || "";
   const Role = getRole(token);
 
   const toggleSettings = () => {

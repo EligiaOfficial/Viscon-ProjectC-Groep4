@@ -10,6 +10,6 @@ namespace Viscon_ProjectC_Groep4.Services.MachineService {
     
     public interface IMachineServices
     {
-        public Task<ActionResult<IEnumerable<Machine>>> GetAll();
+        public Task<List<Machine>> GetAll();
     }
 }

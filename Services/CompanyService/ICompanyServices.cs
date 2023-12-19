@@ -5,6 +5,6 @@ namespace Viscon_ProjectC_Groep4.Services.CompanyService {
     
     public interface ICompanyServices
     {
-        public Task<ActionResult<IEnumerable<Company>>> GetData();
+        public Task<List<Company>> GetData();
     }
 }

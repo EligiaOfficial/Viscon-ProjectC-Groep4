@@ -22,7 +22,7 @@ namespace Viscon_ProjectC_Groep4.Controllers {
         }
 
         [HttpGet("All")]
-        public async Task<ActionResult<IEnumerable<Department>>> GetData() => 
+        public async Task<ActionResult<List<Department>>> GetData() => 
             await _departmentServices.GetAll();
     }
 }

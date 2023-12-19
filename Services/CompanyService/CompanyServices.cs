@@ -5,6 +5,7 @@
 
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Viscon_ProjectC_Groep4.Services.CompanyService {
     
@@ -16,9 +17,7 @@ namespace Viscon_ProjectC_Groep4.Services.CompanyService {
             _dbContext = dbContext;
         }
         
-        public async Task<ActionResult<IEnumerable<Company>>> GetData() {
-            var companies = _dbContext.Companies.ToList();
-            return companies;
-        }
+        public async Task<List<Company>> GetData() => 
+            await _dbContext.Companies.ToListAsync();
     }
 }
