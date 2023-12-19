@@ -29,6 +29,8 @@ const EditAccount = ({ toggleSettings }) => {
   const [emailErr, setEmailErr] = useState("");
   const [phoneErr, setPhoneErr] = useState("");
 
+  const [showPopup, setShowPopup] = useState(false);
+
   const token = localStorage.getItem("token");
   const usr_name = getName(token);
   const usr_email = getEmail(token);
@@ -38,9 +40,10 @@ const EditAccount = ({ toggleSettings }) => {
   const nav = useNavigate();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^[+]?[0-9]*[\s./-]?[(]?[0-9]+[)]?[-\s./]?[0-9]+[-\s./]?[0-9]+$/;
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
     
     if (password != confirmPassowrd) {
       setPassErr("New passwords to not match");
@@ -70,6 +73,7 @@ const EditAccount = ({ toggleSettings }) => {
         .then((res) => {
           localStorage.setItem("token", res["data"]);
           toggleSettings();
+          setShowPopup(true);
           // nav('/');
         })
         .catch((error) => {
@@ -94,7 +98,11 @@ const EditAccount = ({ toggleSettings }) => {
           <HamburgerButton onclick={toggleSettings} state={true} />
         </div>
       </div>
-
+      {showPopup && (
+      <div className="popup">
+        Successfully updated
+      </div>
+    )}
       <div className="flex flex-row h-screen mx-10">
         <div className="w-full bg-gray-150 mt-20">
           <div className="mt-50 sm:mx-auto sm:max-w-sm">
