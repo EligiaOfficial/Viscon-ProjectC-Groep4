@@ -19,5 +19,5 @@ public class Message
     [ForeignKey("Ticket")]
     public int TicketId { get; set; }
     public Ticket RelatedTicket { get; set; }
-
+    List<VisualFile> VisualFiles { get; set; } = new();
 }

@@ -6,6 +6,9 @@ using Viscon_ProjectC_Groep4.Dto;
 using ModelBinding;
 using Viscon_ProjectC_Groep4.Services;
 using Viscon_ProjectC_Groep4.Services.TicketService;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {
@@ -33,9 +36,9 @@ namespace Viscon_ProjectC_Groep4.Controllers
         ) => await _ticketServices.AddMessage(data, uid);
 
         
-        [HttpGet("getimage/{ticketId}")]
-        public async Task<IActionResult> GetImage(int ticketId) =>
-            _ticketServices.GetImage(ticketId);
+        //[HttpGet("getimage/{ticketId}")]
+        //public async Task<IActionResult> GetImage(int ticketId) =>
+        //    _ticketServices.GetImage(ticketId);
 
 
         [Authorize(Policy = "key_user")]

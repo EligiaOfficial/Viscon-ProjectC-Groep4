@@ -4,6 +4,7 @@
  */
 
 using System.Security.Claims;
+using System.Security.Cryptography;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -48,19 +49,19 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             return Ok("Message Added");
         }
 
-        [HttpGet("getimage/{ticketId}")]
-        public IActionResult GetImage(int ticketId)
-        {
-            var visualFile = _dbContext.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
+        //[HttpGet("getimage/{ticketId}")]
+        //public IActionResult GetImage(int ticketId)
+        //{
+        //    var visualFile = _dbContext.VisualFiles.FirstOrDefault(vf => vf.TicketId == ticketId);
 
-            if (visualFile == null)
-            {
-                return NotFound(); // Of een andere foutafhandeling
-            }
+        //    if (visualFile == null)
+        //    {
+        //        return NotFound(); // Of een andere foutafhandeling
+        //    }
 
-            // Retourneer de afbeeldingsbytes als een File-resultaat met het juiste MIME-type
-            return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
-        }
+        //    // Retourneer de afbeeldingsbytes als een File-resultaat met het juiste MIME-type
+        //    return File(visualFile.Image, "image/jpeg"); // Pas het MIME-type aan indien nodig
+        //}
 
         public async Task<ActionResult<Ticket>> CreateTicket(CreateTicketDto data, int id)
         {
@@ -86,6 +87,19 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             _dbContext.Tickets.Add(ticket);
             await _dbContext.SaveChangesAsync();
 
+            string content = $"What do you see happening?\n{data.Description}\n\nWhat have you tried to fix it?\n{data.ExpectedAction}\n\nHave you made any changes to the machine?\n{data.SelfTinkering}";
+
+            Message newMessage = new()
+            {
+                Content = content,
+                RelatedTicket = ticket,
+                Sender = ticket.CreatorUserId,
+                TicketId = ticket.Id,
+                TimeSent = DateTime.UtcNow
+            };
+
+            _dbContext.Messages.Add(newMessage);
+            await _dbContext.SaveChangesAsync();
 
             using MemoryStream memoryStream = new();
             foreach (IFormFile image in data.Images)
@@ -95,12 +109,12 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
                 {
                     Name = image.FileName,
                     Image = memoryStream.ToArray(),
-                    TicketId = ticket.Id
+                    MessageId = newMessage.Id
                 };
                 _dbContext.VisualFiles.Add(visualFile);
             }
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
             return Ok(ticket.Id);
         }
 
@@ -120,18 +134,30 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
                 .Include(t => t.Helper)
                 .FirstOrDefault(x => x.Id == id);
             if (ticket == null) return NotFound("No Ticket Found");
-            var messages = _dbContext.Messages
-                .Where(m => m.TicketId == ticket.Id)
-                .Join(_dbContext.Users,
-                    message => message.Sender,
-                    user => user.Id,
-                    (message, user) => new
-                    {
-                        Content = message.Content,
-                        Sender = $"{user.FirstName} {user.LastName}",
-                        TimeSent = message.TimeSent
-                    })
-                .ToList();
+
+            var messages = await (
+                    from message in _dbContext.Messages
+                    where message.TicketId == ticket.Id
+                    join user in _dbContext.Users on message.Sender equals user.Id
+                    select new { message, user }
+                ).ToListAsync();
+
+            var finalMessage = (from message in messages
+                               join file in _dbContext.VisualFiles on message.message.Id equals file.MessageId into grouping
+                               select new
+                               {
+                                   Content = message.message.Content,
+                                   Sender = $"{message.user.FirstName} {message.user.LastName}",
+                                   TimeSent = message.message.TimeSent,
+                                   SenderId = message.message.Sender,
+                                   Images = grouping.Where(image => image != null).Select(image => new
+                                   {
+                                       ImageId = image.Id,
+                                       ImageFile = image.Image,
+                                       ImageName = image.Name
+                                   }).ToList(),
+                               }).ToList();
+
             var result = new
             {
                 Helper = ticket.HelperUserId != null
@@ -152,7 +178,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
                     published = ticket.Public,
                     dateCreated = ticket.DateCreated
                 },
-                Messages = messages
+                Messages = finalMessage
             };
             return Ok(result);
         }
