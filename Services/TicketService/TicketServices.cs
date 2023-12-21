@@ -196,7 +196,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
                 {
                     TicketID = ticket.Id,
                     Title = ticket.Title,
-                    Status = ticket.Resolved ? "closed" : "open",
+                    Status = ticket.Resolved ? "Closed" : "Open",
                     Urgent = ticket.Urgent ? "Yes" : "No",
                     Company = ticket.Creator.Company.Name,
                     CompanyId = ticket.Creator.Company.Id,

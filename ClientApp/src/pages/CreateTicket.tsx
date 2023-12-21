@@ -254,7 +254,7 @@ const CreateTicket: React.FC = () => {
                     htmlFor="userEmail"
                     className="block text-gray-700 mb-1 font-medium"
                   >
-                    User Email:
+                    {t("createTicket.form.assigneeEmail")}:
                   </label>
                   <input
                     type="text"

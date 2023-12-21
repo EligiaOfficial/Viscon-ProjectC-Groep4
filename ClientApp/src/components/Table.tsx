@@ -136,7 +136,7 @@ function Table(props: TableProps) {
   return (
     <>
       {props.data == undefined || keys.length <= 0 ? (
-        <>No data to show.</>
+        <div className="dark:text-stone-400">{t("tickets.table.nodata")}</div>
       ) : (
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-5 gap-x-4">

@@ -56,7 +56,7 @@ export function LoginAxios(data: LoginDto) {
 }
 
 export function SignupAxios(data: SignUpDto) {
-  return axiosInstance.post("/api/Auth/Add", data)
+  return axiosInstance.post("/api/Auth/Add", data);
 }
 
 export function createMessageAxios(data: MessageDto) {
@@ -75,6 +75,10 @@ export function getTickets() {
   return axiosInstance.get("/api/ticket/tickets");
 }
 
+export function getArchivedTickets() {
+  return axiosInstance.get("/api/ticket/archive");
+}
+
 export function getUser() {
   return axiosInstance.get("/api/user/userdata?id=1");
 }
@@ -88,15 +92,11 @@ export function getMachines() {
 }
 
 export function createTicketAxios(formData: any) {
-  return axiosInstance.post(
-      "api/ticket/createticket",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-  );
+  return axiosInstance.post("api/ticket/createticket", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 }
 
 type changeTicketDto = {

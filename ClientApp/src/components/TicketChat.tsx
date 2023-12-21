@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { createMessageAxios, getDepartments } from "../Endpoints/Dto";
+import { createMessageAxios } from "../Endpoints/Dto";
 import { getId, getName } from "../Endpoints/Jwt";
 import ChatField from "./ChatField";
-import { UserRoles } from "../UserRoles";
+import { useTranslation } from "react-i18next";
 
 function TicketChat({
   ticketId,
@@ -16,11 +15,12 @@ function TicketChat({
 }) {
   const [messages, setMessages] = useState(initialMessages);
   const [content, setMsg] = useState("");
-  const [img] = useState("");
   const token = localStorage.getItem("token");
   const [userId, setUserId] = useState<string>();
 
   const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const { t } = useTranslation();
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -71,51 +71,31 @@ function TicketChat({
       }
     >
       <div className={"h-full w-full flex flex-col items-center"}>
-        <div className="py-5 w-full border-b-2">
-          <div className="text-3xl font-bold mx-auto w-11/12 group relative">
-            <span className="text-sm font-normal italic absolute left-0 top-0 opacity-0 group-hover:opacity-100 transition-opacity inline-block -mt-4">
-              Title:
+        <div className="flex flex-col px-4 py-5 w-full">
+          <span className="text-sm font-normal italic">
+            {t("tickets.ticket.title")}:
+          </span>
+          <span className="text-3xl font-bold">
+            {"#" + ticketId + " - " + ticket["title"]}
+          </span>
+        </div>
+        <div className="border-y-2 w-full">
+          <div className={"grid grid-cols-2 py-2 px-10 w-fit"}>
+            <span className={"text-sm italic"}>
+              {t("tickets.ticket.description")}:
             </span>
-            {ticket["title"]}
+            <span className="font-bold">{ticket["description"]}</span>
+            <span className={"text-sm italic"}>
+              {t("tickets.ticket.edit")}:
+            </span>
+            <span className="font-bold">{ticket["madeAnyChanges"]}</span>
+            <span className={"text-sm italic"}>
+              {t("tickets.ticket.expected")}:
+            </span>
+            <span className="font-bold">{ticket["expectedToBeDone"]}</span>
           </div>
         </div>
-
-        <div className={"w-full border-b-2 py-2.5"}>
-          <div className={"flex flex-col"}>
-            <div className={"text-md font-bold w-11/12 mx-auto"}>
-              <span
-                className={
-                  "text-sm font-normal italic inline-block w-32 mx-auto"
-                }
-              >
-                Description:
-              </span>{" "}
-              {ticket["description"]}
-            </div>
-            <div className={"text-md font-bold w-11/12 mx-auto"}>
-              <span
-                className={
-                  "text-sm font-normal italic inline-block w-32 mx-auto"
-                }
-              >
-                Changes Made:
-              </span>{" "}
-              {ticket["madeAnyChanges"]}
-            </div>
-            <div className={"text-md font-bold w-11/12 mx-auto"}>
-              <span
-                className={
-                  "text-sm font-normal italic inline-block w-32 mx-auto"
-                }
-              >
-                Expected to be done:
-              </span>{" "}
-              {ticket["expectedToBeDone"]}
-            </div>
-          </div>
-        </div>
-
-        <div className="w-11/12">
+        <div className="px-10 w-full">
           <div className={"mx-auto"}>
             <form>
               <div className="w-full mt-10 bg-stone-50 dark:bg-stone-700 border-2 dark:border-stone-600">
@@ -127,7 +107,7 @@ function TicketChat({
                     id="comment"
                     value={content}
                     className="outline-none w-full px-0 my-1.5 text-sm text-stone-900 bg-white dark:bg-stone-800 dark:focus:ring-gray-900 focus:ring-0 focus:ring-blue-900 dark:text-white dark:placeholder-stone-400"
-                    placeholder="Write a comment..."
+                    placeholder={t("tickets.ticket.commentPlaceholder")}
                     required
                     onChange={(e) => setMsg(e.target.value)}
                   />
@@ -138,7 +118,7 @@ function TicketChat({
                     className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-stone-900 hover:bg-blue-800"
                     onClick={submitMessage}
                   >
-                    Post Message
+                    {t("tickets.ticket.postMessage")}
                   </button>
                   <div className="flex ps-0 space-x-1 rtl:space-x-reverse sm:ps-2">
                     <div>
@@ -197,7 +177,7 @@ function TicketChat({
         </div>
 
         {messages.length > 0 ? (
-          <div className="w-11/12 mx-auto mt-1">
+          <div className="w-full px-10">
             <div className="border-2 dark:bg-stone-700 p-4 flex flex-col gap-4">
               {messages.map((message, index) => (
                 <ChatField
@@ -212,11 +192,11 @@ function TicketChat({
             </div>
           </div>
         ) : (
-          <div className="w-11/12 mx-auto border rounded-lg mt-2.5 bg-white dark:bg-stone-400">
-            <div className="mx-10">
+          <div className="w-full px-10  mt-2.5 ">
+            <div className="px-2 border rounded-lg bg-white dark:bg-stone-400">
               <div className={"w-full py-5"}>
                 <div className={""}>
-                  <p className={"text-md"}>No messages found yet...</p>
+                  <p className={"text-md"}>{t("tickets.ticket.noMessages")}</p>
                 </div>
               </div>
             </div>
