@@ -31,6 +31,9 @@
     },
     "logout": "Afmelden"
   },
+  "dashboard": {
+    "welcome": "Welkom"
+  },
   "tickets": {
     "title": {
       "all": "Alle tickets",
@@ -39,16 +42,52 @@
       "archive": "Gearchiveerde tickets"
     },
     "table": {
+      "nodata": "Geen tickets gevonden.",
       "title": "Waar ben je naar op zoek?",
       "category": "Categorie",
       "all": "Alles",
       "search": "Zoeken"
+    },
+    "ticket": {
+      "issuer": "Aanvrager",
+      "company": "Bedrijf",
+      "machine": "Machine",
+      "urgent": {
+        "title": "Urgent",
+        "yes": "Ja",
+        "no": "Nee"
+      },
+      "created": "Aangemaakt op",
+      "department": "Afdeling",
+      "assignee": "Toegewezen aan",
+      "assignSelf": "Zelf oppakken",
+      "public": {
+        "title": "Openbaar",
+        "yes": "Ja",
+        "no": "Nee"
+      },
+      "status": {
+        "title": "Status",
+        "open": "Open",
+        "closed": "Gesloten"
+      },
+      "update": "Aanpassen",
+      "title": "Titel",
+      "description": "Beschrijving",
+      "edit": "Aanpassingen",
+      "expected": "Verwachting",
+      "commentPlaceholder": "Schrijf een opmerkingen...",
+      "postMessage": "Verstuur",
+      "noMessages": "Geen berichten gevonden.",
+      "close": "Sluiten",
+      "you": "Jij"
     }
   },
   "createTicket": {
     "title": "Maak een nieuwe ticket aan",
     "form": {
       "titlelabel": "Titel",
+      "assigneeEmail": "E-mail van aanvrager",
       "departmentlabel": "Voor welke afdeling is dit bestemd?",
       "defaultdepartment": "Selecteer een afdeling",
       "machinelabel": "Om welke machine gaat het?",

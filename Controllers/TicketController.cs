@@ -57,6 +57,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public async Task<ActionResult> GetTicketData([FromQuery] int id) =>
             await _ticketServices.GetTicketData(id);
 
+        [Authorize(Policy = "viscon")]
         [HttpGet("tickets")]
         public async Task<IActionResult> GetTickets([FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
             await _ticketServices.GetTickets(uid);
@@ -71,5 +72,10 @@ namespace Viscon_ProjectC_Groep4.Controllers
         [HttpPost("claim")]
         public async Task<IActionResult> Claim(int ticketId, [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
             await _ticketServices.Claim(ticketId, uid);
+
+        [Authorize(Policy = "user")]
+        [HttpGet("archive")]
+        public async Task<IActionResult> GetArchive() => await _ticketServices.GetArchive();
+
     }
 }
