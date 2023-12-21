@@ -9,37 +9,37 @@ type TicketsProps = {
 };
 
 function Tickets(props: TicketsProps) {
-  const [tickets, setTickets] = useState<[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
 
   const { t } = useTranslation();
 
   const filterTickets = (data: any) => {
+    let newData;
     switch (props.filter) {
       case "all":
-        setTickets(data);
+        newData = data;
         break;
       case "unassigned":
-        setTickets(
-          data.filter((ticket: any) => {
-            return ticket["supporter"] == " ";
-          })
-        );
+        newData = data.filter((ticket: any) => {
+          return ticket["supporter"] == " ";
+        });
+
         break;
       case "critical":
-        setTickets(
-          data.filter((ticket: any) => {
-            return ticket["urgent"] == "true";
-          })
-        );
+        newData = data.filter((ticket: any) => {
+          return ticket["urgent"] == "Yes";
+        });
         break;
       case "archive":
-        setTickets(
-          data.filter((ticket: any) => {
-            return ticket["status"] == "closed";
-          })
-        );
+        newData = data.filter((ticket: any) => {
+          return ticket["status"] == "closed";
+        });
         break;
     }
+    if (newData.length == 0) {
+      newData = [{}];
+    }
+    setTickets([...newData]);
   };
 
   const getData = () => {

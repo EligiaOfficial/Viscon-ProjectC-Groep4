@@ -135,7 +135,7 @@ function Table(props: TableProps) {
 
   return (
     <>
-      {props.data == undefined ? (
+      {props.data == undefined || keys.length <= 0 ? (
         <>No data to show.</>
       ) : (
         <div className="flex flex-col gap-4">

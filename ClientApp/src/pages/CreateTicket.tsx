@@ -35,7 +35,7 @@ const CreateTicket: React.FC = () => {
   const [departments, setDepartments] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [supportedFile, setSupportedFile] = useState<boolean>(true);
-  const [oversized, setOversized] = useState<boolean>(true);
+  const [oversized, setOversized] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const [duplicateFile, setDuplicateFile] = useState<boolean>(false);
@@ -160,14 +160,12 @@ const CreateTicket: React.FC = () => {
       setSupportedFile(true);
       setDuplicateFile(false);
 
-      console.log("size: ", imageArray[i].size);
       if (imageArray[i].size / 1024 > 1000) {
         setOversized(true);
         return;
       }
 
       if (allImages.indexOf(imageArray[i].type) === -1) {
-        console.log(imageArray[i].type);
         setSupportedFile(false);
         return;
       }
@@ -205,10 +203,6 @@ const CreateTicket: React.FC = () => {
   useEffect(() => {
     fetchMachines();
   }, []);
-
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
 
   return (
     <Layout>
@@ -285,7 +279,7 @@ const CreateTicket: React.FC = () => {
                   {t("createTicket.form.departmentlabel")}
                 </label>
                 <select
-                  id="machine"
+                  id="department"
                   value={selectedDepartment}
                   onChange={(e) => setSelectedDepartment(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
