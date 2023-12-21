@@ -46,8 +46,6 @@ const Ticket = () => {
         setMachine(machine);
         setMessages(messages);
         setTicket(ticket);
-
-        console.log(res.data);
       })
       .catch((err) => console.log(err));
   };

@@ -126,7 +126,6 @@ const CreateTicket: React.FC = () => {
       const response = await createTicketAxios(formData)
         .then((res) => {
           if (res.status === 200) {
-            console.log("Ticket created successfully:", res.data);
             nav(`/ticket?id=${res.data}`);
           }
         })
@@ -149,7 +148,6 @@ const CreateTicket: React.FC = () => {
     }
 
     getDepartments().then((res) => {
-      // console.log(res.data);
       setDepartments(res.data);
     });
   };

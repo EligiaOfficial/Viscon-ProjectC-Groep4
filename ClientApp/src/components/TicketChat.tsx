@@ -34,7 +34,6 @@ function TicketChat({
       timeSend: new Date(),
       senderId: userId,
     };
-    console.log(newMessage);
     setMessages((prevMessages) => [newMessage, ...prevMessages]);
   };
 
@@ -45,7 +44,6 @@ function TicketChat({
 
   const submitMessage = (e) => {
     e.preventDefault(); // TODO: Reload Chat ipv Page
-    console.log("msg: " + content);
 
     if (content !== "") {
       createMessageAxios({
