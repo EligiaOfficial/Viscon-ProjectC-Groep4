@@ -34,8 +34,8 @@ const Ticket = () => {
           ticket,
         } = res.data;
 
-        for (let i=0; i < messages.length; i ++) {
-            messages[i].timeSent = new Date(messages[i].timeSent);
+        for (let i = 0; i < messages.length; i++) {
+          messages[i].timeSent = new Date(messages[i].timeSent);
         }
         messages.sort((b, a) => a.timeSent.getTime() - b.timeSent.getTime());
 
@@ -46,6 +46,8 @@ const Ticket = () => {
         setMachine(machine);
         setMessages(messages);
         setTicket(ticket);
+
+        console.log(res.data);
       })
       .catch((err) => console.log(err));
   };
@@ -73,7 +75,11 @@ const Ticket = () => {
           ) : null}
           <div className="bg-white dark:bg-stone-400 h-full w-full">
             <section className="flex h-full overflow-y-auto">
-              <TicketChat ticketId={ticketId} ticket={ticket} messages={messages || []} />
+              <TicketChat
+                ticketId={ticketId}
+                ticket={ticket}
+                messages={messages || []}
+              />
             </section>
           </div>
         </div>

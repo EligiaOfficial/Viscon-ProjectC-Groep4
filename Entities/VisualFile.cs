@@ -13,7 +13,7 @@ namespace Entities
         public string Name { get; set; }
 
         // [ForeignKey("Ticket")]
-        public int TicketId { get; set; }
+        public int MessageId { get; set; }
         // public Ticket RelatedTicket { get; set; }
 
 
