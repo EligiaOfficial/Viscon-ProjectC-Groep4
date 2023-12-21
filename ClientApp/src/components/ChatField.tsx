@@ -29,7 +29,7 @@ function ChatField({
     document.addEventListener("keydown", detectKeyDown, true);
   }, []);
 
-  const detectKeyDown = (e) => {
+  const detectKeyDown = (e: KeyboardEvent) => {
     if (e.key == "Escape") {
       setEnlargedImage(0);
     }
