@@ -35,6 +35,7 @@ const CreateTicket: React.FC = () => {
   const [departments, setDepartments] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [supportedFile, setSupportedFile] = useState<boolean>(true);
+  const [oversized, setOversized] = useState<boolean>(true);
   const [title, setTitle] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const [duplicateFile, setDuplicateFile] = useState<boolean>(false);
@@ -155,13 +156,22 @@ const CreateTicket: React.FC = () => {
 
   const handleImage = (imageArray: any) => {
     for (let i = 0; i < imageArray.length; i++) {
+      setOversized(false);
       setSupportedFile(true);
       setDuplicateFile(false);
+
+      console.log("size: ", imageArray[i].size);
+      if (imageArray[i].size / 1024 > 1000) {
+        setOversized(true);
+        return;
+      }
+
       if (allImages.indexOf(imageArray[i].type) === -1) {
         console.log(imageArray[i].type);
         setSupportedFile(false);
         return;
       }
+
       if (images.length === 0) {
         if (imageArray.length === 1) {
           setImages([...images, imageArray[0]]);
@@ -170,6 +180,7 @@ const CreateTicket: React.FC = () => {
         setImages([...images, ...imageArray]);
         return;
       }
+
       for (let j = 0; j < images.length; j++) {
         if (images[j]!.name == imageArray[i].name) {
           setDuplicateFile(true);
@@ -306,7 +317,7 @@ const CreateTicket: React.FC = () => {
                     handleImage(e.dataTransfer.files);
                   }}
                   className={`${
-                    supportedFile && !duplicateFile
+                    supportedFile && !duplicateFile && !oversized
                       ? "border-stone-600"
                       : "border-red-600"
                   } relative select-none h-full w-full cursor-pointer border rounded-md p-2 shadow-sm active:border-blue-500 border-dashed bg-stone-100 dark:bg-stone-300`}
@@ -354,6 +365,13 @@ const CreateTicket: React.FC = () => {
                   } absolute top-full left-0 translate-y-1/2 text-red-600`}
                 >
                   <ErrorField error={"Duplicate files are not allowed."} />
+                </span>
+                <span
+                  className={`${
+                    !oversized ? "hidden" : ""
+                  } absolute top-full left-0 translate-y-1/2 text-red-600`}
+                >
+                  <ErrorField error={"Only files of max 1MB are allowed."} />
                 </span>
               </div>
               <div className="col-start-1">
