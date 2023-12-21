@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import whiteCrossIcon from "../assets/icons/white-cross.svg";
 
 function ChatField({
@@ -23,6 +23,16 @@ function ChatField({
   }).format(timestamp);
 
   const [enlargedImage, setEnlargedImage] = useState<number>();
+
+  useEffect(() => {
+    document.addEventListener("keydown", detectKeyDown, true);
+  }, []);
+
+  const detectKeyDown = (e) => {
+    if (e.key == "Escape") {
+      setEnlargedImage(0);
+    }
+  };
 
   return (
     <div className={`w-full`}>
