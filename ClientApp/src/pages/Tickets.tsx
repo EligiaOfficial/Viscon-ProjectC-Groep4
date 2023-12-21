@@ -37,7 +37,6 @@ function Tickets(props: TicketsProps) {
         break;
     }
     if (newData.length == 0) {
-      console.log("sad");
       newData = [{}];
     }
     setTickets([...newData]);

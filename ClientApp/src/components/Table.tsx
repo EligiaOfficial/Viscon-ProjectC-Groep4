@@ -133,10 +133,6 @@ function Table(props: TableProps) {
     setTextSearch("");
   };
 
-  useEffect(() => {
-    console.log(props);
-  }, [props]);
-
   return (
     <>
       {props.data == undefined || keys.length <= 0 ? (
