@@ -101,9 +101,9 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             _dbContext.Messages.Add(newMessage);
             await _dbContext.SaveChangesAsync();
 
-            using MemoryStream memoryStream = new();
             foreach (IFormFile image in data.Images)
             {
+                using MemoryStream memoryStream = new();
                 await image.CopyToAsync(memoryStream);
                 VisualFile visualFile = new()
                 {

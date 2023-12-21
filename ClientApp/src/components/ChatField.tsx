@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import whiteCrossIcon from "../assets/icons/white-cross.svg";
+import defaultIcon from "../assets/images/dribbble_100_size25fps.gif";
 
 function ChatField({
   user,
@@ -36,14 +37,21 @@ function ChatField({
 
   return (
     <div className={`w-full`}>
-      <div className={"flex flex-row items-center justify-between gap-4"}>
-        <h1
-          className={`${
-            self ? "text-sky-600 dark:text-orange-400" : ""
-          } dark:text-stone-300 text-md font-bold`}
-        >
-          {user + " " + (self ? "(Jij)" : "")}
-        </h1>
+      <div className={"flex flex-row items-center justify-between gap-4 px-2"}>
+        <div className="flex flex-row gap-2 items-center py-2">
+          <img
+            src={defaultIcon}
+            className={`translate object-cover duration-300 min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] rounded-full border border-black dark:border-white group-hover:border-sky-600 dark:group-hover:border-stone-900`}
+          />
+          <h1
+            className={`${
+              self ? "text-sky-600 dark:text-orange-400" : ""
+            } dark:text-white text-md`}
+          >
+            {user + " " + (self ? "(Jij)" : "")}
+          </h1>
+        </div>
+
         <p className={"dark:text-stone-300 text-xs italic mr-2.5"}>
           {formattedDate}
         </p>
