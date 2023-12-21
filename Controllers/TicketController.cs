@@ -57,6 +57,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public async Task<ActionResult> GetTicketData([FromQuery] int id) =>
             await _ticketServices.GetTicketData(id);
 
+        [Authorize(Policy = "viscon")]
         [HttpGet("tickets")]
         public async Task<IActionResult> GetTickets([FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
             await _ticketServices.GetTickets(uid);
@@ -72,36 +73,9 @@ namespace Viscon_ProjectC_Groep4.Controllers
         public async Task<IActionResult> Claim(int ticketId, [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
             await _ticketServices.Claim(ticketId, uid);
 
+        [Authorize(Policy = "user")]
         [HttpGet("archive")]
-        public async Task<IActionResult> GetArchive() /*=> await _ticketServices.GetArchive();*/
-        {
-            var companies = from company in _dbContext.Companies
-                            select new { company.Id, company.Name };
-
-            var result = await (from ticket in _dbContext.Tickets
-                                where ticket.Resolved == true && ticket.Public == true
-                                join user in _dbContext.Users on ticket.CreatorUserId equals user.Id
-                                join machine in _dbContext.Machines on ticket.MachineId equals machine.Id
-                                join department in _dbContext.Departments on ticket.DepartmentId equals department.Id
-                                join company in companies on user.CompanyId equals company.Id
-                                join helper in _dbContext.Users on ticket.HelperUserId equals helper.Id into grouping
-                                from newgroup in grouping.DefaultIfEmpty()
-                                select new
-                                {
-                                    TicketID = ticket.Id,
-                                    Title = ticket.Title,
-                                    Status = ticket.Resolved ? "Closed" : "Open",
-                                    Urgent = ticket.Urgent ? "Yes" : "No",
-                                    Company = company.Name,
-                                    Machine = machine.Name,
-                                    Department = department.Speciality,
-                                    Supporter = newgroup.LastName + ", " + newgroup.FirstName ?? "-",
-                                    Created = ticket.DateCreated,
-                                    Issuer = user.LastName + ", " + user.FirstName
-                                }).ToListAsync();
-
-            return Ok(result);
-        }
+        public async Task<IActionResult> GetArchive() => await _ticketServices.GetArchive();
 
     }
 }

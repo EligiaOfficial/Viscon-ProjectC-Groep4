@@ -35,5 +35,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
         public Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data);
 
         public Task<IActionResult> Claim(int ticketId, int userId);
+
+        public Task<IActionResult> GetArchive();
     }
 }

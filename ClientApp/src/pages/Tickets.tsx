@@ -57,6 +57,7 @@ function Tickets(props: TicketsProps) {
         filterTickets(response.data);
       })
       .catch((error: any) => {
+        setTickets([{}]);
         console.log(error);
       });
   };
