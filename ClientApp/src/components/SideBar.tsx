@@ -32,6 +32,7 @@ type User = {
 
 function SideBar() {
   const { t } = useTranslation();
+  const navigateTo = useNavigate();
 
   const [menu, setMenu] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -45,6 +46,11 @@ function SideBar() {
     setShowSettings(!showSettings);
   };
   let rendered = false;
+
+  const logout = () => {
+    localStorage.clear();
+    navigateTo("/login");
+  };
 
   useEffect(() => {
     if (!rendered) {
@@ -169,7 +175,7 @@ function SideBar() {
           <SideBarItem
             title={t("sidebar.logout")}
             icon={logoutIcon}
-            onclick={() => nav("/logout")}
+            onclick={() => logout()}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
         </div>

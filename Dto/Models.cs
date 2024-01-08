@@ -59,11 +59,12 @@ public class CreateTicketDto
 
 public class ChangeTicketDto
 {
-    public int id { get; set; }
-    public int department { get; set; }
-    public bool urgent { get; set; }
-    public bool resolved { get; set; }
-    public bool publish { get; set; }
+    public int UserId { get; set; }
+    public int TicketId { get; set; }
+    public int Department { get; set; }
+    public bool Urgent { get; set; }
+    public bool Resolved { get; set; }
+    public bool Publish { get; set; }
 }
 
 public class UserDto

@@ -156,8 +156,9 @@ function AddAccount() {
           }
         })
         .catch((error) => {
-          if (error.response.status === 500)
-            setEmailErr("Email already in use."); // TODO: This is a really BAD way to fix it, fix later.
+          if (error.response.status === 500) {
+            console.log("Something went wrong");
+          }
         });
     }
   };

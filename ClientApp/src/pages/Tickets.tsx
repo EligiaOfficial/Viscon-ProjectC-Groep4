@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import Table from "../components/Table";
 import { getArchivedTickets, getTickets } from "../Endpoints/Dto";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 type TicketsProps = {
   filter: string;
@@ -38,8 +39,9 @@ function Tickets(props: TicketsProps) {
   const getArchive = () => {
     getArchivedTickets()
       .then((response: any) => {
-        if (response.data.length > 0) {
-          setArchive(response.data);
+        setArchive(response.data);
+        if (response.data.length == 0) {
+          setArchive([""]);
         }
       })
       .catch((error: any) => {
@@ -48,10 +50,16 @@ function Tickets(props: TicketsProps) {
   };
 
   const getData = () => {
-    getTickets()
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    };
+    axios
+      .get("http://localhost:5173/api/ticket/tickets", config)
       .then((response: any) => {
         if (response.data == undefined || response.data.length == 0) {
-          setTickets([{}]);
+          setTickets([""]);
           return;
         }
         filterTickets(response.data);
@@ -63,10 +71,12 @@ function Tickets(props: TicketsProps) {
   };
 
   useEffect(() => {
-    if (props.filter != "archive") {
-      getData();
-    } else {
-      getArchive();
+    if (localStorage != null && localStorage.getItem("token") != null) {
+      if (props.filter != "archive") {
+        getData();
+      } else {
+        getArchive();
+      }
     }
   }, [props]);
 

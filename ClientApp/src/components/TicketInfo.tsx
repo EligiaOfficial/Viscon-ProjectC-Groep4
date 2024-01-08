@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { UserRoles } from "../UserRoles";
 import { changeTicket, claimTicket, getDepartments } from "../Endpoints/Dto";
-import { getName, getRole } from "../Endpoints/Jwt";
+import { getName, getRole, getId } from "../Endpoints/Jwt";
 
 import userIcon from "../assets/icons/user_alt.svg";
 import userAddIcon from "../assets/icons/user.svg";
@@ -88,7 +88,8 @@ function TicketInfo({
     e.preventDefault();
 
     changeTicket({
-      id: +TicketId,
+      userid: parseInt(getId(token)),
+      ticketid: TicketId,
       department: +newDepartment,
       urgent: urgency,
       resolved: resolvedState,
