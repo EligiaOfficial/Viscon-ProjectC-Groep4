@@ -36,7 +36,6 @@ function Login() {
       })
         .then((res) => {
           localStorage.setItem("token", res["data"]);
-          console.log("Res: ", res["data"]);
           nav("/");
         })
         .catch((error) => {

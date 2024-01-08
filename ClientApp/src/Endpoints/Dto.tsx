@@ -100,7 +100,8 @@ export function createTicketAxios(formData: any) {
 }
 
 type changeTicketDto = {
-  id: number;
+  userid: number;
+  ticketid: number;
   department: number;
   urgent: boolean;
   resolved: boolean;

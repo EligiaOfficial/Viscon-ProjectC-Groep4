@@ -234,21 +234,16 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
             return Ok(res);
         }
 
-        public Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
+        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data, int id)
-        {
-            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == id)!;
+            var user = _dbContext.Users.FirstOrDefault(_ => _.Id == data.UserId)!;
             if (user.Role >= RoleTypes.KEYUSER) return StatusCode(500);
 
-            var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == data.id);
-            if (data.department != 0) ticket!.DepartmentId = data.department;
-            ticket!.Urgent = data.urgent;
-            ticket.Public = data.publish;
-            ticket.Resolved = data.resolved;
+            var ticket = _dbContext.Tickets.FirstOrDefault(_ => _.Id == data.TicketId);
+            if (data.Department != 0) ticket!.DepartmentId = data.Department;
+            ticket!.Urgent = data.Urgent;
+            ticket.Public = data.Publish;
+            ticket.Resolved = data.Resolved;
             await _dbContext.SaveChangesAsync();
             return Ok("Success");
         }
@@ -294,7 +289,7 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
                                Company = company.Name,
                                Machine = machine.Name,
                                Department = department.Speciality,
-                               Supporter = newgroup.LastName + ", " + newgroup.FirstName ?? "-",
+                               Supporter = newgroup.LastName + ", " + newgroup.FirstName == ", " ? "" : newgroup.LastName + ", " + newgroup.FirstName,
                                Created = ticket.DateCreated,
                                Issuer = user.LastName + ", " + user.FirstName
                            }).ToListAsync();
