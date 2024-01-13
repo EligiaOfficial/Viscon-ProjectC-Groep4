@@ -130,6 +130,17 @@
       "companylabel": "Voor welk bedrijf?",
       "defaultcompany": "Selecteer een bedrijf",
       "submit": "Verzenden"
+    },
+    "error": {
+      "firstname": "First name",
+      "lastname": "Last name",
+      "email": "Email Address",
+      "phone": "Phone number",
+      "password": "Password",
+      "role": "What's the type of user?",
+      "user": "Select a role",
+      "department": "In what department?",
+      "company": "For which company?"
     }
   }
 }

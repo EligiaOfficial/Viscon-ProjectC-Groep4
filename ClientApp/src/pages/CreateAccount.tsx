@@ -21,15 +21,14 @@ function AddAccount() {
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
 
-  const [passErr, setPassErr] = useState("");
-  const [emailErr, setEmailErr] = useState("");
-  const [firstNameErr, setFirstNameErr] = useState("");
-  const [lastNameErr, setLastNameErr] = useState("");
-  const [phoneErr, setPhoneErr] = useState("");
-
-  const [roleErr, setRoleErr] = useState("");
-  const [departmentErr, setDepartmentErr] = useState("");
-  const [companyErr, setCompanyErr] = useState("");
+  const [passErr, setPassErr] = useState<boolean>(false);
+  const [emailErr, setEmailErr] = useState<boolean>(false); 
+  const [firstNameErr, setFirstNameErr] = useState<boolean>(false);
+  const [lastNameErr, setLastNameErr] = useState<boolean>(false);
+  const [phoneErr, setPhoneErr] = useState<boolean>(false);
+  const [roleErr, setRoleErr] = useState<boolean>(false);
+  const [departmentErr, setDepartmentErr] = useState<boolean>(false);
+  const [companyErr, setCompanyErr] = useState<boolean>(false);
 
   const [department, setDepartment] = useState("");
   const [departments, setDepartments] = useState<object[]>([]);
@@ -58,75 +57,17 @@ function AddAccount() {
 
     if (showToast) return;
 
-    if (password == "") {
-      setPassErr("Please fill in a password.");
-    } else if (confirmPassword == "") {
-      setPassErr("Please fill in your password confirmation");
-    } else if (password != confirmPassword) {
-      setPassErr("Passwords to not match");
-    } else {
-      setPassErr("");
-    }
-
-    if (email == "") {
-      setEmailErr("Please fill in a email adress");
-    } else if (email != "" && !emailRegex.test(email)) {
-      setEmailErr(
-        "Please fill in a correct email adress\nExample: yourname@email.com"
-      );
-    } else {
-      setEmailErr("");
-    }
-
-    if (firstName == "") {
-      setFirstNameErr("Please fill in a first name.");
-    } else {
-      setFirstNameErr("");
-    }
-
-    if (lastName == "") {
-      setLastNameErr("Please fill in a last name.");
-    } else {
-      setLastNameErr("");
-    }
-
-    if (phone == "") {
-      //TODO: Check if we want to make this nullable
-      setPhoneErr("Please fill in a phone number.");
-    } else if (phone != "" && !phoneRegex.test(phone)) {
-      setPhoneErr(
-        "Not a valid phone number found.\nExamples: +31652457819, 0615984565, 080058856"
-      );
-    } else {
-      setPhoneErr("");
-    }
-
-    if (role == "" && usr_role == UserRoles.ADMIN) {
-      setRoleErr("Please select a user type.");
-    } else {
-      setRoleErr("");
-    }
-
-    if (
-      department == "" &&
-      usr_role == UserRoles.ADMIN &&
-      (role == 0 || role == 1)
-    ) {
-      setDepartmentErr("Please select which department the user will work.");
-    } else {
-      setDepartmentErr("");
-    }
-
-    if (
-      company == "" &&
-      usr_role == UserRoles.ADMIN &&
-      (role == 2 || role == 3)
-    ) {
-      setCompanyErr("Please select which department the user will work.");
-    } else {
-      setCompanyErr("");
-    }
-
+    password == "" ? setPassErr(true) : setPassErr(false);
+    email == "" || !emailRegex.test(email) ? setEmailErr(true) : setEmailErr(false);
+    firstName == "" ? setFirstNameErr(true) : setFirstNameErr(false);
+    lastName == "" ? setLastNameErr(true) : setLastNameErr(false);
+    phone == "" || !phoneRegex.test(phone) ? setPhoneErr(true) : setPhoneErr(false);
+    role == "" && usr_role == UserRoles.ADMIN ? setRoleErr(true) : setRoleErr(false);
+    // @ts-ignore
+    department == "" && usr_role == UserRoles.ADMIN && (role == 0 || role == 1) ? setDepartmentErr(true) : setDepartmentErr(false);
+    // @ts-ignore
+    company == "" && usr_role == UserRoles.ADMIN && (role == 2 || role == 3) ? setCompanyErr(true) : setCompanyErr(false);
+    
     if (
       [
         passErr,
@@ -211,8 +152,8 @@ function AddAccount() {
                         autoComplete="first_name"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {firstNameErr != "" ? (
-                        <ErrorField error={firstNameErr} />
+                      {firstNameErr ? (
+                        <ErrorField error={t("createUser.error.firstname")} />
                       ) : null}
                     </div>
                     <div className={"w-full ml-2.5"}>
@@ -228,8 +169,8 @@ function AddAccount() {
                         autoComplete="last_name"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {lastNameErr != "" ? (
-                        <ErrorField error={lastNameErr} />
+                      {lastNameErr ? (
+                        <ErrorField error={t("createUser.error.lastname")} />
                       ) : null}
                     </div>
                   </div>
@@ -248,7 +189,7 @@ function AddAccount() {
                         autoComplete="email"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {emailErr != "" ? <ErrorField error={emailErr} /> : null}
+                      {emailErr ? <ErrorField error={t("createUser.error.email")} /> : null}
                     </div>
 
                     <div className={"w-full ml-2.5"}>
@@ -264,7 +205,7 @@ function AddAccount() {
                         autoComplete="phone"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {phoneErr != "" ? <ErrorField error={phoneErr} /> : null}
+                      {phoneErr ? <ErrorField error={t("createUser.error.phone")} /> : null}
                     </div>
                   </div>
 
@@ -281,7 +222,7 @@ function AddAccount() {
                         autoComplete="password"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {passErr != "" ? <ErrorField error={passErr} /> : null}
+                      {passErr ? <ErrorField error={t("createUser.error.password")} /> : null}
                     </div>
 
                     <div className={"w-full ml-2.5"}>
@@ -319,7 +260,7 @@ function AddAccount() {
                         <option value="2">Trained User</option>
                         <option value="3">User</option>
                       </select>
-                      {roleErr != "" ? <ErrorField error={roleErr} /> : null}
+                      {roleErr ? <ErrorField error={t("createUser.error.role")} /> : null}
                     </div>
                   ) : (
                     <div />
@@ -347,8 +288,8 @@ function AddAccount() {
                           </option>
                         ))}
                       </select>
-                      {departmentErr != "" ? (
-                        <ErrorField error={departmentErr} />
+                      {departmentErr ? (
+                        <ErrorField error={t("createUser.error.department")} />
                       ) : null}
                     </div>
                   ) : (
@@ -377,8 +318,8 @@ function AddAccount() {
                           </option>
                         ))}
                       </select>
-                      {companyErr != "" ? (
-                        <ErrorField error={companyErr} />
+                      {companyErr ? (
+                        <ErrorField error={t("createUser.error.company")} />
                       ) : null}
                     </div>
                   ) : (

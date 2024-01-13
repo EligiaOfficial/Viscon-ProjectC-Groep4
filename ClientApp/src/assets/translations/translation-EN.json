@@ -130,6 +130,16 @@
       "companylabel": "For which company?",
       "defaultcompany": "Select a company",
       "submit": "Submit"
+    },
+    "error": {
+      "firstname": "Please fill in a first name.",
+      "lastname": "Please fill in a last name.",
+      "email": "Please fill in a correct email adress\nExample: yourname@email.com",
+      "phone": "Not a valid phone number found.\nExamples: +31652457819, 0615984565, 080058856",
+      "password": "Passwords not valid or do not match",
+      "role": "Please select a user type.",
+      "department": "Please select which department the user will work.",
+      "company": "Please select which company the user will work."
     }
   }
 }
