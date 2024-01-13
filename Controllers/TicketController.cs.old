@@ -1,0 +1,172 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Entities;
+using Viscon_ProjectC_Groep4.Dto;
+using ModelBinding;
+using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.TicketService;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+
+namespace Viscon_ProjectC_Groep4.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class TicketController_ : ControllerBase
+{
+    private readonly ApplicationDbContext _dbContext;
+    private readonly TicketServices _ticketServices;
+
+    public TicketController(
+        ApplicationDbContext dbContext,
+        TicketServices ticketServices
+    )
+    {
+        _dbContext = dbContext;
+        _ticketServices = ticketServices;
+    }
+
+    [Authorize(Policy = "user")] [HttpPost("AddMessage")]
+    public async Task<IActionResult> AddMessage(
+        MessageDto data,
+        [FromClaim(Name = ClaimTypes.NameIdentifier)]
+        int uid
+    ) => await _ticketServices.AddMessage(data, uid);
+
+    
+    //[HttpGet("getimage/{ticketId}")]
+    //public async Task<IActionResult> GetImage(int ticketId) =>
+    //    _ticketServices.GetImage(ticketId);
+
+
+    [Authorize(Policy = "key_user")]
+    [HttpPost("createticket")]
+    public async Task<ActionResult<Ticket>> CreateTicket(
+        [FromForm] CreateTicketDto data,
+        [FromClaim( Name = ClaimTypes.NameIdentifier)] int uid
+    ) => 
+        await _ticketServices.CreateTicket(data, uid);
+
+    [Authorize(Policy = "user")] [HttpPost("UserName")]
+    public async Task<IActionResult> GetUser(getUserDto data) =>
+        await _ticketServices.GetUser(data);
+
+    [Authorize(Policy = "user")] [HttpGet("ticketdata")]
+    public async Task<ActionResult> GetTicketData([FromQuery] int id) =>
+        await _ticketServices.GetTicketData(id);
+
+    [HttpGet("tickets")]
+    public async Task<IActionResult> GetTickets([FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
+        await _ticketServices.GetTickets(uid);
+    
+    [Authorize(Policy = "viscon")]
+    [HttpPost("changeticket")]
+    public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data) =>
+        await _ticketServices.ChangeTicketDepartment(data);
+
+
+    [Authorize(Policy = "viscon")]
+    [HttpPost("claim")]
+    public async Task<IActionResult> Claim(int ticketId, [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
+        await _ticketServices.Claim(ticketId, uid);
+
+    [Authorize(Policy = "user")]
+    [HttpGet("archive")]
+    public async Task<IActionResult> GetArchive() => await _ticketServices.GetArchive();
+
+}
+
+
+public class TicketController : ControllerBase {
+    private readonly ITicketStorage _ticketStorage;
+
+    public TicketController(
+        ITicketStorage ticketStorage
+    ) => _ticketStorage = ticketStorage;
+
+    [Authorize(Policy = "key_user")]
+    [HttpPost("create")]
+    public async Task<ActionResult> CreateTicket(
+        [FromClaim]( Name = ClaimTypes.NameIdentifier )] int uid,
+        [FromBody] Ticket ticket
+    ) {
+        await _ticketStorage.AddTicket(ticket);
+        return Ok();
+    }
+
+    [Authorize(Policy = "user")]
+    [HttpPost("get")]
+    public async Task<ActionResult> GetTicket(
+        [FromQuery] int id,
+        [FromClaim( Name = ClaimTypes.Role )] RoleTypes role
+        [FromClaim( Name = "CompanyId" )] int cid
+    ) {
+        Ticket ticket = await _ticketStorage.SelectTicket(id);
+        _authorizer.MayViewTicket(role, cid, ticket) ? Ok(ticket) : Forbid();
+    }
+
+    [HttpGet("tickets")]
+    [Authorize(Policy = "USER")]
+    public async<ActionResult> GetTickets(
+        [FromClaim( Name = ClaimTypes.Role )] RoleTypes role,
+        [FromClaim( Name = "CompanyId" )] int cid,
+        [FromClaim( Name = "DepartmentId" )] int did
+    ) {
+        var selecter = role switch {
+            RoleTypes.USER, RoleTypes.KEYUSER => t => t.Creator.CompanyId == cid,
+            RoleTypes.VISCON => t => t.DepartmentId == did,
+            RoleTypes.ADMIN => t => true
+        }
+
+        return await _ticketStorage.SelectTickets(selecter);
+    }
+
+    HttpPost("update")
+    public async Task<IActionResult> UpdateTicket(
+        [FromClaim( Name = ClaimTypes.NameIdentifier )] int uid,
+        [FromClaim( Name = ClaimTypes.Role)] RoleTypes role,
+        [FromBody] int ticketId,
+        [FromBody] bool urgent,
+        [FromBody] bool published,
+        [FromBody] bool resolved
+    ) {
+        Ticket? ticket = _ticketStorage.GetTicket(ticketId);
+        if (ticket is null) return NotFound();
+
+        if (!_authenticator.HasAuthority(RoleTypes.VISCON, role))
+            return Forbid();
+
+        ticket.Urgent = urgent;
+        ticket.Public = published;
+        ticket.Resolved = resolved;
+
+        return Ok();
+    }
+
+    [HttpPost("claim")]
+    public async Task<IActionResult> Claim(
+        int ticketId,
+        [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid,
+        [FromClaim( Name = ClaimTypes.Role)] RoleTypes role
+    ) {
+        // Can KEYUSER claim? Wasn't it supposed to be VISCON and ADMIN?
+        if (!_authenticator.HasAuthority(role, RoleTypes.KEYUSER))
+            return Forbid();
+
+        Ticket? ticket = _ticketStorage.GetTicket(ticketId);
+        if (ticket is null) return NotFound();
+
+        ticket.HelperUserId = uid;
+        return Ok();
+    }
+    [Authorize(Policy = "USER")]
+    [HttpGet("archive")]
+    public async Task<IActionResult> Archive(
+        [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid
+    ) {
+        return await _ticketStorage.SelectTickets(
+            t => t.Resolved == true && t.Public == true && t.Creater equals uid)
+    }
+}

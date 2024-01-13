@@ -11,6 +11,7 @@ using Viscon_ProjectC_Groep4.Services.DepartmentService;
 using Viscon_ProjectC_Groep4.Services.MachineService;
 using Viscon_ProjectC_Groep4.Services.TicketService;
 using Viscon_ProjectC_Groep4.Services.UserService;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddConsole();
@@ -22,6 +23,7 @@ builder.Services
         )
     )
     .AddSingleton<Authenticator>()
+    .AddScoped<ITicketStorage, EFTicketStorage>()
     .AddControllersWithViews(options => options.ValueProviderFactories.Add(
         new ModelBinding.ClaimValueProviderFactory()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

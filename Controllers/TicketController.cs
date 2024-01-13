@@ -1,80 +1,103 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Security.Claims;
+using System.Linq.Expressions;
+using System.Linq;
 using Entities;
-using Viscon_ProjectC_Groep4.Dto;
 using ModelBinding;
 using Viscon_ProjectC_Groep4.Services;
-using Viscon_ProjectC_Groep4.Services.TicketService;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
+using Services;
+using DTOs;
 
-namespace Viscon_ProjectC_Groep4.Controllers
-{
-    [Route("[controller]")]
-    [ApiController]
-    public class TicketController : ControllerBase
-    {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly TicketServices _ticketServices;
+namespace Controllers;
 
-        public TicketController(
-            ApplicationDbContext dbContext,
-            TicketServices ticketServices
-        )
-        {
-            _dbContext = dbContext;
-            _ticketServices = ticketServices;
-        }
+[Route("[controller]")]
+[ApiController]
+public class TicketController : ControllerBase {
+    private readonly ITicketStorage _ticketStorage;
 
-        [Authorize(Policy = "user")] [HttpPost("AddMessage")]
-        public async Task<IActionResult> AddMessage(
-            MessageDto data,
-            [FromClaim(Name = ClaimTypes.NameIdentifier)]
-            int uid
-        ) => await _ticketServices.AddMessage(data, uid);
+    public TicketController(
+        ITicketStorage ticketStorage
+    ) {
+        _ticketStorage = ticketStorage;
+    }
 
-        
-        //[HttpGet("getimage/{ticketId}")]
-        //public async Task<IActionResult> GetImage(int ticketId) =>
-        //    _ticketServices.GetImage(ticketId);
+    [Authorize(Policy = "key_user")]
+    [HttpPost("create")]
+    public async Task<ActionResult> CreateTicket(
+        [FromClaim( Name = ClaimTypes.NameIdentifier )] int uid,
+        [FromBody] Ticket ticket
+    ) {
+        await _ticketStorage.AddTicket(ticket);
+        return Ok();
+    }
 
+    //[Authorize(Policy = "user")]
+    [HttpGet("get_data")]
+    public async Task<ActionResult> GetTicket(
+        [BindRequired, FromQuery] int id,
+        [FromClaim( Name = ClaimTypes.Role )] RoleTypes role,
+        [FromClaim( Name = "CompanyId" )] int cid
+    ) {
+        TicketDataDTO? ticketData = await _ticketStorage.GetTicketViewData(id);
+        if (ticketData is null) return NotFound("Ticket not found");
+        //Console.WriteLine(ticketData.Title);
+        return Authorizer.MayViewTicket(
+            role, cid, ((TicketDataDTO)ticketData).CreatorCompanyId
+        ) ? Ok(ticketData) : Forbid();
+    }
 
-        [Authorize(Policy = "key_user")]
-        [HttpPost("createticket")]
-        public async Task<ActionResult<Ticket>> CreateTicket(
-            [FromForm] CreateTicketDto data,
-            [FromClaim( Name = ClaimTypes.NameIdentifier)] int uid
-        ) => 
-            await _ticketServices.CreateTicket(data, uid);
+    [HttpGet("tickets")]
+    [Authorize(Policy = "USER")]
+    public async Task<ActionResult> GetTickets(
+        [FromClaim( Name = ClaimTypes.Role )] RoleTypes role,
+        [FromClaim( Name = "CompanyId" )] int cid,
+        [FromClaim( Name = "DepartmentId" )] int did
+    ) {
+        var ticketData = role switch {
+            RoleTypes.USER => _ticketStorage.SelectTicketDataByCompanyId(cid),
+            RoleTypes.KEYUSER => _ticketStorage.SelectTicketDataByCompanyId(cid),
+            RoleTypes.VISCON => _ticketStorage.SelectTicketDataByDepartmentId(did),
+            RoleTypes.ADMIN => _ticketStorage.SelectTicketData()
+        };
 
-        [Authorize(Policy = "user")] [HttpPost("UserName")]
-        public async Task<IActionResult> GetUser(getUserDto data) =>
-            await _ticketServices.GetUser(data);
+        return Ok(ticketData);
+    }
 
-        [Authorize(Policy = "user")] [HttpGet("ticketdata")]
-        public async Task<ActionResult> GetTicketData([FromQuery] int id) =>
-            await _ticketServices.GetTicketData(id);
+    [HttpPost("update")]
+    [Authorize(Policy = "VISCON")]
+    public async Task<IActionResult> UpdateTicket(
+        [FromClaim( Name = ClaimTypes.NameIdentifier )] int uid,
+        [FromClaim( Name = ClaimTypes.Role)] RoleTypes role,
+        [FromBody] TicketUpdateDTO data
+    ) {
+        if (await _ticketStorage.UpdateTicket(data)) return Ok();
+        // UpdateTicket returns false if it couldn't find the ticket.
+        return NotFound();
+    }
 
-        [HttpGet("tickets")]
-        public async Task<IActionResult> GetTickets([FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
-            await _ticketServices.GetTickets(uid);
-        
-        [Authorize(Policy = "viscon")]
-        [HttpPost("changeticket")]
-        public async Task<IActionResult> ChangeTicketDepartment(ChangeTicketDto data) =>
-            await _ticketServices.ChangeTicketDepartment(data);
+    [HttpPost("claim")]
+    public async Task<IActionResult> Claim(
+        int ticketId,
+        [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid,
+        [FromClaim( Name = ClaimTypes.Role)] RoleTypes role
+    ) {
+        // Can KEYUSER claim? Wasn't it supposed to be VISCON and ADMIN?
+        if (!Authorizer.HasAuthority(role, RoleTypes.KEYUSER))
+            return Forbid();
 
+        if (await _ticketStorage.ClaimTicket(ticketId, uid)) return Ok();
+        return NotFound();
+    }
 
-        [Authorize(Policy = "viscon")]
-        [HttpPost("claim")]
-        public async Task<IActionResult> Claim(int ticketId, [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid) =>
-            await _ticketServices.Claim(ticketId, uid);
-
-        [Authorize(Policy = "user")]
-        [HttpGet("archive")]
-        public async Task<IActionResult> GetArchive() => await _ticketServices.GetArchive();
-
+    [Authorize(Policy = "USER")]
+    [HttpGet("archive")]
+    public async Task<IActionResult> Archive(
+        [FromClaim(Name = ClaimTypes.NameIdentifier)] int uid
+    ) {
+        return Ok(_ticketStorage.SelectArchivedTicketData(uid));
     }
 }
+
+
