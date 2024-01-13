@@ -82,7 +82,6 @@ const CreateTicket: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // TODO: Language
     title == ""
       ? setTitleError(true)
       : setTitleError(false);
@@ -113,7 +112,7 @@ const CreateTicket: React.FC = () => {
       formData.append("machine", selectedMachine);
       formData.append("description", description);
       formData.append("priority", stringToBoolean(priority));
-      formData.append("expectedAction", expectedAction); // TODO: Rename these
+      formData.append("expectedAction", expectedAction);
       formData.append("selfTinkering", selfTinkering);
       formData.append("departmentId", selectedDepartment);
       if (usr_role <= UserRoles.VISCON) formData.append("userEmail", userEmail);

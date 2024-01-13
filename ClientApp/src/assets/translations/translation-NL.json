@@ -9,7 +9,11 @@
     "email": "E-mailadres",
     "password": "Wachtwoord",
     "forgot": "Uw wachtwoord vergeten?",
-    "signIn": "Aanmelden"
+    "signIn": "Aanmelden",
+    "error" : {
+      "email" : "A.U.B. Voer een valide e-mail adres in..",
+      "failed" : "Email en wachtwoord combinatie niet gevonden."
+    }
   },
   "sidebar": {
     "overview": {
@@ -132,15 +136,14 @@
       "submit": "Verzenden"
     },
     "error": {
-      "firstname": "First name",
-      "lastname": "Last name",
-      "email": "Email Address",
-      "phone": "Phone number",
-      "password": "Password",
-      "role": "What's the type of user?",
-      "user": "Select a role",
-      "department": "In what department?",
-      "company": "For which company?"
+      "firstname": "Vul a.u.b. een voornaam in.",
+      "lastname": "Vul a.u.b. een achternaam in.",
+      "email": "Vul een correct e-mailadres in. Voorbeeld: uw naam@email.com",
+      "phone": "Geen geldig telefoonnummer gevonden.\nVoorbeelden: +31652457819, 0615984565, 080058856",
+      "password": "Wachtwoorden zijn niet geldig of komen niet overeen",
+      "role": "Selecteer een gebruikerstype.",
+      "department": "Selecteer op welke afdeling de gebruiker gaat werken.",
+      "company": "Selecteer bij welk bedrijf de gebruiker gaat werken."
     }
   }
 }

@@ -9,7 +9,11 @@
     "email": "Email Address",
     "password": "Password",
     "forgot": "Forgot your password?",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "error" : {
+      "email" : "Please put in a valid e-mail adress.",
+      "failed" : "Email and Password combination not found."
+    }
   },
   "sidebar": {
     "overview": {
@@ -134,7 +138,7 @@
     "error": {
       "firstname": "Please fill in a first name.",
       "lastname": "Please fill in a last name.",
-      "email": "Please fill in a correct email adress\nExample: yourname@email.com",
+      "email": "Please fill in a correct email address Example: yourname@email.com",
       "phone": "Not a valid phone number found.\nExamples: +31652457819, 0615984565, 080058856",
       "password": "Passwords not valid or do not match",
       "role": "Please select a user type.",

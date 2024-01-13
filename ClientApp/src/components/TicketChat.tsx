@@ -43,7 +43,7 @@ function TicketChat({
   }, [initialMessages]);
 
   const submitMessage = (e) => {
-    e.preventDefault(); // TODO: Reload Chat ipv Page
+    e.preventDefault();
 
     if (content !== "") {
       createMessageAxios({
