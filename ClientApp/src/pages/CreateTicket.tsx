@@ -41,13 +41,13 @@ const CreateTicket: React.FC = () => {
   const [duplicateFile, setDuplicateFile] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState("");
 
-  const [titleError, setTitleError] = useState("");
-  const [machineError, setMachineError] = useState("");
-  const [departmentError, setDepartmentError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [descriptionError, setDescriptionError] = useState("");
-  const [actionTakenError, setActionTakenError] = useState("");
-  const [changesMadeError, setChangesMadeError] = useState("");
+  const [titleError, setTitleError] = useState<boolean>(false);
+  const [machineError, setMachineError] = useState<boolean>(false);
+  const [departmentError, setDepartmentError] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [descriptionError, setDescriptionError] = useState<boolean>(false);
+  const [actionTakenError, setActionTakenError] = useState<boolean>(false);
+  const [changesMadeError, setChangesMadeError] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
@@ -84,27 +84,28 @@ const CreateTicket: React.FC = () => {
 
     // TODO: Language
     title == ""
-      ? setTitleError("Please provide a fitting title.")
-      : setTitleError("");
+      ? setTitleError(true)
+      : setTitleError(false);
+
     selectedMachine == ""
-      ? setMachineError("Select a machine.")
-      : setMachineError("");
+      ? setMachineError(true)
+      : setMachineError(false);
+
     description == ""
-      ? setDescriptionError("Please fill what's happening")
-      : setDescriptionError("");
+      ? setDescriptionError(true)
+      : setDescriptionError(false);
+
     expectedAction == ""
-      ? setActionTakenError(
-          "Please fill in a everything you have done so far to try and fix the problem."
-        )
-      : setActionTakenError("");
+      ? setActionTakenError(true)
+      : setActionTakenError(false);
+
     selfTinkering == ""
-      ? setChangesMadeError(
-          "Please fill what changes you have made\nIf you have made no changes fill in that you haven't made changes.."
-        )
-      : setChangesMadeError("");
+      ? setChangesMadeError(true)
+      : setChangesMadeError(false);
+
     selectedDepartment == ""
-      ? setDepartmentError("Please select a department that might help you.")
-      : setDepartmentError("");
+      ? setDepartmentError(true)
+      : setDepartmentError(false);
 
     try {
       const formData: any = new FormData();
@@ -243,7 +244,7 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                 />
-                {titleError != "" ? <ErrorField error={titleError} /> : null}
+                {titleError ? <ErrorField error={t("createTicket.error.title")} /> : null}
               </div>
 
               {usr_role <= UserRoles.VISCON ? (
@@ -262,7 +263,7 @@ const CreateTicket: React.FC = () => {
                     className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
                     required
                   />
-                  {emailError != "" ? <ErrorField error={emailError} /> : null}
+                  {emailError ? <ErrorField error={emailError} /> : null}
                 </div>
               ) : (
                 <div />
@@ -291,8 +292,8 @@ const CreateTicket: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                {descriptionError != "" ? (
-                  <ErrorField error={departmentError} />
+                {departmentError ? (
+                  <ErrorField error={t("createTicket.error.department")} />
                 ) : null}
               </div>
               <div className="relative row-span-3 flex flex-col">
@@ -388,8 +389,8 @@ const CreateTicket: React.FC = () => {
                     </option>
                   ))}
                 </select>
-                {machineError != "" ? (
-                  <ErrorField error={machineError} />
+                {machineError ? (
+                  <ErrorField error={t("createTicket.error.machine")} />
                 ) : null}
               </div>
               <div className="col-start-1">
@@ -460,8 +461,8 @@ const CreateTicket: React.FC = () => {
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
                 />
-                {descriptionError != "" ? (
-                  <ErrorField error={descriptionError} />
+                {descriptionError ? (
+                  <ErrorField error={t("createTicket.error.description1")} />
                 ) : null}
               </div>
               <div className="col-span-2">
@@ -478,8 +479,8 @@ const CreateTicket: React.FC = () => {
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
                 />
-                {actionTakenError != "" ? (
-                  <ErrorField error={actionTakenError} />
+                {actionTakenError ? (
+                  <ErrorField error={t("createTicket.error.description2")} />
                 ) : null}
               </div>
               <div className="col-span-2">
@@ -496,8 +497,8 @@ const CreateTicket: React.FC = () => {
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
                 />
-                {changesMadeError != "" ? (
-                  <ErrorField error={changesMadeError} />
+                {changesMadeError ? (
+                  <ErrorField error={t("createTicket.error.description3")} />
                 ) : null}
               </div>
 

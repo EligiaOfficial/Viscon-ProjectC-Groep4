@@ -103,6 +103,15 @@
       "description2": "What have you tried to fix it?",
       "description3": "Have you made any changes to the machine?",
       "submit": "Submit"
+    },
+    "error": {
+      "title": "Please provide a fitting title.",
+      "email": "Please provide a valid email.",
+      "department": "Please select a department that might help you.",
+      "machine": "Select a machine.",
+      "description1": "Please fill what's happening",
+      "description2": "Please fill in a everything you have done so far to try and fix the problem.",
+      "description3": "Please fill what changes you have made\nIf you have made no changes fill in that you haven't made changes."
     }
   },
   "createUser": {

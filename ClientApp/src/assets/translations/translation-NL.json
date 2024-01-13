@@ -103,6 +103,15 @@
       "description2": "Wat heb je al geprobeerd?",
       "description3": "Heb je aanpassingen gemaakt aan de machine?",
       "submit": "Verzenden"
+    },
+    "error": {
+      "title": "Voeg A.U.B. een valide titel toe.",
+      "email": "Voeg A.U.B. een valide e-mail adress toe.",
+      "department": "Selecteer een afdeling die U zou kunnen helpen.",
+      "machine": "Selecteer om welke machine het gaat.",
+      "description1": "Vul in wat er gebeurt.",
+      "description2": "Vul a.u.b. alles in wat u tot nu toe heeft gedaan om te proberen het probleem op te lossen.",
+      "description3": "Vul in welke wijzigingen u heeft aangebracht\nAls u geen wijzigingen heeft aangebracht, vult u in dat u geen wijzigingen heeft aangebracht."
     }
   },
   "createUser": {
