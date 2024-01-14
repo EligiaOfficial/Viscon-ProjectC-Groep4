@@ -5,7 +5,7 @@ using Viscon_ProjectC_Groep4;
 namespace Services;
 
 
-class EFMessageStorage : IMessageStorage {
+public class EFMessageStorage : IMessageStorage {
     private readonly ApplicationDbContext _context;
 
     public EFMessageStorage(ApplicationDbContext context) {
