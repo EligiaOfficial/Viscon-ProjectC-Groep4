@@ -42,9 +42,8 @@ public class TicketController : ControllerBase {
     ) {
         TicketDataDTO? ticketData = await _ticketStorage.GetTicketViewData(id);
         if (ticketData is null) return NotFound("Ticket not found");
-        //Console.WriteLine(ticketData.Title);
         return Authorizer.MayViewTicket(
-            role, cid, ((TicketDataDTO)ticketData).CreatorCompanyId
+            role, cid, ticketData.CreatorCompanyId
         ) ? Ok(ticketData) : Forbid();
     }
 
