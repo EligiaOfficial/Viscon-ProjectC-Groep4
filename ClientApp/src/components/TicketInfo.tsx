@@ -150,8 +150,17 @@ function TicketInfo({
                 className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
                 onChange={(e) => setUrgency(stringToBoolean(e.target.value))}
               >
-                <option value="Yes">{t("tickets.ticket.urgent.yes")}</option>
-                <option value="No">{t("tickets.ticket.urgent.no")}</option>
+                {urgent ? (
+                    <>
+                      <option value="yes">{t("tickets.ticket.urgent.yes")}</option>
+                      <option value="no">{t("tickets.ticket.urgent.no")}</option>
+                    </>
+                ) : (
+                    <>
+                      <option value="no">{t("tickets.ticket.urgent.no")}</option>
+                      <option value="yes">{t("tickets.ticket.urgent.yes")}</option>
+                    </>
+                )}
               </select>
             )}
           </div>
@@ -260,8 +269,17 @@ function TicketInfo({
                 className=" w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
                 onChange={(e) => setPublished(stringToBoolean(e.target.value))}
               >
-                <option value={"Yes"}>{t("tickets.ticket.public.yes")}</option>
-                <option value="No">{t("tickets.ticket.public.no")}</option>
+                {published.toString() == "true" ? (
+                    <>
+                      <option value="yes">{t("tickets.ticket.public.yes")}</option>
+                      <option value="no">{t("tickets.ticket.public.no")}</option>
+                    </>
+                ) : (
+                    <>
+                      <option value="no">{t("tickets.ticket.public.no")}</option>
+                      <option value="yes">{t("tickets.ticket.public.yes")}</option>
+                    </>
+                )}
               </select>
             )}
           </div>
@@ -288,8 +306,17 @@ function TicketInfo({
                 className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
                 onChange={(e) => setResolved(stringToBoolean(e.target.value))}
               >
-                <option value="yes">{t("tickets.ticket.status.open")}</option>
-                <option value="no">{t("tickets.ticket.status.closed")}</option>
+                {resolved.toString() == "false" ? (
+                    <>
+                      <option value="no">{t("tickets.ticket.status.open")}</option>
+                      <option value="yes">{t("tickets.ticket.status.closed")}</option>
+                    </> 
+                ) : (
+                    <>
+                      <option value="yes">{t("tickets.ticket.status.closed")}</option>
+                      <option value="no">{t("tickets.ticket.status.open")}</option>
+                    </>
+                )}
               </select>
             )}
           </div>

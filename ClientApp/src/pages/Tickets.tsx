@@ -33,7 +33,7 @@ function Tickets(props: TicketsProps) {
         });
         break;
     }
-    setTickets([...newData]);
+    newData.length == 0 ? setTickets([""]) : setTickets([...newData]);
   };
 
   const getArchive = () => {

@@ -31,7 +31,7 @@ type MessageDto = {
 };
 
 export function EditUserAxios(data: EditUserDto) {
-  return axiosInstance
+  return axiosInstance()
     .put("api/Auth/Edit", data)
     .then((res) => {
       return res;
@@ -43,7 +43,7 @@ export function EditUserAxios(data: EditUserDto) {
 
 export function LoginAxios(data: LoginDto) {
   console.log("Before Axios request");
-  return axiosInstance
+  return axiosInstance()
     .post("/api/Auth/Login", data)
     .then((response) => {
       console.log("Axios request succeeded:", response);
@@ -56,43 +56,43 @@ export function LoginAxios(data: LoginDto) {
 }
 
 export function SignupAxios(data: SignUpDto) {
-  return axiosInstance.post("/api/Auth/Add", data);
+  return axiosInstance().post("/api/Auth/Add", data);
 }
 
 export function createMessageAxios(data: MessageDto) {
-  return axiosInstance.post("/api/Ticket/AddMessage", data);
+  return axiosInstance().post("/api/Ticket/AddMessage", data);
 }
 
 export function FetchTicketAxios(id: number) {
-  return axiosInstance.get(`/api/ticket/ticketdata?id=${id}`);
+  return axiosInstance().get(`/api/ticket/ticketdata?id=${id}`);
 }
 
 export function FetchUserCreationData() {
-  return axiosInstance.get("api/Fetch/AccountData");
+  return axiosInstance().get("api/Fetch/AccountData");
 }
 
 export function getTickets() {
-  return axiosInstance.get("/api/ticket/tickets");
+  return axiosInstance().get("/api/ticket/tickets");
 }
 
 export function getArchivedTickets() {
-  return axiosInstance.get("/api/ticket/archive");
+  return axiosInstance().get("/api/ticket/archive");
 }
 
 export function getUser() {
-  return axiosInstance.get("/api/user/userdata?id=1");
+  return axiosInstance().get("/api/user/userdata?id=1");
 }
 
 export function getDepartments() {
-  return axiosInstance.get("api/department/All");
+  return axiosInstance().get("api/department/All");
 }
 
 export function getMachines() {
-  return axiosInstance.get("api/machine/All");
+  return axiosInstance().get("api/machine/All");
 }
 
 export function createTicketAxios(formData: any) {
-  return axiosInstance.post("api/ticket/createticket", formData, {
+  return axiosInstance().post("api/ticket/createticket", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -109,12 +109,12 @@ type changeTicketDto = {
 };
 
 export function claimTicket(id: number) {
-  return axiosInstance.post(`api/ticket/claim?ticketId=${id}`);
+  return axiosInstance().post(`api/ticket/claim?ticketId=${id}`);
 }
 
 export function changeTicket(data: changeTicketDto) {
   console.log("Start Axios Instance");
-  return axiosInstance
+  return axiosInstance()
     .post("api/ticket/changeticket", data)
     .then((response) => {
       // Handle successful response
