@@ -59,8 +59,12 @@ export function SignupAxios(data: SignUpDto) {
   return axiosInstance().post("/api/Auth/Add", data);
 }
 
-export function createMessageAxios(data: MessageDto) {
-  return axiosInstance().post("/api/Ticket/AddMessage", data);
+export function createMessageAxios(formData: any) {
+  return axiosInstance().post("/api/Ticket/AddMessage", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 }
 
 export function FetchTicketAxios(id: number) {

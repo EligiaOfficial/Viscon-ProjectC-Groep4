@@ -82,17 +82,11 @@ const CreateTicket: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    title == ""
-      ? setTitleError(true)
-      : setTitleError(false);
+    title == "" ? setTitleError(true) : setTitleError(false);
 
-    selectedMachine == ""
-      ? setMachineError(true)
-      : setMachineError(false);
+    selectedMachine == "" ? setMachineError(true) : setMachineError(false);
 
-    description == ""
-      ? setDescriptionError(true)
-      : setDescriptionError(false);
+    description == "" ? setDescriptionError(true) : setDescriptionError(false);
 
     expectedAction == ""
       ? setActionTakenError(true)
@@ -123,7 +117,7 @@ const CreateTicket: React.FC = () => {
         });
       }
 
-      const response = await createTicketAxios(formData)
+      await createTicketAxios(formData)
         .then((res) => {
           if (res.status === 200) {
             nav(`/ticket?id=${res.data}`);
@@ -243,7 +237,9 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                 />
-                {titleError ? <ErrorField error={t("createTicket.error.title")} /> : null}
+                {titleError ? (
+                  <ErrorField error={t("createTicket.error.title")} />
+                ) : null}
               </div>
 
               {usr_role <= UserRoles.VISCON ? (
@@ -438,7 +434,7 @@ const CreateTicket: React.FC = () => {
                             src={URL.createObjectURL(image!)}
                           />
                         </div>
-                        <span className="italic text-sm max-w-[200px]">
+                        <span className="italic text-xs w-[200px] overflow-hidden px-1 break-all max-h-[32px]">
                           {image?.name}
                         </span>
                       </div>

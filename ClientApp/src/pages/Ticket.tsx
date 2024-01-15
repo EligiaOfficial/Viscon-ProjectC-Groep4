@@ -59,19 +59,21 @@ const Ticket = () => {
       <Layout>
         <div key="Ticket" className="flex flex-row h-full">
           {ticket["urgent"] !== undefined ? (
-            <TicketInfo
-              assignee={helper}
-              company={company}
-              department={department}
-              machine={machine}
-              requester={creator}
-              urgent={ticket["urgent"]}
-              published={ticket["published"]}
-              resolved={ticket["resolved"]}
-              createdAt={ticket["dateCreated"]}
-            />
+            <div className="w-1/6">
+              <TicketInfo
+                assignee={helper}
+                company={company}
+                department={department}
+                machine={machine}
+                requester={creator}
+                urgent={ticket["urgent"]}
+                published={ticket["published"]}
+                resolved={ticket["resolved"]}
+                createdAt={ticket["dateCreated"]}
+              />
+            </div>
           ) : null}
-          <div className="bg-white dark:bg-stone-400 h-full w-full">
+          <div className="bg-white dark:bg-stone-400 h-full w-5/6">
             <section className="flex h-full overflow-y-auto">
               <TicketChat
                 ticketId={ticketId}

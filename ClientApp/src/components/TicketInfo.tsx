@@ -107,7 +107,7 @@ function TicketInfo({
     <form
       onSubmit={handleSubmit}
       className={
-        "w-1/5 h-full border-r-2 bg-white dark:bg-stone-500 flex flex-col items-center"
+        "w-full h-full border-r-2 bg-white dark:bg-stone-500 flex flex-col items-center"
       }
     >
       <div className="flex flex-col gap-2 py-4">
@@ -151,15 +151,19 @@ function TicketInfo({
                 onChange={(e) => setUrgency(stringToBoolean(e.target.value))}
               >
                 {urgent ? (
-                    <>
-                      <option value="yes">{t("tickets.ticket.urgent.yes")}</option>
-                      <option value="no">{t("tickets.ticket.urgent.no")}</option>
-                    </>
+                  <>
+                    <option value="yes">
+                      {t("tickets.ticket.urgent.yes")}
+                    </option>
+                    <option value="no">{t("tickets.ticket.urgent.no")}</option>
+                  </>
                 ) : (
-                    <>
-                      <option value="no">{t("tickets.ticket.urgent.no")}</option>
-                      <option value="yes">{t("tickets.ticket.urgent.yes")}</option>
-                    </>
+                  <>
+                    <option value="no">{t("tickets.ticket.urgent.no")}</option>
+                    <option value="yes">
+                      {t("tickets.ticket.urgent.yes")}
+                    </option>
+                  </>
                 )}
               </select>
             )}
@@ -270,15 +274,19 @@ function TicketInfo({
                 onChange={(e) => setPublished(stringToBoolean(e.target.value))}
               >
                 {published.toString() == "true" ? (
-                    <>
-                      <option value="yes">{t("tickets.ticket.public.yes")}</option>
-                      <option value="no">{t("tickets.ticket.public.no")}</option>
-                    </>
+                  <>
+                    <option value="yes">
+                      {t("tickets.ticket.public.yes")}
+                    </option>
+                    <option value="no">{t("tickets.ticket.public.no")}</option>
+                  </>
                 ) : (
-                    <>
-                      <option value="no">{t("tickets.ticket.public.no")}</option>
-                      <option value="yes">{t("tickets.ticket.public.yes")}</option>
-                    </>
+                  <>
+                    <option value="no">{t("tickets.ticket.public.no")}</option>
+                    <option value="yes">
+                      {t("tickets.ticket.public.yes")}
+                    </option>
+                  </>
                 )}
               </select>
             )}
@@ -306,16 +314,24 @@ function TicketInfo({
                 className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
                 onChange={(e) => setResolved(stringToBoolean(e.target.value))}
               >
-                {resolved.toString() == "false" ? (
-                    <>
-                      <option value="no">{t("tickets.ticket.status.open")}</option>
-                      <option value="yes">{t("tickets.ticket.status.closed")}</option>
-                    </> 
+                {resolved.toString() != "false" ? (
+                  <>
+                    <option value="yes">
+                      {t("tickets.ticket.status.open")}
+                    </option>
+                    <option value="no">
+                      {t("tickets.ticket.status.closed")}
+                    </option>
+                  </>
                 ) : (
-                    <>
-                      <option value="yes">{t("tickets.ticket.status.closed")}</option>
-                      <option value="no">{t("tickets.ticket.status.open")}</option>
-                    </>
+                  <>
+                    <option value="no">
+                      {t("tickets.ticket.status.closed")}
+                    </option>
+                    <option value="yes">
+                      {t("tickets.ticket.status.open")}
+                    </option>
+                  </>
                 )}
               </select>
             )}
