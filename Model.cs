@@ -34,7 +34,8 @@ namespace Viscon_ProjectC_Groep4
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("public");
+            modelBuilder.HasDefaultSchema("public")
+                .Entity<User>().HasIndex(e => e.Email).IsUnique();
         }
 
         public void SeedDb()
@@ -211,7 +212,7 @@ namespace Viscon_ProjectC_Groep4
                     MadeAnyChanges = "Dummy Changes",
                     DepartmentId = 1,
                     CreatorUserId = 5,
-                    HelperUserId = 7,
+                    HelperUserId = 8,
                     Resolved = false
                 });
 
@@ -254,7 +255,7 @@ namespace Viscon_ProjectC_Groep4
                     ExpectedToBeDone = "Dummy Expected",
                     MadeAnyChanges = "Dummy Changes",
                     DepartmentId = 4,
-                    CreatorUserId = 5,
+                    CreatorUserId = 9,
                     Resolved = false
                 });
                 this.SaveChanges();

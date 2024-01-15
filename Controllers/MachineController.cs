@@ -17,7 +17,6 @@ namespace Viscon_ProjectC_Groep4.Controllers
         ) {
             _machineServices = machineServices;
         }
-        
 
         [Authorize(Policy = "user")]
         [HttpGet("All")]

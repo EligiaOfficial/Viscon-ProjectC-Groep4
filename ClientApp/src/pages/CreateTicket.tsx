@@ -271,8 +271,8 @@ const CreateTicket: React.FC = () => {
             <div className="grid grid-cols-2 gap-6">
               <div className="col-start-1">
                 <label
-                    htmlFor="machine"
-                    className="block text-gray-700 mb-1 font-medium"
+                  htmlFor="machine"
+                  className="block text-gray-700 mb-1 font-medium"
                 >
                   {t("createTicket.form.departmentlabel")}
                 </label>
@@ -286,9 +286,9 @@ const CreateTicket: React.FC = () => {
                     {t("createTicket.form.defaultdepartment")}
                   </option>
                   {departments.map((department) => (
-                      <option key={department["id"]} value={department["id"]}>
-                        {department["speciality"]}
-                      </option>
+                    <option key={department["id"]} value={department["id"]}>
+                      {department["speciality"]}
+                    </option>
                   ))}
                 </select>
                 {departmentError ? (

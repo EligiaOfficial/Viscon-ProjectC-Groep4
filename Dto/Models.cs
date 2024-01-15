@@ -43,7 +43,7 @@ public class MessageDto
     public int ticketId { get; set; }
 }
 
-public class TicketDto
+public class CreateTicketDto
 {
     public string Title { get; set; } = string.Empty;
     public int Machine { get; set; }
@@ -54,7 +54,7 @@ public class TicketDto
     public int DepartmentId { get; set; }
     public string UserEmail { get; set; } = string.Empty;
 
-    public IFormFile? image { get; set; }
+    public List<IFormFile> Images { get; set; } = new();
 }
 
 public class ChangeTicketDto

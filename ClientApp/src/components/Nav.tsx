@@ -3,12 +3,14 @@
  *   All rights reserved.
  */
 import { useRef, useState } from "react";
-import visconLogo from "../assets/Viscon-Group_logo-gradient.svg";
-import flagNL from "../assets/nl.svg";
-import flagGB from "../assets/gb.svg";
+import visconLogo from "../assets/icons/Viscon-Group_logo-gradient.svg";
+import flagNL from "../assets/icons/nl.svg";
+import flagGB from "../assets/icons/gb.svg";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Nav() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   // const [search, setSearch] = useState<boolean>(false);
   const [changeLanguage, setChangeLanguage] = useState<boolean>(false);
@@ -42,21 +44,21 @@ function Nav() {
               search ? "" : "translate-x-[200px]"
             } transition ease-in-out duration-300 select-none relative group flex flex-row justify-between items-center gap-2 cursor-pointer`}
           >
-            <div className="w-[48px] min-h-[33px] overflow-hidden border-y border-transparent flex items-center">
+            <div className="w-fit min-h-[33px] overflow-hidden border-y border-transparent flex items-center">
               <div
                 className={`${
                   search ? "translate-x-[200px]" : ""
                 } transition ease-in-out duration-300 border-b border-transparent`}
               >
                 <span
-                  className={`dark:relative absolute -z-10 left-0 dark:text-white`}
+                  className={`dark:relative absolute -z-10 left-0 dark:text-white dark:group-hover:text-orange-600`}
                 >
-                  Search
+                  {t("header.search")}
                 </span>
                 <span
                   className={`dark:hidden transition ease-in-out duration-300 group-hover:bg-gradient-to-r from-[#2a3180] via-[#199bd8] to-[#07ab9a] group-hover:bg-clip-text group-hover:text-transparent`}
                 >
-                  Search
+                  {t("header.search")}
                 </span>
               </div>
             </div>
@@ -66,7 +68,7 @@ function Nav() {
               } transition ease-in-out duration-300 delay-100 h-[26px] w-[26px] flex justify-center items-center `}
             >
               <svg
-                className={`object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert duration-200 `}
+                className={`object-contain min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert duration-200 delay-[50ms]`}
                 xmlns="http://www.w3.org/2000/svg"
                 width="32"
                 height="32"
@@ -87,14 +89,14 @@ function Nav() {
           onClick={() => setChangeLanguage(!changeLanguage)}
           className="z-10 select-none relative group flex flex-row items-center gap-2 cursor-pointer"
         >
-          <span className="absolute z-10 dark:relative dark:text-white">
-            Language
+          <span className="absolute z-10 dark:relative dark:text-white dark:group-hover:text-orange-600">
+            {t("header.language")}
           </span>
           <span className="dark:hidden z-10 transition ease-in-out duration-300 group-hover:bg-gradient-to-r from-[#2a3180] via-[#199bd8] to-[#07ab9a] group-hover:bg-clip-text group-hover:text-transparent">
-            Language
+            {t("header.language")}
           </span>
           <svg
-            className="z-10 transition ease-in-out duration-300 delay-100 object-contain max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert"
+            className="z-10 transition ease-in-out duration-300 delay-[50ms] object-contain max-h-[20px] max-w-[20px] fill-black group-hover:fill-[#07ab9a] dark:invert"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -122,13 +124,25 @@ function Nav() {
         >
           <div className="overflow-hidden">
             <div className="p-2 grid grid-cols-1 gap-1">
-              <div className="flex flex-row items-center gap-2 cursor-pointer hover:bg-stone-400 dark:text-white dark:hover:bg-white rounded-md p-1 dark:hover:text-black">
+              <div
+                onClick={() => {
+                  i18n.changeLanguage("en");
+                  setChangeLanguage(false);
+                }}
+                className="flex flex-row items-center gap-2 cursor-pointer hover:bg-stone-400 dark:text-white dark:hover:bg-white rounded-md p-1 dark:hover:text-black"
+              >
                 <img className="object-contain h-[12px]" src={flagGB} />
                 <span>English</span>
               </div>
-              <div className="flex flex-row items-center gap-2 cursor-pointer hover:bg-stone-400 dark:text-white dark:hover:bg-white rounded-md p-1 dark:hover:text-black">
+              <div
+                onClick={() => {
+                  i18n.changeLanguage("nl");
+                  setChangeLanguage(false);
+                }}
+                className="flex flex-row items-center gap-2 cursor-pointer hover:bg-stone-400 dark:text-white dark:hover:bg-white rounded-md p-1 dark:hover:text-black"
+              >
                 <img className="object-contain h-[12px]" src={flagNL} />
-                <span>Dutch</span>
+                <span>Nederlands</span>
               </div>
             </div>
           </div>
