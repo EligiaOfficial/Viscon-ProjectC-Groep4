@@ -60,7 +60,11 @@ export function SignupAxios(data: SignUpDto) {
 }
 
 export function createMessageAxios(data: MessageDto) {
-  return axiosInstance.post("/api/Ticket/AddMessage", data);
+  return axiosInstance.post("/api/message/create", data);
+}
+
+export function fetchMessagesAxios(id: number) {
+    return axiosInstance.get(`/api/message/get_messages?ticketId=${id}`);
 }
 
 export function FetchTicketAxios(id: number) {

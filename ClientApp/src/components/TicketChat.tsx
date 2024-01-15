@@ -30,7 +30,7 @@ function TicketChat({
   const addMessage = (content) => {
     let newMessage = {
       content: content,
-      sender: getName(token)[0] + " " + getName(token)[1],
+      senderName: getName(token)[0] + " " + getName(token)[1],
       timeSend: new Date(),
       senderId: userId,
     };
@@ -181,7 +181,7 @@ function TicketChat({
                 <ChatField
                   key={index}
                   message={message["content"]}
-                  user={message["sender"]}
+                  user={message["senderName"]}
                   timestamp={message["timeSent"]}
                   self={message["senderId"] == userId ? true : false}
                   images={message["images"]}

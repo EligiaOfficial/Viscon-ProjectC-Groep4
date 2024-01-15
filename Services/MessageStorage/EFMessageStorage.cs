@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Entities;
 using Viscon_ProjectC_Groep4;
+using DTOs;
 
 namespace Services;
 
@@ -25,10 +26,18 @@ public class EFMessageStorage : IMessageStorage {
             .AsAsyncEnumerable();
     }
 
-    public IAsyncEnumerable<Message> GetMessagesByTicketId(int ticketId) {
+    public IAsyncEnumerable<MessageDataDTO> GetMessagesByTicketId(int ticketId) {
         return _context.Messages
             .Where(m => m.TicketId == ticketId)
             .OrderBy(m => m.Id)
+            .Select(m => new MessageDataDTO {
+                Content = m.Content,
+                SenderId = m.Sender,
+                //SenderName = $"{m.Sender.FirstName} {m.Sender.LastName}",
+                SenderName = _context.Users.Where(u => u.Id == m.Sender).Select(u => $"{u.FirstName} {u.LastName}").First(),
+                TimeSent = m.TimeSent,
+                VisualFiles = null,
+            })
             .AsAsyncEnumerable();
     }
 }

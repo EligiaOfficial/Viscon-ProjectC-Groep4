@@ -50,20 +50,20 @@ public class MessageController : ControllerBase {
 
     [HttpPost("create")]
     public async Task<IActionResult> CreateMessage(
-        [FromBody] MessageDataDTO data,
+        [FromBody] CreateMessageDTO data,
         [FromClaim( Name = ClaimTypes.NameIdentifier )] int uid,
         [FromClaim( Name = ClaimTypes.Role)] RoleTypes role,
         [FromClaim( Name = "companyId")] int cid
     ) {
-        int? ticketCompanyId = await _ticketStorage.GetTicketCompanyId(data.RelatedTicketId);
+        int? ticketCompanyId = await _ticketStorage.GetTicketCompanyId(data.TicketId);
         if (ticketCompanyId is null) return NotFound("Ticket not found.");
         if (!Authorizer.MayViewTicket(role, cid, (int)ticketCompanyId))
             return Forbid();
         Message message = new Message {
             Content = data.Content,
             Sender = uid,
-            TimeSent = DateTime.Now,
-            TicketId = data.RelatedTicketId
+            TimeSent = DateTime.UtcNow,
+            TicketId = data.TicketId
         };
         await _messageStorage.AddMessage(message);
         return Ok();

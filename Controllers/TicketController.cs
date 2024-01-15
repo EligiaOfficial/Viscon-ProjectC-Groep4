@@ -33,7 +33,7 @@ public class TicketController : ControllerBase {
         return Ok();
     }
 
-    //[Authorize(Policy = "user")]
+    [Authorize]
     [HttpGet("get_data")]
     public async Task<ActionResult> GetTicket(
         [BindRequired, FromQuery] int id,

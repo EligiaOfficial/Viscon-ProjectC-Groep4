@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { FetchTicketAxios } from "../Endpoints/Dto";
+import { FetchTicketAxios, fetchMessagesAxios } from "../Endpoints/Dto";
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import TicketInfo from "../components/TicketInfo";
@@ -46,13 +46,39 @@ const Ticket = () => {
         setMachine(res.data.machineName);
         //setMessages(messages);
         setTicket(res.data);
+
       })
       .catch((err) => console.log(err));
+
+        await fetchMessagesAxios(ticketId)
+        .then((res) => {
+            for (let i = 0; i < res.data.length; i++) {
+              res.data[i].timeSent = new Date(res.data[i].timeSent);
+            }
+            res.data.sort((b, a) => a.timeSent.getTime() - b.timeSent.getTime());
+            console.log("Setting messages");
+            setMessages(res.data);
+        })
+        .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     fetchTicket();
   }, []);
+
+  const fetchMessages = async () => {
+    await fetchMessagesAxios(ticketId)
+        .then((res) => {
+            for (let i = 0; i < res.data.length; i++) {
+              res.data[i].timeSent = new Date(messages[i].timeSent);
+            }
+            messages.sort((b, a) => a.timeSent.getTime() - b.timeSent.getTime());
+            console.log("Setting messages");
+            setMessages(messages);
+        })
+        .catch((err) => console.log(err));
+  }
+  //useEffect(() => { fetchMessages(); }, []);
 
   return (
     <>
@@ -76,7 +102,8 @@ const Ticket = () => {
               <TicketChat
                 ticketId={ticketId}
                 ticket={ticket}
-                messages={messages || []}
+                messages={messages}
+                setMessages={setMessages}
               />
             </section>
           </div>

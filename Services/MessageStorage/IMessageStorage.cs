@@ -1,4 +1,5 @@
 using Entities;
+using DTOs;
 
 namespace Services;
 
@@ -7,5 +8,5 @@ public interface IMessageStorage {
 
     public IAsyncEnumerable<Message> GetPage(int id);
 
-    public IAsyncEnumerable<Message> GetMessagesByTicketId(int ticketId);
+    public IAsyncEnumerable<MessageDataDTO> GetMessagesByTicketId(int ticketId);
 }
