@@ -96,6 +96,7 @@ function TicketInfo({
       publish: publishedState,
     }).then((res) => {
       console.log(res);
+      alert("Ticket updated");
     });
   };
 

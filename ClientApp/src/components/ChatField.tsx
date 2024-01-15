@@ -34,7 +34,6 @@ function ChatField({
   const detectKeyDown = (e: KeyboardEvent) => {
     if (e.key == "Escape") {
       setEnlargedImage(0);
-      console.log("esc");
     }
   };
 

@@ -10,9 +10,9 @@
     "password": "Wachtwoord",
     "forgot": "Uw wachtwoord vergeten?",
     "signIn": "Aanmelden",
-    "error" : {
-      "email" : "A.U.B. Voer een valide e-mail adres in..",
-      "failed" : "Email en wachtwoord combinatie niet gevonden."
+    "error": {
+      "email": "A.U.B. Voer een valide e-mail adres in..",
+      "failed": "Email en wachtwoord combinatie niet gevonden."
     }
   },
   "sidebar": {
@@ -80,7 +80,7 @@
       "description": "Beschrijving",
       "edit": "Aanpassingen",
       "expected": "Verwachting",
-      "commentPlaceholder": "Schrijf een opmerkingen...",
+      "commentPlaceholder": "Schrijf een opmerking...",
       "postMessage": "Verstuur",
       "noMessages": "Geen berichten gevonden.",
       "close": "Sluiten",

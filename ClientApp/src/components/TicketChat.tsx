@@ -170,8 +170,6 @@ function TicketChat({
         });
       }
 
-      console.log(images);
-
       await createMessageAxios(formData)
         .then((res: any) => {
           addMessage(content);
@@ -260,7 +258,7 @@ function TicketChat({
                           src={URL.createObjectURL(image!)}
                         />
                       </div>
-                      <span className="italic text-sm max-w-[200px]">
+                      <span className="italic text-xs dark:text-white w-[200px] overflow-hidden px-1 break-all max-h-[32px]">
                         {image?.name}
                       </span>
                     </div>

@@ -22,7 +22,7 @@ function AddAccount() {
   const [role, setRole] = useState("");
 
   const [passErr, setPassErr] = useState<boolean>(false);
-  const [emailErr, setEmailErr] = useState<boolean>(false); 
+  const [emailErr, setEmailErr] = useState<boolean>(false);
   const [firstNameErr, setFirstNameErr] = useState<boolean>(false);
   const [lastNameErr, setLastNameErr] = useState<boolean>(false);
   const [phoneErr, setPhoneErr] = useState<boolean>(false);
@@ -58,16 +58,26 @@ function AddAccount() {
     if (showToast) return;
 
     password == "" ? setPassErr(true) : setPassErr(false);
-    email == "" || !emailRegex.test(email) ? setEmailErr(true) : setEmailErr(false);
+    email == "" || !emailRegex.test(email)
+      ? setEmailErr(true)
+      : setEmailErr(false);
     firstName == "" ? setFirstNameErr(true) : setFirstNameErr(false);
     lastName == "" ? setLastNameErr(true) : setLastNameErr(false);
-    phone == "" || !phoneRegex.test(phone) ? setPhoneErr(true) : setPhoneErr(false);
-    role == "" && usr_role == UserRoles.ADMIN ? setRoleErr(true) : setRoleErr(false);
+    phone == "" || !phoneRegex.test(phone)
+      ? setPhoneErr(true)
+      : setPhoneErr(false);
+    role == "" && usr_role == UserRoles.ADMIN
+      ? setRoleErr(true)
+      : setRoleErr(false);
     // @ts-ignore
-    department == "" && usr_role == UserRoles.ADMIN && (role == 0 || role == 1) ? setDepartmentErr(true) : setDepartmentErr(false);
+    department == "" && usr_role == UserRoles.ADMIN && (role == 0 || role == 1)
+      ? setDepartmentErr(true)
+      : setDepartmentErr(false);
     // @ts-ignore
-    company == "" && usr_role == UserRoles.ADMIN && (role == 2 || role == 3) ? setCompanyErr(true) : setCompanyErr(false);
-    
+    company == "" && usr_role == UserRoles.ADMIN && (role == 2 || role == 3)
+      ? setCompanyErr(true)
+      : setCompanyErr(false);
+
     const errs = [
       password,
       email,
@@ -75,15 +85,14 @@ function AddAccount() {
       lastName,
       phone,
       role,
-      confirmPassword
-    ]
-    
-    const AllFalse = (arr: any[]) => arr.every(x => !x);
-    const AllNotEmpty = (arr: any[]) => arr.every(x => x !== "");
+      confirmPassword,
+    ];
+
+    const AllFalse = (arr: any[]) => arr.every((x) => !x);
+    const AllNotEmpty = (arr: any[]) => arr.every((x) => x !== "");
     console.log(errs);
-    
+
     if (AllNotEmpty(errs)) {
-      console.log("Hi")
       SignupAxios({
         email: email,
         firstName: firstName,
@@ -97,7 +106,6 @@ function AddAccount() {
       })
         .then((res) => {
           if (res.status == 200) {
-            console.log(res.status)
             setShowToast(true);
           }
         })
@@ -126,7 +134,7 @@ function AddAccount() {
             buttonText={"Return to Dashboard"}
             buttonFunction={() => {
               setShowToast(false);
-              nav('/');
+              nav("/");
             }}
           />
         )}
@@ -187,7 +195,6 @@ function AddAccount() {
                         {t("createUser.form.email")}
                       </span>
                       <input
-                        id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         name="email"
@@ -195,7 +202,9 @@ function AddAccount() {
                         autoComplete="email"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {emailErr ? <ErrorField error={t("createUser.error.email")} /> : null}
+                      {emailErr ? (
+                        <ErrorField error={t("createUser.error.email")} />
+                      ) : null}
                     </div>
 
                     <div className={"w-full ml-2.5"}>
@@ -203,7 +212,6 @@ function AddAccount() {
                         {t("createUser.form.phone")}
                       </span>
                       <input
-                        id="phone"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         name="phone"
@@ -211,7 +219,9 @@ function AddAccount() {
                         autoComplete="phone"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {phoneErr ? <ErrorField error={t("createUser.error.phone")} /> : null}
+                      {phoneErr ? (
+                        <ErrorField error={t("createUser.error.phone")} />
+                      ) : null}
                     </div>
                   </div>
 
@@ -228,7 +238,9 @@ function AddAccount() {
                         autoComplete="password"
                         className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                       />
-                      {passErr ? <ErrorField error={t("createUser.error.password")} /> : null}
+                      {passErr ? (
+                        <ErrorField error={t("createUser.error.password")} />
+                      ) : null}
                     </div>
 
                     <div className={"w-full ml-2.5"}>
@@ -266,7 +278,9 @@ function AddAccount() {
                         <option value="2">Trained User</option>
                         <option value="3">User</option>
                       </select>
-                      {roleErr ? <ErrorField error={t("createUser.error.role")} /> : null}
+                      {roleErr ? (
+                        <ErrorField error={t("createUser.error.role")} />
+                      ) : null}
                     </div>
                   ) : (
                     <div />

@@ -42,11 +42,9 @@ export function EditUserAxios(data: EditUserDto) {
 }
 
 export function LoginAxios(data: LoginDto) {
-  console.log("Before Axios request");
   return axiosInstance()
     .post("/api/Auth/Login", data)
     .then((response) => {
-      console.log("Axios request succeeded:", response);
       return response;
     })
     .catch((error) => {
@@ -117,12 +115,10 @@ export function claimTicket(id: number) {
 }
 
 export function changeTicket(data: changeTicketDto) {
-  console.log("Start Axios Instance");
   return axiosInstance()
     .post("api/ticket/changeticket", data)
     .then((response) => {
       // Handle successful response
-      console.log("Success:", response.data);
       return response.data; // You can return or process the data here
     })
     .catch((error) => {
