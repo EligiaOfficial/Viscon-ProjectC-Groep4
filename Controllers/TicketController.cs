@@ -9,6 +9,8 @@ using ModelBinding;
 using Viscon_ProjectC_Groep4.Services;
 using Services;
 using DTOs;
+using Viscon_ProjectC_Groep4.Dto;
+using Viscon_ProjectC_Groep4.Services.TicketService;
 
 namespace Controllers;
 
@@ -16,11 +18,14 @@ namespace Controllers;
 [ApiController]
 public class TicketController : ControllerBase {
     private readonly ITicketStorage _ticketStorage;
+    private readonly TicketServices _ticketServices;
 
     public TicketController(
-        ITicketStorage ticketStorage
+        ITicketStorage ticketStorage,
+        TicketServices ticketServices
     ) {
         _ticketStorage = ticketStorage;
+        _ticketServices = ticketServices;
     }
 
     [Authorize(Policy = "key_user")]
@@ -97,6 +102,14 @@ public class TicketController : ControllerBase {
     ) {
         return Ok(_ticketStorage.SelectArchivedTicketData(uid));
     }
+
+    [Authorize(Policy = "key_user")]
+    [HttpPost("createticket")]
+    public async Task<ActionResult<Ticket>> CreateTicket(
+        [FromForm] CreateTicketDto data,
+        [FromClaim( Name = ClaimTypes.NameIdentifier)] int uid
+    ) =>
+        await _ticketServices.CreateTicket(data, uid);
 }
 
 
