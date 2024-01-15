@@ -11,7 +11,7 @@ type SignUpDto = {
   firstName: string;
   lastName: string;
   password: string;
-  phone: number;
+  phone: string;
   company: number;
   role: number;
   department: number;
@@ -21,14 +21,13 @@ type SignUpDto = {
 type EditUserDto = {
   email: string;
   password: string;
-  phone: number;
+  phone: string;
   language: string;
 };
 
 type MessageDto = {
   content: string;
   ticketId: number;
-  sender: number;
 };
 
 export function EditUserAxios(data: EditUserDto) {
@@ -57,15 +56,7 @@ export function LoginAxios(data: LoginDto) {
 }
 
 export function SignupAxios(data: SignUpDto) {
-  console.log("Before Axios request", data);
-  return axiosInstance
-    .post("/api/Auth/Add", data)
-    .then((response) => {
-      console.log("Axios request succeeded:", response);
-    })
-    .catch((error) => {
-      console.error("Axios request failed:", error);
-    });
+  return axiosInstance.post("/api/Auth/Add", data);
 }
 
 export function createMessageAxios(data: MessageDto) {
@@ -84,6 +75,10 @@ export function getTickets() {
   return axiosInstance.get("/api/ticket/tickets");
 }
 
+export function getArchivedTickets() {
+  return axiosInstance.get("/api/ticket/archive");
+}
+
 export function getUser() {
   return axiosInstance.get("/api/user/userdata?id=1");
 }
@@ -92,8 +87,21 @@ export function getDepartments() {
   return axiosInstance.get("api/department/All");
 }
 
+export function getMachines() {
+  return axiosInstance.get("api/machine/All");
+}
+
+export function createTicketAxios(formData: any) {
+  return axiosInstance.post("api/ticket/createticket", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+}
+
 type changeTicketDto = {
-  id: number;
+  userid: number;
+  ticketid: number;
   department: number;
   urgent: boolean;
   resolved: boolean;
@@ -101,7 +109,7 @@ type changeTicketDto = {
 };
 
 export function claimTicket(id: number) {
-  return axiosInstance.post(`api/ticket/claim?id=${id}`);
+  return axiosInstance.post(`api/ticket/claim?ticketId=${id}`);
 }
 
 export function changeTicket(data: changeTicketDto) {

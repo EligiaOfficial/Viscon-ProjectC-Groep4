@@ -57,6 +57,29 @@ namespace Viscon_ProjectC_Groep4.Migrations
                     b.ToTable("Departments", "public");
                 });
 
+            modelBuilder.Entity("Entities.ForgottenPassword", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("FP_Expire")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("FP_Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FP_Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ForgottenPasswords", "public");
+                });
+
             modelBuilder.Entity("Entities.Machine", b =>
                 {
                     b.Property<int>("Id")
@@ -205,8 +228,9 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("integer");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer");
@@ -232,12 +256,12 @@ namespace Viscon_ProjectC_Groep4.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
+                    b.Property<int>("MessageId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

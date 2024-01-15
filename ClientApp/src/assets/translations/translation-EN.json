@@ -1,0 +1,149 @@
+{
+  "header": {
+    "search": "Search",
+    "language": "Language"
+  },
+  "login": {
+    "title": "Welcome!",
+    "subtitle": "Sign in to continue.",
+    "email": "Email Address",
+    "password": "Password",
+    "forgot": "Forgot your password?",
+    "signIn": "Sign in",
+    "error" : {
+      "email" : "Please put in a valid e-mail adress.",
+      "failed" : "Email and Password combination not found."
+    }
+  },
+  "sidebar": {
+    "overview": {
+      "title": "Overview",
+      "dashboard": "Dashboard",
+      "mailbox": "Mailbox",
+      "tickets": "Tickets"
+    },
+    "filters": {
+      "title": "Filter by",
+      "open": "Unassigned",
+      "critical": "Top-priority",
+      "archive": "Archive"
+    },
+    "create": {
+      "title": "Create",
+      "ticket": "New ticket",
+      "user": "New user"
+    },
+    "logout": "Sign out"
+  },
+  "dashboard": {
+    "welcome": "Welcome"
+  },
+  "tickets": {
+    "title": {
+      "all": "All tickets",
+      "unassigned": "Unasssigned tickets",
+      "critical": "Critical tickets",
+      "archive": "Archived tickets"
+    },
+    "table": {
+      "nodata": "There were no records found.",
+      "title": "What are you looking for?",
+      "category": "Category",
+      "all": "All",
+      "search": "Search"
+    },
+    "ticket": {
+      "issuer": "Issuer",
+      "company": "Company",
+      "machine": "Machine",
+      "urgent": {
+        "title": "Urgent",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "created": "Created on",
+      "department": "Department",
+      "assignee": "Assigned to",
+      "assignSelf": "Assign to self",
+      "public": {
+        "title": "Public",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "status": {
+        "title": "Status",
+        "open": "Open",
+        "closed": "Closed"
+      },
+      "update": "Update",
+      "title": "Title",
+      "description": "Description",
+      "edit": "Changes made",
+      "expected": "Expected",
+      "commentPlaceholder": "Write a comment...",
+      "postMessage": "Send",
+      "noMessages": "No posts found.",
+      "close": "Close",
+      "you": "You"
+    }
+  },
+  "createTicket": {
+    "title": "Create a new ticket",
+    "form": {
+      "titlelabel": "Title",
+      "assigneeEmail": "Email issuer",
+      "departmentlabel": "Which department should pick up this ticket?",
+      "defaultdepartment": "Select a department",
+      "machinelabel": "Which machine is in question?",
+      "defaultmachine": "Select a machine",
+      "urgency": "Is it urgent?",
+      "yes": "Yes",
+      "no": "No",
+      "medialabel": "Add picture(s)",
+      "dragndrop": "Drag & drop",
+      "or": "Or",
+      "browse": "Browse files",
+      "description1": "What do you see happening?",
+      "description2": "What have you tried to fix it?",
+      "description3": "Have you made any changes to the machine?",
+      "submit": "Submit"
+    },
+    "error": {
+      "title": "Please provide a fitting title.",
+      "email": "Please provide a valid email.",
+      "department": "Please select a department that might help you.",
+      "machine": "Select a machine.",
+      "description1": "Please fill what's happening",
+      "description2": "Please fill in a everything you have done so far to try and fix the problem.",
+      "description3": "Please fill what changes you have made\nIf you have made no changes fill in that you haven't made changes."
+    }
+  },
+  "createUser": {
+    "title": "Create new user",
+    "form": {
+      "firstname": "First name",
+      "lastname": "Last name",
+      "email": "Email Address",
+      "phone": "Phone number",
+      "password": "Password",
+      "confirm": "Confirm password",
+      "userlabel": "What's the type of user?",
+      "defaultuser": "Select a role",
+      "departmentlabel": "In what department?",
+      "defaultdepartment": "Select a department",
+      "companylabel": "For which company?",
+      "defaultcompany": "Select a company",
+      "submit": "Submit"
+    },
+    "error": {
+      "firstname": "Please fill in a first name.",
+      "lastname": "Please fill in a last name.",
+      "email": "Please fill in a correct email address Example: yourname@email.com",
+      "phone": "Not a valid phone number found.\nExamples: +31652457819, 0615984565, 080058856",
+      "password": "Passwords not valid or do not match",
+      "role": "Please select a user type.",
+      "department": "Please select which department the user will work.",
+      "company": "Please select which company the user will work."
+    }
+  }
+}

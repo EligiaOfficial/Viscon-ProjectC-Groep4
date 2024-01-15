@@ -1,49 +1,47 @@
 import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
-import { getTickets } from "../Endpoints/Dto";
+import { getArchivedTickets, getTickets } from "../Endpoints/Dto";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 type TicketsProps = {
   filter: string;
 };
 
 function Tickets(props: TicketsProps) {
-  const [tickets, setTickets] = useState<[]>([]);
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [archive, setArchive] = useState<any[]>([]);
+
+  const { t } = useTranslation();
 
   const filterTickets = (data: any) => {
+    let newData;
     switch (props.filter) {
       case "all":
-        setTickets(data);
+        newData = data;
         break;
-      case "new":
-        setTickets(
-          data.filter((ticket: any) => {
-            return ticket["supporter"] == " ";
-          })
-        );
+      case "unassigned":
+        newData = data.filter((ticket: any) => {
+          return ticket["supporter"] == " ";
+        });
+
         break;
       case "critical":
-        setTickets(
-          data.filter((ticket: any) => {
-            return ticket["urgent"] == "Yes";
-          })
-        );
-        break;
-      case "archive":
-        setTickets(
-          data.filter((ticket: any) => {
-            return ticket["status"] == "closed";
-          })
-        );
+        newData = data.filter((ticket: any) => {
+          return ticket["urgent"] == "Yes";
+        });
         break;
     }
+    setTickets([...newData]);
   };
 
-  const getData = () => {
-    getTickets()
+  const getArchive = () => {
+    getArchivedTickets()
       .then((response: any) => {
-        if (response.data.length > 0) {
-          filterTickets(response.data);
+        setArchive(response.data);
+        if (response.data.length == 0) {
+          setArchive([""]);
         }
       })
       .catch((error: any) => {
@@ -51,17 +49,47 @@ function Tickets(props: TicketsProps) {
       });
   };
 
+  const getData = () => {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+    };
+    axios
+      .get("http://localhost:5173/api/ticket/tickets", config)
+      .then((response: any) => {
+        if (response.data == undefined || response.data.length == 0) {
+          setTickets([""]);
+          return;
+        }
+        filterTickets(response.data);
+      })
+      .catch((error: any) => {
+        setTickets([{}]);
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
-    getData();
+    if (localStorage != null && localStorage.getItem("token") != null) {
+      if (props.filter != "archive") {
+        getData();
+      } else {
+        getArchive();
+      }
+    }
   }, [props]);
 
   return (
     <Layout>
       <div className="flex flex-col">
         <span className="text-2xl py-4 dark:text-white">
-          {props.filter.charAt(0).toUpperCase() + props.filter.slice(1)} Tickets
+          {t(`tickets.title.${props.filter}`)}
         </span>
-        <Table data={tickets} uid={"ticketID"} />
+        <Table
+          data={props.filter == "archive" ? archive : tickets}
+          uid={"ticketID"}
+        />
       </div>
     </Layout>
   );

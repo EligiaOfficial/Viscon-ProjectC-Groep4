@@ -7,30 +7,36 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginAxios } from "../Endpoints/Dto";
+import { useTranslation } from "react-i18next";
+import ErrorField from "../components/ErrorField";
 
 function Login() {
+  const { t } = useTranslation();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const nav = useNavigate();
 
+  const [err, setErr] = useState<boolean>(false);
+  const [emailErr, setEmailErr] = useState<boolean>(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Passw:", password);
-
-    if (email !== "" && password !== "") {
+    
+    !emailRegex.test(email) ? setEmailErr(true) : setEmailErr(false);
+    
+    if (email !== "" && password !== "" && emailRegex.test(email)) {
       LoginAxios({
         email: email,
         password: password,
       })
         .then((res) => {
           localStorage.setItem("token", res["data"]);
-          console.log("Res: ", res["data"]);
           nav("/");
         })
         .catch((error) => {
           console.error("Error:", error);
-          alert("Email and or Password not found");
+          setErr(true);
         });
     }
   };
@@ -72,6 +78,7 @@ function Login() {
                     required
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6 "
                   />
+                  {emailErr ? <ErrorField error={t("login.error.email")} /> : null}
                 </div>
               </div>
 
@@ -95,11 +102,12 @@ function Login() {
                     required
                     className="pl-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm sm:leading-6"
                   />
+                  {err? <ErrorField error={t("login.error.failed")} /> : null}
                 </div>
               </div>
               <div className="text-sm">
                 <a
-                  href="#"
+                  href="/forgot-password"
                   className="text-xs text-gray-600 hover:text-indigo-500 dark:text-stone-400 dark:hover:text-stone-200"
                 >
                   Lost your password?

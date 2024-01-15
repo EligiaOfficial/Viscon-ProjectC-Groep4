@@ -10,18 +10,18 @@ import { useNavigate } from "react-router-dom";
 
 function Nav() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState<boolean>(false);
+  // const [search, setSearch] = useState<boolean>(false);
   const [changeLanguage, setChangeLanguage] = useState<boolean>(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const searchClicked = (toggle: boolean) => {
-    setSearch(toggle);
-    if (toggle) {
-      setTimeout(() => {
-        searchInputRef.current?.focus();
-      }, 300);
-    }
-  };
+  // const searchClicked = (toggle: boolean) => {
+  //   setSearch(toggle);
+  //   if (toggle) {
+  //     setTimeout(() => {
+  //       searchInputRef.current?.focus();
+  //     }, 300);
+  //   }
+  // };
 
   const logo = () => {
     navigate("/");
@@ -35,7 +35,7 @@ function Nav() {
         onClick={logo}
       />
       <div className="flex items-center justify-between gap-16 pr-10">
-        <div className="z-0 overflow-hidden">
+        {/* <div className="z-0 overflow-hidden">
           <div
             onClick={() => searchClicked(true)}
             className={`${
@@ -82,7 +82,7 @@ function Nav() {
               className={`w-[200px] transition ease-in-out duration-300 outline-none border-black group-hover:border-[#07ab9a] border-b p-1`}
             />
           </div>
-        </div>
+        </div> */}
         <div
           onClick={() => setChangeLanguage(!changeLanguage)}
           className="z-10 select-none relative group flex flex-row items-center gap-2 cursor-pointer"

@@ -7,9 +7,9 @@ import TicketChat from "../components/TicketChat";
 
 const Ticket = () => {
   const [searchParams] = useSearchParams();
-  const Id = searchParams.get("id") || " ";
-  const TicketId = parseInt(Id, 10);
-  if (isNaN(TicketId)) {
+  const ticketId = parseInt(searchParams.get("id") || "", 10);
+
+  if (isNaN(ticketId)) {
     return <div>Invalid Ticket</div>;
   }
 
@@ -22,7 +22,7 @@ const Ticket = () => {
   const [messages, setMessages] = useState<object[]>([]);
 
   const fetchTicket = async () => {
-    await FetchTicketAxios(TicketId)
+    await FetchTicketAxios(ticketId)
       .then((res) => {
         const {
           company,
@@ -33,6 +33,12 @@ const Ticket = () => {
           messages,
           ticket,
         } = res.data;
+
+        for (let i = 0; i < messages.length; i++) {
+          messages[i].timeSent = new Date(messages[i].timeSent);
+        }
+        messages.sort((b, a) => a.timeSent.getTime() - b.timeSent.getTime());
+
         setCompany(company);
         setCreator(creator);
         setDepartment(department);
@@ -62,11 +68,16 @@ const Ticket = () => {
               urgent={ticket["urgent"]}
               published={ticket["published"]}
               resolved={ticket["resolved"]}
+              createdAt={ticket["dateCreated"]}
             />
           ) : null}
-          <div className="bg-stone-200 h-full w-full">
+          <div className="bg-white dark:bg-stone-400 h-full w-full">
             <section className="flex h-full overflow-y-auto">
-              <TicketChat ticket={ticket} messages={messages || []} />
+              <TicketChat
+                ticketId={ticketId}
+                ticket={ticket}
+                messages={messages || []}
+              />
             </section>
           </div>
         </div>

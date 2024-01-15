@@ -21,6 +21,8 @@ import Seperator from "./Seperator";
 import mailIcon from "../assets/mail.svg";
 import profileAI from "../assets/ai-generated-7751688_1280.jpg";
 import { getUser } from "../Endpoints/Dto";
+import { useTranslation } from "react-i18next";
+import animatedImg from "../assets/images/dribbble_100_size25fps.gif";
 
 type User = {
   firstName: string;
@@ -30,6 +32,9 @@ type User = {
 };
 
 function SideBar() {
+  const { t } = useTranslation();
+  const navigateTo = useNavigate();
+
   const [menu, setMenu] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState(false);
   const [user, setUser] = useState<User | undefined>();
@@ -42,6 +47,11 @@ function SideBar() {
     setShowSettings(!showSettings);
   };
   let rendered = false;
+
+  const logout = () => {
+    localStorage.clear();
+    navigateTo("/login");
+  };
 
   useEffect(() => {
     if (!rendered) {
@@ -78,18 +88,24 @@ function SideBar() {
           <SideBarItem
             title={"Dashboard"}
             icon={dashboardIcon}
-            onclick={() => nav("/dashboard")}
+            onclick={() => {
+              setMenu(false);
+              nav("/dashboard");
+            }}
             transformAnimation={"rotate3d(0,1,0,180deg)"}
           />
-          <SideBarItem
-            title={"Mailbox"}
+          {/* <SideBarItem
+            title={t("sidebar.overview.mailbox")}
             icon={mailIcon}
             transformAnimation={"rotate3d(0,1,0,180deg"}
-          />
+          /> */}
           <SideBarItem
             title={"Tickets"}
             icon={normalIcon}
-            onclick={() => nav("/tickets/all")}
+            onclick={() => {
+              setMenu(false);
+              nav("/tickets/all");
+            }}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
           <Seperator color="white" marginX="4px" marginY="16px" />
@@ -98,19 +114,28 @@ function SideBar() {
             <SideBarItem
               title={"New"}
               icon={newIcon}
-              onclick={() => nav("/tickets/new")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/unassigned");
+              }}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
             <SideBarItem
               title={"Critical"}
               icon={criticalIcon}
-              onclick={() => nav("/tickets/critical")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/critical");
+              }}
               transformAnimation={"rotate(360deg)"}
             />
             <SideBarItem
               title={"Archive"}
               icon={archiveIcon}
-              onclick={() => nav("/tickets/archive")}
+              onclick={() => {
+                setMenu(false);
+                nav("/tickets/archive");
+              }}
               transformAnimation={"rotate3d(0,1,0,180deg"}
             />
           </div>
@@ -155,9 +180,12 @@ function SideBar() {
           <SideBarItem
             title={"Logout"}
             icon={logoutIcon}
-            onclick={() => nav("/logout")}
+            onclick={() => logout()}
             transformAnimation={"rotate3d(0,1,0,180deg"}
           />
+        </div>
+        <div className="mt-auto" onClick={() => setShowSettings(!showSettings)}>
+          <ProfileItem icon={animatedImg} user={user} />
         </div>
       </div>
       <div

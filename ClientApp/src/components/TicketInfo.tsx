@@ -1,8 +1,20 @@
-import {useEffect, useState} from "react";
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {UserRoles} from "../UserRoles";
-import {changeTicket, claimTicket, getDepartments} from "../Endpoints/Dto";
-import {getName, getRole} from "../Endpoints/Jwt";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { UserRoles } from "../UserRoles";
+import { changeTicket, claimTicket, getDepartments } from "../Endpoints/Dto";
+import { getName, getRole, getId } from "../Endpoints/Jwt";
+
+import userIcon from "../assets/icons/user_alt.svg";
+import userAddIcon from "../assets/icons/user.svg";
+import companyIcon from "../assets/icons/company.svg";
+import dateIcon from "../assets/icons/date.svg";
+import departmentIcon from "../assets/icons/department.svg";
+import publishedIcon from "../assets/icons/published.svg";
+import statusIcon from "../assets/icons/status.svg";
+import urgentIcon from "../assets/icons/urgent.svg";
+import machineIcon from "../assets/icons/cogs.svg";
+import { useTranslation } from "react-i18next";
+import TicketSideBarItem from "./TicketSideBarItem";
 
 function TicketInfo({
   requester,
@@ -13,6 +25,7 @@ function TicketInfo({
   urgent,
   published,
   resolved,
+  createdAt,
 }: {
   requester: string;
   company: string;
@@ -22,15 +35,18 @@ function TicketInfo({
   urgent: boolean;
   published: boolean;
   resolved: boolean;
+  createdAt: Date;
 }) {
+  const { t } = useTranslation();
+
   const [departments, setDepartments] = useState<string[]>([]);
   const [newDepartment, setNewDepartment] = useState<string>("");
 
   const [urgency, setUrgency] = useState<boolean>(Boolean(urgent));
   const [publishedState, setPublished] = useState<boolean>(Boolean(published));
   const [resolvedState, setResolved] = useState<boolean>(Boolean(resolved));
-  const [assigneeState, setAssignee] = useState(assignee)
-  
+  const [assigneeState, setAssignee] = useState(assignee);
+
   const [searchParams] = useSearchParams();
   const Id = searchParams.get("id") || " ";
   const TicketId = parseInt(Id, 10);
@@ -38,20 +54,29 @@ function TicketInfo({
     return <div>Invalid Ticket</div>;
   }
 
+  const formattedDate = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  }).format(new Date(createdAt));
+
   useEffect(() => {
     if (role >= UserRoles.USER) return;
 
     getDepartments().then((res) => {
       setDepartments(res.data);
     });
-  }, [urgent, published, resolved]);
+    setAssignee(assignee);
+  }, [urgent, published, resolved, assignee]);
 
   const stringToBoolean = (stringValue) => {
     switch (stringValue?.toLowerCase()?.trim()) {
       case "true":
+      case "yes":
         return true;
 
       case "false":
+      case "no":
         return false;
 
       default:
@@ -63,7 +88,8 @@ function TicketInfo({
     e.preventDefault();
 
     changeTicket({
-      id: +TicketId,
+      userid: parseInt(getId(token)),
+      ticketid: TicketId,
       department: +newDepartment,
       urgent: urgency,
       resolved: resolvedState,
@@ -75,85 +101,88 @@ function TicketInfo({
 
   const token = localStorage.getItem("token");
   const role = getRole(token);
-  const name = getName(token);
-  
+  const name = getName(token)[0] + " " + getName(token)[1];
+
   return (
     <form
       onSubmit={handleSubmit}
-      className={"w-2/12 h-full bg-stone-300 flex flex-col items-center"}
+      className={
+        "w-1/5 h-full border-r-2 bg-white dark:bg-stone-500 flex flex-col items-center"
+      }
     >
-      <div className="flex flex-col">
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Requestor</h1>
-            <input
-              type="text"
-              className={"w-full"}
-              disabled
-              value={requester}
-            />
-          </div>
-        </div>
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Company</h1>
-            <input type="text" className={"w-full "} disabled value={company} />
-          </div>
-        </div>
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Machine</h1>
-            <input type="text" className={"w-full"} disabled value={machine} />
-          </div>
-        </div>
+      <div className="flex flex-col gap-2 py-4">
+        <TicketSideBarItem
+          title={t("tickets.ticket.issuer")}
+          subtitle={requester}
+          icon={userIcon}
+        />
+        <TicketSideBarItem
+          title={t("tickets.ticket.company")}
+          subtitle={company}
+          icon={companyIcon}
+        />
+        <TicketSideBarItem
+          title={t("tickets.ticket.machine")}
+          subtitle={machine}
+          icon={machineIcon}
+        />
 
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Urgancy</h1>
+        <hr />
+
+        <div className="flex flex-row items-center gap-2">
+          <img
+            className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
+            alt={""}
+            src={urgentIcon}
+          />
+          <div className={`flex flex-col w-full min-w-[50px]`}>
+            <h1 className="flex font-bold italic text-md">
+              {t("tickets.ticket.urgent.title")}
+            </h1>
             {role >= UserRoles.KEYUSER ? (
-              <input
-                type="text"
-                className={"w-full"}
-                disabled
-                value={!urgent ? "No" : "Yes"}
-              />
+              <h1 className="text-md flex">
+                {!urgent
+                  ? t("tickets.ticket.urgent.no")
+                  : t("tickets.ticket.urgent.yes")}
+              </h1>
             ) : (
               <select
-                className="w-[197px] mx-auto hover:bg-white"
+                className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
                 onChange={(e) => setUrgency(stringToBoolean(e.target.value))}
               >
-                <option value={urgent.toString() === "true" ? "true" : "false"}>
-                  {urgent.toString() === "true" ? "True" : "False"}
-                </option>
-                <option value={urgent.toString() !== "true" ? "true" : "false"}>
-                  {urgent.toString() !== "true" ? "True" : "False"}
-                </option>
+                <option value="Yes">{t("tickets.ticket.urgent.yes")}</option>
+                <option value="No">{t("tickets.ticket.urgent.no")}</option>
               </select>
             )}
           </div>
         </div>
 
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Department</h1>
+        <TicketSideBarItem
+          title={t("tickets.ticket.created")}
+          subtitle={formattedDate}
+          icon={dateIcon}
+        />
+
+        <hr />
+
+        <div className="flex flex-row items-center gap-2">
+          <img
+            className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
+            alt={""}
+            src={departmentIcon}
+          />
+          <div className={`flex flex-col w-full min-w-[50px]`}>
+            <h1 className="flex font-bold italic text-md">
+              {t("tickets.ticket.department")}
+            </h1>
             {role >= UserRoles.KEYUSER ? (
-              <input type="text" disabled value={department} />
+              <h1 className="text-md flex">{department}</h1>
             ) : (
               <select
-                className="w-[197px] mx-auto hover:bg-white"
+                className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400"
                 onChange={(e) => setNewDepartment(e.target.value)}
               >
-                <option value="">{department}</option>
+                <option className="">{department}</option>
                 {departments.map(
                   (dep) =>
                     department !== dep["speciality"] && (
@@ -166,66 +195,112 @@ function TicketInfo({
             )}
           </div>
         </div>
-        
-        
-        <div className="group flex flex-row justify-start py-2">
-          <div
-            className={`flex w-full flex-col items-start justify-center min-w-[50px]`}
-          >
-            <h1 className="flex text-xl">Assignee</h1>
-            <input type="text" className={"w-full"} disabled value={assigneeState} />
-            { role <= UserRoles.VISCON ? (
-                <div
-                    onClick={async () => await claimTicket(TicketId).then(setAssignee(name))}
-                    type="submit"
-                    className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
-                >
-                  Claim Ticket
-                </div>
-            ):(
-                <div/>
-            ) }
-          </div>
-        </div>
-      </div>
 
-      <div className="w-[200px] flex flex-col mt-auto">
-        <div className="group flex flex-row justify-start">
-          <div className={`w-[200px] flex items-center justify-between`}>
-            <span className="text-xl">Publish Ticket</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-                onChange={(e) => setPublished(!publishedState)}
-                checked={publishedState}
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
-            </label>
+        <div className="flex flex-row items-center gap-2">
+          <img
+            className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
+            alt={""}
+            src={userAddIcon}
+          />
+          <div className={`flex flex-col w-full min-w-[50px]`}>
+            <h1 className="flex font-bold italic text-md">
+              {t("tickets.ticket.assignee")}
+            </h1>
+            {role >= UserRoles.KEYUSER ? (
+              <h1 className="text-md flex">{assigneeState}</h1>
+            ) : (
+              <h1 className="text-md flex">{assigneeState}</h1>
+            )}
+            {role <= UserRoles.VISCON ? (
+              assigneeState == getName(token)[0] + " " + getName(token)[1] ? (
+                ""
+              ) : (
+                <div
+                  onClick={async () =>
+                    await claimTicket(TicketId).then(setAssignee(name))
+                  }
+                  className={
+                    "flex flex-row ml-5 text-blue-700 hover:text-purple-700 dark:text-gray-700 cursor-pointer dark:hover:text-orange-400"
+                  }
+                >
+                  <img
+                    className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
+                    alt={""}
+                    src={userIcon}
+                  />
+                  <h1>{t("tickets.ticket.assignSelf")}</h1>
+                </div>
+              )
+            ) : (
+              <div />
+            )}
           </div>
         </div>
-        <div className="group flex flex-row justify-start">
-          <div className={`w-[200px] flex items-center justify-between`}>
-            <span className="text-xl">Resolved</span>
-            <label className="relative inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                value=""
-                className="sr-only peer"
-                onChange={(e) => setResolved(!resolvedState)}
-                checked={resolvedState}
-              />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
-            </label>
+
+        <hr />
+
+        <div className="flex flex-row items-center gap-2">
+          <img
+            className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
+            alt={""}
+            src={publishedIcon}
+          />
+          <div className={`flex flex-col w-full min-w-[50px]`}>
+            <h1 className="flex font-bold italic text-md">
+              {t("tickets.ticket.public.title")}
+            </h1>
+            {role >= UserRoles.KEYUSER ? (
+              <h1 className="text-md flex">
+                {published.toString() === "true"
+                  ? t("tickets.ticket.public.yes")
+                  : t("tickets.ticket.public.no")}
+              </h1>
+            ) : (
+              <select
+                className=" w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
+                onChange={(e) => setPublished(stringToBoolean(e.target.value))}
+              >
+                <option value={"Yes"}>{t("tickets.ticket.public.yes")}</option>
+                <option value="No">{t("tickets.ticket.public.no")}</option>
+              </select>
+            )}
           </div>
         </div>
+
+        <div className="flex flex-row items-center gap-2">
+          <img
+            className={`min-w-[24px] max-w-[24px] min-h-[24px] max-h-[24px] dark:invert`}
+            alt={""}
+            src={statusIcon}
+          />
+          <div className={`flex flex-col w-full min-w-[50px]`}>
+            <h1 className="flex font-bold italic text-md">
+              {t("tickets.ticket.status.title")}
+            </h1>
+            {role >= UserRoles.KEYUSER ? (
+              <h1 className="text-md flex">
+                {resolved.toString() !== "false"
+                  ? t("tickets.ticket.status.open")
+                  : t("tickets.ticket.status.closed")}
+              </h1>
+            ) : (
+              <select
+                className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
+                onChange={(e) => setResolved(stringToBoolean(e.target.value))}
+              >
+                <option value="yes">{t("tickets.ticket.status.open")}</option>
+                <option value="no">{t("tickets.ticket.status.closed")}</option>
+              </select>
+            )}
+          </div>
+        </div>
+
         {role == UserRoles.ADMIN || role == UserRoles.VISCON ? (
           <button
             type="submit"
-            className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="my-5 mx-auto flex w-5/6 justify-center rounded-md bg-blue-700 dark:bg-gray-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-800 dark:hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2"
           >
-            Update Ticket
+            {t("tickets.ticket.update")}
           </button>
         ) : (
           <></>
