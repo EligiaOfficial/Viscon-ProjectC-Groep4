@@ -306,15 +306,15 @@ function TicketInfo({
                 className="w-auto bg-sky-100 dark:bg-stone-500 hover:bg-sky-200 dark:hover:bg-stone-400 outline-none rounded-md"
                 onChange={(e) => setResolved(stringToBoolean(e.target.value))}
               >
-                {resolved.toString() != "false" ? (
+                {resolved.toString() == "false" ? (
                     <>
-                      <option value="yes">{t("tickets.ticket.status.open")}</option>
-                      <option value="no">{t("tickets.ticket.status.closed")}</option>
+                      <option value="no">{t("tickets.ticket.status.open")}</option>
+                      <option value="yes">{t("tickets.ticket.status.closed")}</option>
                     </> 
                 ) : (
                     <>
-                      <option value="no">{t("tickets.ticket.status.closed")}</option>
-                      <option value="yes">{t("tickets.ticket.status.open")}</option>
+                      <option value="yes">{t("tickets.ticket.status.closed")}</option>
+                      <option value="no">{t("tickets.ticket.status.open")}</option>
                     </>
                 )}
               </select>
