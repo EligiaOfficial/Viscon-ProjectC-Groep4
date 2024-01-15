@@ -68,18 +68,22 @@ function AddAccount() {
     // @ts-ignore
     company == "" && usr_role == UserRoles.ADMIN && (role == 2 || role == 3) ? setCompanyErr(true) : setCompanyErr(false);
     
-    if (
-      [
-        passErr,
-        emailErr,
-        firstNameErr,
-        lastNameErr,
-        phoneErr,
-        roleErr,
-        departmentErr,
-        companyErr,
-      ].every((str) => str === "")
-    ) {
+    const errs = [
+      password,
+      email,
+      firstName,
+      lastName,
+      phone,
+      role,
+      confirmPassword
+    ]
+    
+    const AllFalse = (arr: any[]) => arr.every(x => !x);
+    const AllNotEmpty = (arr: any[]) => arr.every(x => x !== "");
+    console.log(errs);
+    
+    if (AllNotEmpty(errs)) {
+      console.log("Hi")
       SignupAxios({
         email: email,
         firstName: firstName,
@@ -93,6 +97,7 @@ function AddAccount() {
       })
         .then((res) => {
           if (res.status == 200) {
+            console.log(res.status)
             setShowToast(true);
           }
         })
@@ -121,6 +126,7 @@ function AddAccount() {
             buttonText={"Return to Dashboard"}
             buttonFunction={() => {
               setShowToast(false);
+              nav('/');
             }}
           />
         )}
