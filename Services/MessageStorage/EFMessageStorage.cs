@@ -24,4 +24,11 @@ public class EFMessageStorage : IMessageStorage {
             .Take(10)
             .AsAsyncEnumerable();
     }
+
+    public IAsyncEnumerable<Message> GetMessagesByTicketId(int ticketId) {
+        return _context.Messages
+            .Where(m => m.TicketId == ticketId)
+            .OrderBy(m => m.Id)
+            .AsAsyncEnumerable();
+    }
 }

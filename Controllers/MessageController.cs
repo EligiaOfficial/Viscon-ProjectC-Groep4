@@ -7,9 +7,9 @@ using DTOs;
 
 namespace Controllers;
 
-[Route("[controllers]")]
+[Route("[controller]")]
 [ApiController]
-class MessageController : ControllerBase {
+public class MessageController : ControllerBase {
     private readonly IMessageStorage _messageStorage;
     private readonly ITicketStorage _ticketStorage;
 
@@ -22,7 +22,7 @@ class MessageController : ControllerBase {
     }
 
     [HttpGet("page")]
-    public async Task<IActionResult> GetMessages(
+    public async Task<IActionResult> GetMessagePage(
         [FromQuery] int ticketId,
         [FromQuery] int afterId,
         [FromClaim( Name = "companyId" )] int cid,
@@ -33,6 +33,19 @@ class MessageController : ControllerBase {
         if (!Authorizer.MayViewTicket(role, cid, (int)ticketCompanyId))
             return Forbid();
         return Ok(_messageStorage.GetPage(afterId));
+    }
+
+    [HttpGet("get_messages")]
+    public async Task<IActionResult> GetMessages(
+        [FromQuery] int ticketId,
+        [FromClaim( Name = "companyId" )] int cid,
+        [FromClaim( Name = ClaimTypes.NameIdentifier )] RoleTypes role
+    ) {
+        int? ticketCompanyId = await _ticketStorage.GetTicketCompanyId(ticketId);
+        if (ticketCompanyId is null) return NotFound();
+        if (!Authorizer.MayViewTicket(role, cid, (int)ticketCompanyId))
+            return Forbid();
+        return Ok(_messageStorage.GetMessagesByTicketId(ticketId));
     }
 
     [HttpPost("create")]

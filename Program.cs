@@ -24,6 +24,7 @@ builder.Services
     )
     .AddSingleton<Authenticator>()
     .AddScoped<ITicketStorage, EFTicketStorage>()
+    .AddScoped<IMessageStorage, EFMessageStorage>()
     .AddControllersWithViews(options => options.ValueProviderFactories.Add(
         new ModelBinding.ClaimValueProviderFactory()));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

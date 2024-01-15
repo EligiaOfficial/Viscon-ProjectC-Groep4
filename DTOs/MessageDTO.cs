@@ -1,6 +1,7 @@
 namespace DTOs;
 
-public struct MessageDataDTO {
-    public string Content;
-    public int RelatedTicketId;
+public class MessageDataDTO {
+    public string Content { get; set; }
+    public int RelatedTicketId { get; set; }
+    public string SenderName { get; set; }
 }
