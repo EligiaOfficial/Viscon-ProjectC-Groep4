@@ -36,6 +36,12 @@ public class EFTicketStorage : ITicketStorage {
                 Urgent = t.Urgent,
                 Resolved = t.Resolved,
                 DateCreated = t.DateCreated,
+                CompanyName = t.Creator.Company.Name,
+                CreatorName = $"{t.Creator.FirstName} {t.Creator.LastName}",
+                MachineName = t.Machine.Name,
+                DepartmentName = t.Department.Speciality,
+                HelperName = $"{t.Helper.FirstName} {t.Helper.LastName}",
+                Published = t.Public,
                 CreatorCompanyId = t.Creator.Company.Id
             })
             .FirstOrDefaultAsync();

@@ -24,28 +24,28 @@ const Ticket = () => {
   const fetchTicket = async () => {
     await FetchTicketAxios(ticketId)
       .then((res) => {
-        const {
-          company,
-          creator,
-          department,
-          helper,
-          machine,
-          messages,
-          ticket,
-        } = res.data;
+        //const {
+        //  company,
+        //  creator,
+        //  department,
+        //  helper,
+        //  machine,
+        //  messages,
+        //  ticket,
+        //} = res.data;
 
         for (let i = 0; i < messages.length; i++) {
           messages[i].timeSent = new Date(messages[i].timeSent);
         }
         messages.sort((b, a) => a.timeSent.getTime() - b.timeSent.getTime());
 
-        setCompany(company);
-        setCreator(creator);
-        setDepartment(department);
-        setHelper(helper);
-        setMachine(machine);
-        setMessages(messages);
-        setTicket(ticket);
+        setCompany(res.data.companyName);
+        setCreator(res.data.creatorName);
+        setDepartment(res.data.departmentName);
+        setHelper(res.data.helperName);
+        setMachine(res.data.machineName);
+        //setMessages(messages);
+        setTicket(res.data);
       })
       .catch((err) => console.log(err));
   };

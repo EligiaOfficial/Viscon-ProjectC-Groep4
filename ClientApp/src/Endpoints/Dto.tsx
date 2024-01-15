@@ -64,7 +64,7 @@ export function createMessageAxios(data: MessageDto) {
 }
 
 export function FetchTicketAxios(id: number) {
-  return axiosInstance.get(`/api/ticket/ticketdata?id=${id}`);
+  return axiosInstance.get(`/api/ticket/get_data?id=${id}`);
 }
 
 export function FetchUserCreationData() {
