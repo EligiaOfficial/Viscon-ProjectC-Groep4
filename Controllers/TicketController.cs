@@ -30,7 +30,7 @@ namespace Viscon_ProjectC_Groep4.Controllers
 
         [Authorize(Policy = "user")] [HttpPost("AddMessage")]
         public async Task<IActionResult> AddMessage(
-            MessageDto data,
+            [FromForm] MessageDto data,
             [FromClaim(Name = ClaimTypes.NameIdentifier)]
             int uid
         ) => await _ticketServices.AddMessage(data, uid);
