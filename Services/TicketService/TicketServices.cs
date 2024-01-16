@@ -3,6 +3,7 @@
  *   All rights reserved.
  */
 
+using System.Net.Sockets;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Entities;
@@ -36,15 +37,35 @@ namespace Viscon_ProjectC_Groep4.Services.TicketService
         {
             _logger.LogInformation("API Fetched");
             _logger.LogInformation("\n\n\n");
-            var message = new Message
+
+            Ticket ticket = _dbContext.Tickets.Where(ticket => ticket.Id == data.ticketId).FirstOrDefault()!;
+
+            Message message = new()
             {
-                TimeSent = DateTime.UtcNow,
-                TicketId = _dbContext.Tickets.Where(_ => _.Id == data.ticketId).Select(_ => _.Id).FirstOrDefault(),
                 Content = data.content,
-                Sender = uid
+                Sender = uid,
+                TicketId = ticket.Id,
+                TimeSent = DateTime.UtcNow,
+                RelatedTicket = ticket,
             };
+
             _dbContext.Messages.Add(message);
             await _dbContext.SaveChangesAsync();
+
+            foreach (IFormFile image in data.Images)
+            {
+                using MemoryStream memoryStream = new();
+                await image.CopyToAsync(memoryStream);
+                VisualFile visualFile = new()
+                {
+                    Name = image.FileName,
+                    Image = memoryStream.ToArray(),
+                    MessageId = message.Id
+                };
+                _dbContext.VisualFiles.Add(visualFile);
+            }
+            await _dbContext.SaveChangesAsync();
+
             _logger.LogInformation("Added message to tickId " + message.TicketId);
             return Ok("Message Added");
         }

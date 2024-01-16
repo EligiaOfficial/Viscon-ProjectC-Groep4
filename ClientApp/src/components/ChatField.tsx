@@ -41,8 +41,10 @@ function ChatField({
     <div className={`w-full`}>
       <div
         className={`${
-          self ? "border-sky-600 dark:border-orange-400" : ""
-        } bg-stone-100 dark:bg-stone-500 flex flex-col gap-4 rounded border-2 p-2.5`}
+          self
+            ? "bg-sky-100 dark:bg-stone-900"
+            : "bg-stone-100 dark:bg-stone-500"
+        }  flex flex-col gap-4 rounded border-2 p-2.5`}
       >
         <div
           className={"flex flex-row items-center justify-between gap-4 px-2"}
@@ -50,15 +52,19 @@ function ChatField({
           <div className="flex flex-row gap-2 items-center py-2">
             <img
               src={defaultIcon}
-              className={`translate object-cover duration-300 min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] rounded-full border border-black dark:border-white group-hover:border-sky-600 dark:group-hover:border-stone-900`}
-            />
-            <h1
               className={`${
-                self ? "text-sky-600 dark:text-orange-400" : ""
-              } dark:text-white text-md`}
+                self
+                  ? "border-sky-600 dark:border-orange-300"
+                  : "border-black dark:border-white"
+              } translate object-cover duration-300 min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] rounded-full border group-hover:border-sky-600 dark:group-hover:border-stone-900`}
+            />
+            <div
+              className={`${
+                self ? "text-sky-600 dark:text-orange-300" : "dark:text-white"
+              }  text-md`}
             >
               {user + " " + (self ? `(${t("tickets.ticket.you")})` : "")}
-            </h1>
+            </div>
           </div>
         </div>
         <div className="flex flex-row overflow-auto gap-1">
@@ -88,7 +94,7 @@ function ChatField({
                           className="object-contain max-h-[800px] max-w-[1200px]"
                           src={`data:image/jpeg;base64,${image.imageFile}`}
                         />
-                        <span className="text-white italic">
+                        <span className="dark:text-white italic">
                           {image.imageName}
                         </span>
                       </div>
@@ -106,7 +112,7 @@ function ChatField({
                       src={`data:image/jpeg;base64,${image.imageFile}`}
                     />
                   </div>
-                  <span className="italic text-xs w-[200px]">
+                  <span className="italic dark:text-white text-xs w-[200px] overflow-hidden px-1 break-all max-h-[32px]">
                     {image.imageName}
                   </span>
                 </div>

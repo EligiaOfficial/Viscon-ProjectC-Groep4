@@ -41,6 +41,7 @@ public class MessageDto
 {
     public string content { get; set; }
     public int ticketId { get; set; }
+    public List<IFormFile> Images { get; set; } = new();
 }
 
 public class CreateTicketDto
