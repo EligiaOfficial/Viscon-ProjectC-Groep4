@@ -16,7 +16,7 @@ public class AddDto
 
     public string Password { get; set; } = string.Empty;
 
-    public int Phone { get; set; } = 0;
+    public string Phone { get; set; } = string.Empty;
 
     public int Company { get; set; } = 0;
 
@@ -41,30 +41,30 @@ public class MessageDto
 {
     public string content { get; set; }
     public int ticketId { get; set; }
-    public int sender { get; set; }
 }
 
-public class TicketDto
+public class CreateTicketDto
 {
-    public string title { get; set; }
-    public string machine { get; set; }
-    public string description { get; set; }
-    public bool priority { get; set; }
-    public string expectedAction { get; set; }
-    public string selfTinkering { get; set; }
-    public int departmentId { get; set; }
-    public string? userEmail { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public int Machine { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public bool Priority { get; set; }
+    public string ExpectedAction { get; set; } = string.Empty;
+    public string SelfTinkering { get; set; } = string.Empty;
+    public int DepartmentId { get; set; }
+    public string UserEmail { get; set; } = string.Empty;
 
-    public IFormFile? image { get; set; }
+    public List<IFormFile> Images { get; set; } = new();
 }
 
 public class ChangeTicketDto
 {
-    public int id { get; set; }
-    public int department { get; set; }
-    public bool urgent { get; set; }
-    public bool resolved { get; set; }
-    public bool publish { get; set; }
+    public int UserId { get; set; }
+    public int TicketId { get; set; }
+    public int Department { get; set; }
+    public bool Urgent { get; set; }
+    public bool Resolved { get; set; }
+    public bool Publish { get; set; }
 }
 
 public class UserDto
@@ -86,7 +86,7 @@ public class EditDto
 
     public string Password { get; set; } = string.Empty;
 
-    public int Phone { get; set; } = 0;
+    public string Phone { get; set; } = string.Empty;
 
     public string Language { get; set; } = string.Empty;
 }
@@ -103,4 +103,16 @@ public class GetTicketsDto
     public string Department { get; set; }
     public string Issuer { get; set; }
     public string? Supporter { get; set; }
+}
+
+public class ResetPasswordRequest
+{
+    public string Token { get; set; }
+    public string NewPassword { get; set; }
+}
+
+
+public class ForgotPasswordRequest
+{
+    public string Email { get; set; }
 }

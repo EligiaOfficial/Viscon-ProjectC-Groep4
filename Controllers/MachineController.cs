@@ -1,12 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Entities;
-using Microsoft.Extensions.Logging;
+using Viscon_ProjectC_Groep4.Services;
+using Viscon_ProjectC_Groep4.Services.MachineService;
 
 namespace Viscon_ProjectC_Groep4.Controllers
 {
@@ -14,31 +10,17 @@ namespace Viscon_ProjectC_Groep4.Controllers
     [ApiController]
     public class MachineController : ControllerBase
     {
-        
-        private readonly ILogger<FetchController> _logger;
-        private readonly IServiceProvider _services;
+        private readonly MachineServices _machineServices;
 
-        public MachineController(ILogger<FetchController> logger, IServiceProvider services) {
-            _logger = logger;
-            _services = services;
+        public MachineController(
+            MachineServices machineServices
+        ) {
+            _machineServices = machineServices;
         }
-        
 
-        // GET: api/Machine
         [Authorize(Policy = "user")]
-        [HttpGet("fetchmachines")]
-        public async Task<ActionResult<IEnumerable<Machine>>> GetMachines() {
-            await using var context = _services.GetService<ApplicationDbContext>();;
-            try
-            {
-                var machines = context!.Machines.Select(machines => machines.Name).ToList();
-                return Ok(machines);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return StatusCode(500, ex.Message);
-            }
-        }
+        [HttpGet("All")]
+        public async Task<ActionResult<IEnumerable<Machine>>> GetMachines() =>
+            await _machineServices.GetAll();
     }
 }

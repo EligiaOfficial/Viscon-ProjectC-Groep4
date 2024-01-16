@@ -1,0 +1,149 @@
+{
+  "header": {
+    "search": "Zoeken",
+    "language": "Taal"
+  },
+  "login": {
+    "title": "Welkom!",
+    "subtitle": "Voer uw gegevens in om door te gaan.",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "forgot": "Uw wachtwoord vergeten?",
+    "signIn": "Aanmelden",
+    "error" : {
+      "email" : "A.U.B. Voer een valide e-mail adres in..",
+      "failed" : "Email en wachtwoord combinatie niet gevonden."
+    }
+  },
+  "sidebar": {
+    "overview": {
+      "title": "Overzicht",
+      "dashboard": "Dashboard",
+      "mailbox": "Brievenbus",
+      "tickets": "Tickets"
+    },
+    "filters": {
+      "title": "Filter op",
+      "open": "Openstaand",
+      "critical": "Urgent",
+      "archive": "Archief"
+    },
+    "create": {
+      "title": "Aanmaken",
+      "ticket": "Nieuwe ticket",
+      "user": "Nieuwe gebruiker"
+    },
+    "logout": "Afmelden"
+  },
+  "dashboard": {
+    "welcome": "Welkom"
+  },
+  "tickets": {
+    "title": {
+      "all": "Alle tickets",
+      "unassigned": "Openstaande tickets",
+      "critical": "Urgente tickets",
+      "archive": "Gearchiveerde tickets"
+    },
+    "table": {
+      "nodata": "Geen tickets gevonden.",
+      "title": "Waar ben je naar op zoek?",
+      "category": "Categorie",
+      "all": "Alles",
+      "search": "Zoeken"
+    },
+    "ticket": {
+      "issuer": "Aanvrager",
+      "company": "Bedrijf",
+      "machine": "Machine",
+      "urgent": {
+        "title": "Urgent",
+        "yes": "Ja",
+        "no": "Nee"
+      },
+      "created": "Aangemaakt op",
+      "department": "Afdeling",
+      "assignee": "Toegewezen aan",
+      "assignSelf": "Zelf oppakken",
+      "public": {
+        "title": "Openbaar",
+        "yes": "Ja",
+        "no": "Nee"
+      },
+      "status": {
+        "title": "Status",
+        "open": "Open",
+        "closed": "Gesloten"
+      },
+      "update": "Aanpassen",
+      "title": "Titel",
+      "description": "Beschrijving",
+      "edit": "Aanpassingen",
+      "expected": "Verwachting",
+      "commentPlaceholder": "Schrijf een opmerkingen...",
+      "postMessage": "Verstuur",
+      "noMessages": "Geen berichten gevonden.",
+      "close": "Sluiten",
+      "you": "Jij"
+    }
+  },
+  "createTicket": {
+    "title": "Maak een nieuwe ticket aan",
+    "form": {
+      "titlelabel": "Titel",
+      "assigneeEmail": "E-mail van aanvrager",
+      "departmentlabel": "Voor welke afdeling is dit bestemd?",
+      "defaultdepartment": "Selecteer een afdeling",
+      "machinelabel": "Om welke machine gaat het?",
+      "defaultmachine": "Selecteer een machine",
+      "urgency": "Is het urgent?",
+      "yes": "Ja",
+      "no": "Nee",
+      "medialabel": "Voeg afbeelding(en) toe",
+      "dragndrop": "Slepen & neerzetten",
+      "or": "Of",
+      "browse": "Bladeren",
+      "description1": "Wat zie je gebeuren?",
+      "description2": "Wat heb je al geprobeerd?",
+      "description3": "Heb je aanpassingen gemaakt aan de machine?",
+      "submit": "Verzenden"
+    },
+    "error": {
+      "title": "Voeg A.U.B. een valide titel toe.",
+      "email": "Voeg A.U.B. een valide e-mail adress toe.",
+      "department": "Selecteer een afdeling die U zou kunnen helpen.",
+      "machine": "Selecteer om welke machine het gaat.",
+      "description1": "Vul in wat er gebeurt.",
+      "description2": "Vul a.u.b. alles in wat u tot nu toe heeft gedaan om te proberen het probleem op te lossen.",
+      "description3": "Vul in welke wijzigingen u heeft aangebracht\nAls u geen wijzigingen heeft aangebracht, vult u in dat u geen wijzigingen heeft aangebracht."
+    }
+  },
+  "createUser": {
+    "title": "Maak een nieuwe gebruiker aan",
+    "form": {
+      "firstname": "Voornaam",
+      "lastname": "Achternaam",
+      "email": "E-mailadres",
+      "phone": "Telefoonnummer",
+      "password": "Wachtwoord",
+      "confirm": "Herhaal wachtwoord",
+      "userlabel": "Welke rechten heeft de nieuwe gebruiker?",
+      "defaultuser": "Selecteer een rol",
+      "departmentlabel": "Voor welke afdeling?",
+      "defaultdepartment": "Selecteer een afdeling",
+      "companylabel": "Voor welk bedrijf?",
+      "defaultcompany": "Selecteer een bedrijf",
+      "submit": "Verzenden"
+    },
+    "error": {
+      "firstname": "Vul a.u.b. een voornaam in.",
+      "lastname": "Vul a.u.b. een achternaam in.",
+      "email": "Vul een correct e-mailadres in. Voorbeeld: uw naam@email.com",
+      "phone": "Geen geldig telefoonnummer gevonden.\nVoorbeelden: +31652457819, 0615984565, 080058856",
+      "password": "Wachtwoorden zijn niet geldig of komen niet overeen",
+      "role": "Selecteer een gebruikerstype.",
+      "department": "Selecteer op welke afdeling de gebruiker gaat werken.",
+      "company": "Selecteer bij welk bedrijf de gebruiker gaat werken."
+    }
+  }
+}

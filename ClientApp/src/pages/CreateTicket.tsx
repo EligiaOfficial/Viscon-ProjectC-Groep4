@@ -1,12 +1,17 @@
-import { axiosInstance } from "../axiosInstance";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRole } from "../Endpoints/Jwt";
 import { UserRoles } from "../UserRoles";
 import Layout from "../components/Layout";
-import uploadIcon from "../assets/upload.svg";
-import whiteCrossIcon from "../assets/white-cross.svg";
-import {getDepartments} from "../Endpoints/Dto";
+import uploadIcon from "../assets/icons/upload.svg";
+import whiteCrossIcon from "../assets/icons/white-cross.svg";
+import {
+  createTicketAxios,
+  getDepartments,
+  getMachines,
+} from "../Endpoints/Dto";
+import ErrorField from "../components/ErrorField";
+import { useTranslation } from "react-i18next";
 
 const CreateTicket: React.FC = () => {
   const nav = useNavigate();
@@ -29,11 +34,22 @@ const CreateTicket: React.FC = () => {
   const [machines, setMachines] = useState<string[]>([]);
   const [departments, setDepartments] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
-  const [previewImage, setPreviewImage] = useState<any>();
   const [supportedFile, setSupportedFile] = useState<boolean>(true);
+  const [oversized, setOversized] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [images, setImages] = useState<File[]>([]);
   const [duplicateFile, setDuplicateFile] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState("");
+
+  const [titleError, setTitleError] = useState<boolean>(false);
+  const [machineError, setMachineError] = useState<boolean>(false);
+  const [departmentError, setDepartmentError] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [descriptionError, setDescriptionError] = useState<boolean>(false);
+  const [actionTakenError, setActionTakenError] = useState<boolean>(false);
+  const [changesMadeError, setChangesMadeError] = useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   const allImages: string[] = [
     "png",
@@ -43,6 +59,11 @@ const CreateTicket: React.FC = () => {
     "tiff",
     "bpg",
     "image/png",
+    "image/jpg",
+    "image/jpeg",
+    "image/gif",
+    "image/tiff",
+    "image/bpg",
   ];
 
   const stringToBoolean = (stringValue) => {
@@ -61,91 +82,92 @@ const CreateTicket: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const errors: string[] = [];
+    title == ""
+      ? setTitleError(true)
+      : setTitleError(false);
 
-    if (selectedDepartment === "") {
-      errors.push("Please select a department.");
-    }
-    
-    if (selectedMachine === "") {
-      errors.push("Please select a machine.");
-    }
+    selectedMachine == ""
+      ? setMachineError(true)
+      : setMachineError(false);
 
-    if (description.trim() === "") {
-      errors.push("Please fill in a description of the problem.");
-    }
+    description == ""
+      ? setDescriptionError(true)
+      : setDescriptionError(false);
 
-    if (expectedAction.trim() === "") {
-      errors.push("Please fill in what have you tried to fix it.");
-    }
+    expectedAction == ""
+      ? setActionTakenError(true)
+      : setActionTakenError(false);
 
-    if (selfTinkering.trim() === "") {
-      errors.push("Please fill in what changed you have made.");
-    }
+    selfTinkering == ""
+      ? setChangesMadeError(true)
+      : setChangesMadeError(false);
 
-    if (errors.length === 0) {
-      try {
-        const formData: any = new FormData();
-        formData.append("title", title);
-        formData.append("machine", selectedMachine);
-        formData.append("description", description);
-        formData.append("priority", stringToBoolean(priority));
-        formData.append("expectedAction", expectedAction);
-        formData.append("selfTinkering", selfTinkering);
-        formData.append("departmentId", selectedDepartment);
+    selectedDepartment == ""
+      ? setDepartmentError(true)
+      : setDepartmentError(false);
 
-        if (images.length > 0) {
-          images.forEach((image, i) => {
-            formData.append(`image-${i}`, image, image!.name);
-          });
-        }
+    try {
+      const formData: any = new FormData();
+      formData.append("title", title);
+      formData.append("machine", selectedMachine);
+      formData.append("description", description);
+      formData.append("priority", stringToBoolean(priority));
+      formData.append("expectedAction", expectedAction);
+      formData.append("selfTinkering", selfTinkering);
+      formData.append("departmentId", selectedDepartment);
+      if (usr_role <= UserRoles.VISCON) formData.append("userEmail", userEmail);
 
-        const response = await axiosInstance.post(
-          "api/ticket/createticket",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          console.log("Ticket created successfully:", response.data);
-          nav(`/ticket?id=${response.data}`);
-        } else {
-          console.error("Ticket creation failed:", response.data);
-        }
-      } catch (error) {
-        console.error("Error creating ticket:", error);
+      if (images.length > 0) {
+        images.forEach((image) => {
+          formData.append(`images`, image, image!.name);
+        });
       }
-    } else {
-      setValidationErrors(errors);
+
+      const response = await createTicketAxios(formData)
+        .then((res) => {
+          if (res.status === 200) {
+            nav(`/ticket?id=${res.data}`);
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 500) {
+            setEmailError("Email Not Found");
+          }
+        });
+    } catch (error) {
+      console.error("Error creating ticket:", error);
     }
   };
 
   const fetchMachines = async () => {
     try {
-      const response = await axiosInstance.get("/api/machine/fetchmachines");
+      const response = await getMachines();
       setMachines(response.data);
     } catch (error) {
       console.error("Error fetching machines:", error);
     }
 
     getDepartments().then((res) => {
-      console.log(res.data);
       setDepartments(res.data);
     });
   };
 
   const handleImage = (imageArray: any) => {
     for (let i = 0; i < imageArray.length; i++) {
+      setOversized(false);
       setSupportedFile(true);
       setDuplicateFile(false);
+
+      if (imageArray[i].size / 1024 > 1000) {
+        setOversized(true);
+        return;
+      }
+
       if (allImages.indexOf(imageArray[i].type) === -1) {
         setSupportedFile(false);
         return;
       }
+
       if (images.length === 0) {
         if (imageArray.length === 1) {
           setImages([...images, imageArray[0]]);
@@ -154,6 +176,7 @@ const CreateTicket: React.FC = () => {
         setImages([...images, ...imageArray]);
         return;
       }
+
       for (let j = 0; j < images.length; j++) {
         if (images[j]!.name == imageArray[i].name) {
           setDuplicateFile(true);
@@ -185,7 +208,7 @@ const CreateTicket: React.FC = () => {
         {/*<span className="text-2xl py-4">Add Ticket</span>*/}
         <div className="mx-auto bg-white p-8 rounded-lg w-[1000px] shadow-lg space-y-6 dark:bg-stone-400 h-full my-20">
           <h1 className="text-3xl mb-2 text-center text-blue-600 dark:text-stone-600">
-            Create a new Ticket
+            {t("createTicket.title")}
           </h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             {validationErrors.length > 0 && (
@@ -206,48 +229,78 @@ const CreateTicket: React.FC = () => {
                 </button>
               </div>
             )}
-            <div>
-              <label
+            <div className={"flex w-full"}>
+              <div className={"w-full"}>
+                <label
                   htmlFor="title"
                   className="block text-gray-700 mb-1 font-medium"
-              >
-                Title:
-              </label>
-              <input
+                >
+                  {t("createTicket.form.titlelabel")}:
+                </label>
+                <input
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
-              />
+                />
+                {titleError ? <ErrorField error={t("createTicket.error.title")} /> : null}
+              </div>
+
+              {usr_role <= UserRoles.VISCON ? (
+                <div className={"w-full ml-5"}>
+                  <label
+                    htmlFor="userEmail"
+                    className="block text-gray-700 mb-1 font-medium"
+                  >
+                    {t("createTicket.form.assigneeEmail")}:
+                  </label>
+                  <input
+                    type="text"
+                    id="userEmail"
+                    value={userEmail}
+                    onChange={(e) => setUserEmail(e.target.value)}
+                    className="w-full border rounded-md p-3 shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    required
+                  />
+                  {emailError ? <ErrorField error={emailError} /> : null}
+                </div>
+              ) : (
+                <div />
+              )}
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="col-start-1">
                 <label
-                    htmlFor="machine"
-                    className="block text-gray-700 mb-1 font-medium"
+                  htmlFor="machine"
+                  className="block text-gray-700 mb-1 font-medium"
                 >
-                  Which department should pick up this ticket?
+                  {t("createTicket.form.departmentlabel")}
                 </label>
                 <select
-                    id="machine"
-                    value={selectedDepartment}
-                    onChange={(e) => setSelectedDepartment(e.target.value)}
-                    className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
+                  id="department"
+                  value={selectedDepartment}
+                  onChange={(e) => setSelectedDepartment(e.target.value)}
+                  className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                 >
-                  <option value="">Select a department</option>
+                  <option value="">
+                    {t("createTicket.form.defaultdepartment")}
+                  </option>
                   {departments.map((department) => (
-                      <option key={department["id"]} value={department["id"]}>
-                        {department["speciality"]}
-                      </option>
+                    <option key={department["id"]} value={department["id"]}>
+                      {department["speciality"]}
+                    </option>
                   ))}
                 </select>
+                {departmentError ? (
+                  <ErrorField error={t("createTicket.error.department")} />
+                ) : null}
               </div>
               <div className="relative row-span-3 flex flex-col">
                 <label
                   htmlFor="image"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Add picture(s):
+                  {t("createTicket.form.medialabel")}:
                 </label>
                 <div
                   onDragOver={(e) => e.preventDefault()}
@@ -256,7 +309,7 @@ const CreateTicket: React.FC = () => {
                     handleImage(e.dataTransfer.files);
                   }}
                   className={`${
-                    supportedFile && !duplicateFile
+                    supportedFile && !duplicateFile && !oversized
                       ? "border-stone-600"
                       : "border-red-600"
                   } relative select-none h-full w-full cursor-pointer border rounded-md p-2 shadow-sm active:border-blue-500 border-dashed bg-stone-100 dark:bg-stone-300`}
@@ -276,17 +329,17 @@ const CreateTicket: React.FC = () => {
                     <div className="flex flex-1 flex-col items-center justify-center">
                       <img className="max-w-[60px]" src={uploadIcon} />
                       <span className="text-stone-600 font-bold">
-                        Drag & drop
+                        {t("createTicket.form.dragndrop")}
                       </span>
                     </div>
                     <div className="relative h-full border border-stone-400">
                       <span className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 bg-stone-100 dark:bg-stone-300 py-2 font-bold text-stone-600">
-                        or
+                        {t("createTicket.form.or")}
                       </span>
                     </div>
                     <div className="flex-1 flex justify-center items-center ">
                       <span className="border border-stone-200 px-2 py-1 font-bold bg-stone-200 text-stone-600 rounded-md">
-                        Browse Files
+                        {t("createTicket.form.browse")}
                       </span>
                     </div>
                   </div>
@@ -296,14 +349,21 @@ const CreateTicket: React.FC = () => {
                     supportedFile ? "hidden" : ""
                   } absolute top-full left-0 translate-y-1/2 text-red-600`}
                 >
-                  File type not supported.
+                  <ErrorField error={"File type not supported."} />
                 </span>
                 <span
                   className={`${
                     !duplicateFile ? "hidden" : ""
                   } absolute top-full left-0 translate-y-1/2 text-red-600`}
                 >
-                  Duplicate files are not allowed.
+                  <ErrorField error={"Duplicate files are not allowed."} />
+                </span>
+                <span
+                  className={`${
+                    !oversized ? "hidden" : ""
+                  } absolute top-full left-0 translate-y-1/2 text-red-600`}
+                >
+                  <ErrorField error={"Only files of max 1MB are allowed."} />
                 </span>
               </div>
               <div className="col-start-1">
@@ -311,7 +371,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="machine"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Which machine is in question?
+                  {t("createTicket.form.machinelabel")}
                 </label>
                 <select
                   id="machine"
@@ -319,20 +379,25 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setSelectedMachine(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm focus:border-blue-500"
                 >
-                  <option value="">Select a machine</option>
+                  <option value="">
+                    {t("createTicket.form.defaultmachine")}
+                  </option>
                   {machines.map((machine) => (
-                    <option key={machine} value={machine}>
-                      {machine}
+                    <option key={machine["id"]} value={machine["id"]}>
+                      {machine["name"]}
                     </option>
                   ))}
                 </select>
+                {machineError ? (
+                  <ErrorField error={t("createTicket.error.machine")} />
+                ) : null}
               </div>
               <div className="col-start-1">
                 <label
                   htmlFor="priority"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Has all work stopped?
+                  {t("createTicket.form.urgency")}
                 </label>
                 <select
                   id="priority"
@@ -340,8 +405,8 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setPriority(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                 >
-                  <option value="false">No</option>
-                  <option value="true">Yes</option>
+                  <option value="false">{t("createTicket.form.no")}</option>
+                  <option value="true">{t("createTicket.form.yes")}</option>
                 </select>
               </div>
               <div
@@ -362,13 +427,15 @@ const CreateTicket: React.FC = () => {
                             className="hover:scale-110 scale-90 translate-y-1/4 -translate-x-1/4 active:scale-90 w-[30px] h-[30px] z-50 cursor-pointer absolute opacity-0 group-hover:opacity-100 duration-100 top-0 right-0"
                             src={whiteCrossIcon}
                           />
-                          <div className="opacity-0 group-hover:opacity-100 duration-200 w-full h-full absolute top-0 left-0 z-20 bg-gradient-to-t from-black/40 via-black/20 to-black/40" />
+                          <div
+                            onClick={() =>
+                              window.open(URL.createObjectURL(image!), "_blank")
+                            }
+                            className="cursor-pointer opacity-0 group-hover:opacity-100 duration-200 w-full h-full absolute top-0 left-0 z-20 bg-gradient-to-t from-black/40 via-black/20 to-black/40"
+                          />
                           <img
-                            className={`${
-                              previewImage ? "border" : ""
-                            } border-blue-500 object-cover h-[200px] w-[200px] cursor-pointer`}
+                            className={`object-cover h-[200px] w-[200px]`}
                             src={URL.createObjectURL(image!)}
-                            onClick={() => window.open(previewImage, "_blank")}
                           />
                         </div>
                         <span className="italic text-sm max-w-[200px]">
@@ -384,7 +451,7 @@ const CreateTicket: React.FC = () => {
                   htmlFor="description"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  What do you see happening?
+                  {t("createTicket.form.description1")}
                 </label>
                 <textarea
                   id="description"
@@ -392,14 +459,17 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
-                ></textarea>
+                />
+                {descriptionError ? (
+                  <ErrorField error={t("createTicket.error.description1")} />
+                ) : null}
               </div>
               <div className="col-span-2">
                 <label
                   htmlFor="expectedAction"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  What have you tried to fix it
+                  {t("createTicket.form.description2")}
                 </label>
                 <textarea
                   id="expectedAction"
@@ -407,14 +477,17 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setExpectedAction(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
-                ></textarea>
+                />
+                {actionTakenError ? (
+                  <ErrorField error={t("createTicket.error.description2")} />
+                ) : null}
               </div>
               <div className="col-span-2">
                 <label
                   htmlFor="selfTinkering"
                   className="block text-gray-700 mb-1 font-medium"
                 >
-                  Have you made any changes to the machine?
+                  {t("createTicket.form.description3")}
                 </label>
                 <textarea
                   id="selfTinkering"
@@ -422,7 +495,10 @@ const CreateTicket: React.FC = () => {
                   onChange={(e) => setSelfTinkering(e.target.value)}
                   className="w-full border rounded-md p-3 outline-none shadow-sm  focus:border-blue-500"
                   rows={2}
-                ></textarea>
+                />
+                {changesMadeError ? (
+                  <ErrorField error={t("createTicket.error.description3")} />
+                ) : null}
               </div>
 
               <div className="col-span-2">
@@ -430,7 +506,7 @@ const CreateTicket: React.FC = () => {
                   type="submit"
                   className="bg-blue-600 dark:bg-stone-600 text-white rounded-md p-3 w-full hover:bg-blue-800 focus:ring-2 focus:ring-offset-2  transition-all ease-in-out duration-300"
                 >
-                  Create Ticket
+                  {t("createTicket.form.submit")}
                 </button>
               </div>
             </div>

@@ -11,6 +11,8 @@ import SuccessCreating from "./pages/SuccessCreating";
 import Ticket from "./pages/Ticket";
 import CreateTicketForSomeone from "./pages/CreateTicketForSomeone";
 import Tickets from "./pages/Tickets";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 export const routes = [
   { path: "/", name: "dashboard", component: <Dashboard /> },
@@ -27,9 +29,19 @@ export const routes = [
   { path: "/success", name: "success", component: <SuccessCreating /> },
   { path: "/ticket", name: "ticket", component: <Ticket /> },
   {
-    path: "/tickets/new",
+    path: "/forgot-password",
+    name: "forgotpassword",
+    component: <ForgotPassword />,
+  },
+  {
+    path: "/reset-password",
+    name: "resetpassword",
+    component: <ResetPassword />,
+  },
+  {
+    path: "/tickets/unassigned",
     name: "new-filter",
-    component: <Tickets filter={"new"} />,
+    component: <Tickets filter={"unassigned"} />,
   },
   {
     path: "/tickets/critical",
@@ -40,11 +52,5 @@ export const routes = [
     path: "/tickets/archive",
     name: "archive-filter",
     component: <Tickets filter={"archive"} />,
-  },
-  // { path: '/edit', name: 'edit', component: <UserSettings /> },
-  {
-    path: "/createforsomeone",
-    name: "createforsomeone",
-    component: <CreateTicketForSomeone />,
   },
 ];

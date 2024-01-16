@@ -14,7 +14,7 @@ public class User
     public byte[] PasswSalt { get; set; }
     public string Email { get; set; }
     public RoleTypes Role { get; set; } = RoleTypes.NONE;
-    public int PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
     public string LanguagePreference { get; set; }
 
     [ForeignKey("Departments")]
