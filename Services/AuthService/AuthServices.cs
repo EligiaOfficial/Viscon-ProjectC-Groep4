@@ -158,7 +158,7 @@ namespace Viscon_ProjectC_Groep4.Services.AuthService
             await _dbContext.SaveChangesAsync();
 
 
-            var resetLink = $"http://localhost:5173/reset-password?token={token}";
+            var resetLink = $"/reset-password?token={token}";
 
             var mailMessage = new MailMessage
             {

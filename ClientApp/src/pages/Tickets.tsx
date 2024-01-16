@@ -56,7 +56,7 @@ function Tickets(props: TicketsProps) {
       },
     };
     axios
-      .get("http://localhost:5173/api/ticket/tickets", config)
+      .get("/api/ticket/tickets", config)
       .then((response: any) => {
         if (response.data == undefined || response.data.length == 0) {
           setTickets([""]);
