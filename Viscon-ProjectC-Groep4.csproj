@@ -8,7 +8,7 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
-    <SpaProxyServerUrl>http://localhost:5173</SpaProxyServerUrl>
+    <SpaProxyServerUrl>http://62.195.97.2:5173</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <RootNamespace>Viscon_ProjectC_Groep4</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>

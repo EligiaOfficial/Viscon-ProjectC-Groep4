@@ -9,7 +9,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
         '/api': {
-            target: 'http://localhost:5030',
+            target: 'http://0.0.0.0:5030',
             rewrite: (path) => path.replace(/^\/api/, ''),
          },
     }
